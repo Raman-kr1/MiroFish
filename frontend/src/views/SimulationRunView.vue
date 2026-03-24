@@ -47,7 +47,7 @@
         />
       </div>
 
-      <!-- Right Panel: Step3 开始模拟 -->
+      <!-- comment -->
       <div class="panel-wrapper right" :style="rightPanelStyle">
         <Step3Simulation
           :simulationId="currentSimulationId"
@@ -87,9 +87,9 @@ const viewMode = ref('split')
 
 // Data State
 const currentSimulationId = ref(route.params.simulationId)
-// 直接在初始化时从 query 参数获取 maxRounds，确保子组件能立即获取到值
+// comment
 const maxRounds = ref(route.query.maxRounds ? parseInt(route.query.maxRounds) : null)
-const minutesPerRound = ref(30) // 默认每轮30分钟
+const minutesPerRound = ref(30) // comment
 const projectData = ref(null)
 const graphData = ref(null)
 const graphLoading = ref(false)
@@ -145,14 +145,14 @@ const toggleMaximize = (target) => {
 }
 
 const handleGoBack = async () => {
-  // 在返回 Step 2 之前，先关闭正在运行的模拟
+  // comment
   addLog('准备返回 Step 2，正在关闭模拟...')
   
-  // 停止轮询
+  // comment
   stopGraphRefresh()
   
   try {
-    // 先尝试优雅关闭模拟环境
+    // comment
     const envStatusRes = await getEnvStatus({ simulation_id: currentSimulationId.value })
     
     if (envStatusRes.success && envStatusRes.data?.env_alive) {
@@ -173,7 +173,7 @@ const handleGoBack = async () => {
         }
       }
     } else {
-      // 环境未运行，检查是否需要停止进程
+      // comment
       if (isSimulating.value) {
         addLog('正在停止模拟进程...')
         try {
@@ -188,13 +188,13 @@ const handleGoBack = async () => {
     addLog(`检查模拟状态失败: ${err.message}`)
   }
   
-  // 返回到 Step 2 (环境搭建)
+  // comment
   router.push({ name: 'Simulation', params: { simulationId: currentSimulationId.value } })
 }
 
 const handleNextStep = () => {
-  // Step3Simulation 组件会直接处理报告生成和路由跳转
-  // 这个方法仅作为备用
+  // comment
+  // comment
   addLog('进入 Step 4: 报告生成')
 }
 
@@ -203,12 +203,12 @@ const loadSimulationData = async () => {
   try {
     addLog(`加载模拟数据: ${currentSimulationId.value}`)
     
-    // 获取 simulation 信息
+    //Get simulation info
     const simRes = await getSimulation(currentSimulationId.value)
     if (simRes.success && simRes.data) {
       const simData = simRes.data
       
-      // 获取 simulation config 以获取 minutes_per_round
+      // comment
       try {
         const configRes = await getSimulationConfig(currentSimulationId.value)
         if (configRes.success && configRes.data?.time_config?.minutes_per_round) {
@@ -219,14 +219,14 @@ const loadSimulationData = async () => {
         addLog(`获取时间配置失败，使用默认值: ${minutesPerRound.value}分钟/轮`)
       }
       
-      // 获取 project 信息
+      // comment
       if (simData.project_id) {
         const projRes = await getProject(simData.project_id)
         if (projRes.success && projRes.data) {
           projectData.value = projRes.data
           addLog(`项目加载成功: ${projRes.data.project_id}`)
           
-          // 获取 graph 数据
+          // comment
           if (projRes.data.graph_id) {
             await loadGraph(projRes.data.graph_id)
           }
@@ -241,8 +241,8 @@ const loadSimulationData = async () => {
 }
 
 const loadGraph = async (graphId) => {
-  // 当正在模拟时，自动刷新不显示全屏 loading，以免闪烁
-  // 手动刷新或初始加载时显示 loading
+  // comment
+  // comment
   if (!isSimulating.value) {
     graphLoading.value = true
   }
@@ -274,7 +274,7 @@ let graphRefreshTimer = null
 const startGraphRefresh = () => {
   if (graphRefreshTimer) return
   addLog('开启图谱实时刷新 (30s)')
-  // 立即刷新一次，然后每30秒刷新
+  // comment
   graphRefreshTimer = setInterval(refreshGraph, 30000)
 }
 
@@ -297,7 +297,7 @@ watch(isSimulating, (newValue) => {
 onMounted(() => {
   addLog('SimulationRunView 初始化')
   
-  // 记录 maxRounds 配置（值已在初始化时从 query 参数获取）
+  // comment
   if (maxRounds.value) {
     addLog(`自定义模拟轮数: ${maxRounds.value}`)
   }

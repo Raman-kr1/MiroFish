@@ -1,8 +1,8 @@
 """
-测试Profile格式生成是否符合OASIS要求
-验证：
-1. Twitter Profile生成CSV格式
-2. Reddit Profile生成JSON详细格式
+Test that profile format generation meets OASIS requirements.
+Validates:
+1. Twitter Profile generates CSV format
+2. Reddit Profile generates detailed JSON format
 """
 
 import os
@@ -11,14 +11,14 @@ import json
 import csv
 import tempfile
 
-# 添加项目路径
+# Add project path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.services.oasis_profile_generator import OasisProfileGenerator, OasisAgentProfile
 
 
 def test_profile_formats():
-    """测试Profile格式"""
+    """Test profile formats"""
     print("=" * 60)
     print("OASIS Profile格式测试")
     print("=" * 60)
@@ -128,7 +128,7 @@ def test_profile_formats():
 
 
 def show_expected_formats():
-    """显示OASIS期望的格式"""
+    """Display the profile format expected by OASIS"""
     print("\n" + "=" * 60)
     print("OASIS 期望的Profile格式参考")
     print("=" * 60)

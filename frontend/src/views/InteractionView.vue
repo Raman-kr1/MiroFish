@@ -47,7 +47,7 @@
         />
       </div>
 
-      <!-- Right Panel: Step5 深度互动 -->
+      <!-- comment -->
       <div class="panel-wrapper right" :style="rightPanelStyle">
         <Step5Interaction
           :reportId="currentReportId"
@@ -78,7 +78,7 @@ const props = defineProps({
   reportId: String
 })
 
-// Layout State - 默认切换到工作台视角
+// comment
 const viewMode = ref('workbench')
 
 // Data State
@@ -142,26 +142,26 @@ const loadReportData = async () => {
   try {
     addLog(`加载报告数据: ${currentReportId.value}`)
     
-    // 获取 report 信息以获取 simulation_id
+    // comment
     const reportRes = await getReport(currentReportId.value)
     if (reportRes.success && reportRes.data) {
       const reportData = reportRes.data
       simulationId.value = reportData.simulation_id
       
       if (simulationId.value) {
-        // 获取 simulation 信息
+        //Get simulation info
         const simRes = await getSimulation(simulationId.value)
         if (simRes.success && simRes.data) {
           const simData = simRes.data
           
-          // 获取 project 信息
+          // comment
           if (simData.project_id) {
             const projRes = await getProject(simData.project_id)
             if (projRes.success && projRes.data) {
               projectData.value = projRes.data
               addLog(`项目加载成功: ${projRes.data.project_id}`)
               
-              // 获取 graph 数据
+              // comment
               if (projRes.data.graph_id) {
                 await loadGraph(projRes.data.graph_id)
               }

@@ -25,7 +25,7 @@ class LLMClient:
         self.model = model or Config.LLM_MODEL_NAME
         
         if not self.api_key:
-            raise ValueError("LLM_API_KEY 未配置")
+            raise ValueError("LLM_API_KEY details")
         
         self.client = OpenAI(
             api_key=self.api_key,
@@ -39,18 +39,18 @@ class LLMClient:
         max_tokens: int = 4096,
         response_format: Optional[Dict] = None
     ) -> str:
-    """
-    Send a chat request
-    
-    Args:
-        messages: List of messages
-        temperature: Temperature parameter
-        max_tokens: Maximum number of tokens
-        response_format: Response format (e.g., JSON mode)
+        """
+        Send a chat request
         
-    Returns:
-        Model response text
-    """
+        Args:
+            messages: List of messages
+            temperature: Temperature parameter
+            max_tokens: Maximum number of tokens
+            response_format: Response format (e.g., JSON mode)
+            
+        Returns:
+            Model response text
+        """
         kwargs = {
             "model": self.model,
             "messages": messages,
@@ -99,5 +99,4 @@ class LLMClient:
         try:
             return json.loads(cleaned_response)
         except json.JSONDecodeError:
-            raise ValueError(f"LLM返回的JSON格式无效: {cleaned_response}")
-
+            raise ValueError(f"LLMconvertedJSONconverted: {cleaned_response}")

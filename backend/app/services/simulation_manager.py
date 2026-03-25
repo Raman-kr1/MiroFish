@@ -1,7 +1,7 @@
 """
-OASIStranslated
-translatedTwittertranslatedReddittranslated
-translated + LLMtranslated
+OASISconverted
+convertedTwitterconvertedRedditconverted
+details + LLMconverted
 """
 
 import os
@@ -22,60 +22,60 @@ logger = get_logger('mirofish.simulation')
 
 
 class SimulationStatus(str, Enum):
-    """translated"""
+    """details"""
     CREATED = "created"
     PREPARING = "preparing"
     READY = "ready"
     RUNNING = "running"
     PAUSED = "paused"
-    STOPPED = "stopped"      # translated
-    COMPLETED = "completed"  # translated
+    STOPPED = "stopped"      # details
+    COMPLETED = "completed"  # details
     FAILED = "failed"
 
 
 class PlatformType(str, Enum):
-    """translated"""
+    """details"""
     TWITTER = "twitter"
     REDDIT = "reddit"
 
 
 @dataclass
 class SimulationState:
-    """translated"""
+    """details"""
     simulation_id: str
     project_id: str
     graph_id: str
     
-    # translated
+    # details
     enable_twitter: bool = True
     enable_reddit: bool = True
     
-    # translated
+    # details
     status: SimulationStatus = SimulationStatus.CREATED
     
-    # translated
+    # details
     entities_count: int = 0
     profiles_count: int = 0
     entity_types: List[str] = field(default_factory=list)
     
-    # translated
+    # details
     config_generated: bool = False
     config_reasoning: str = ""
     
-    # translated
+    # details
     current_round: int = 0
     twitter_status: str = "not_started"
     reddit_status: str = "not_started"
     
-    # translated
+    # details
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
     updated_at: str = field(default_factory=lambda: datetime.now().isoformat())
     
-    # translated
+    # details
     error: Optional[str] = None
     
     def to_dict(self) -> Dict[str, Any]:
-        """translated（translated）"""
+        """details（details）"""
         return {
             "simulation_id": self.simulation_id,
             "project_id": self.project_id,
@@ -97,7 +97,7 @@ class SimulationState:
         }
     
     def to_simple_dict(self) -> Dict[str, Any]:
-        """translated（APItranslated）"""
+        """details（APIconverted）"""
         return {
             "simulation_id": self.simulation_id,
             "project_id": self.project_id,
@@ -113,36 +113,36 @@ class SimulationState:
 
 class SimulationManager:
     """
-    translated
+    details
     
-    translated：
-    1. translatedZeptranslated
-    2. translatedOASIS Agent Profile
-    3. translatedLLMtranslated
-    4. translated
+    details：
+    1. convertedZepconverted
+    2. convertedOASIS Agent Profile
+    3. convertedLLMconverted
+    4. details
     """
     
-    # translated
+    # details
     SIMULATION_DATA_DIR = os.path.join(
         os.path.dirname(__file__), 
         '../../uploads/simulations'
     )
     
     def __init__(self):
-        # translated
+        # details
         os.makedirs(self.SIMULATION_DATA_DIR, exist_ok=True)
         
-        # translated
+        # details
         self._simulations: Dict[str, SimulationState] = {}
     
     def _get_simulation_dir(self, simulation_id: str) -> str:
-        """translated"""
+        """details"""
         sim_dir = os.path.join(self.SIMULATION_DATA_DIR, simulation_id)
         os.makedirs(sim_dir, exist_ok=True)
         return sim_dir
     
     def _save_simulation_state(self, state: SimulationState):
-        """translated"""
+        """details"""
         sim_dir = self._get_simulation_dir(state.simulation_id)
         state_file = os.path.join(sim_dir, "state.json")
         
@@ -154,7 +154,7 @@ class SimulationManager:
         self._simulations[state.simulation_id] = state
     
     def _load_simulation_state(self, simulation_id: str) -> Optional[SimulationState]:
-        """translated"""
+        """details"""
         if simulation_id in self._simulations:
             return self._simulations[simulation_id]
         
@@ -198,13 +198,13 @@ class SimulationManager:
         enable_reddit: bool = True,
     ) -> SimulationState:
         """
-        translated
+        details
         
         Args:
-            project_id: translatedID
-            graph_id: ZeptranslatedID
-            enable_twitter: translatedTwittertranslated
-            enable_reddit: translatedReddittranslated
+            project_id: convertedID
+            graph_id: ZepconvertedID
+            enable_twitter: convertedTwitterconverted
+            enable_reddit: convertedRedditconverted
             
         Returns:
             SimulationState
@@ -222,7 +222,7 @@ class SimulationManager:
         )
         
         self._save_simulation_state(state)
-        logger.info(f"translated: {simulation_id}, project={project_id}, graph={graph_id}")
+        logger.info(f"details: {simulation_id}, project={project_id}, graph={graph_id}")
         
         return state
     
@@ -237,30 +237,30 @@ class SimulationManager:
         parallel_profile_count: int = 3
     ) -> SimulationState:
         """
-        translated（translated）
+        details（details）
         
-        translated：
-        1. translatedZeptranslated
-        2. translatedOASIS Agent Profile（translatedLLMtranslated，translated）
-        3. translatedLLMtranslated（translated、translated、translated）
-        4. translatedProfiletranslated
-        5. translated
+        details：
+        1. convertedZepconverted
+        2. convertedOASIS Agent Profile（convertedLLMconverted，details）
+        3. convertedLLMconverted（details、details、details）
+        4. convertedProfileconverted
+        5. details
         
         Args:
-            simulation_id: translatedID
-            simulation_requirement: translated（translatedLLMtranslated）
-            document_text: translated（translatedLLMtranslated）
-            defined_entity_types: translated（translated）
-            use_llm_for_profiles: translatedLLMtranslated
-            progress_callback: translated (stage, progress, message)
-            parallel_profile_count: translated，translated3
+            simulation_id: convertedID
+            simulation_requirement: details（convertedLLMconverted）
+            document_text: details（convertedLLMconverted）
+            defined_entity_types: details（details）
+            use_llm_for_profiles: convertedLLMconverted
+            progress_callback: details (stage, progress, message)
+            parallel_profile_count: details，converted3
             
         Returns:
             SimulationState
         """
         state = self._load_simulation_state(simulation_id)
         if not state:
-            raise ValueError(f"translated: {simulation_id}")
+            raise ValueError(f"details: {simulation_id}")
         
         try:
             state.status = SimulationStatus.PREPARING
@@ -268,14 +268,14 @@ class SimulationManager:
             
             sim_dir = self._get_simulation_dir(simulation_id)
             
-            # ========== translated1: translated ==========
+            # ========== converted1: details ==========
             if progress_callback:
-                progress_callback("reading", 0, "translatedZeptranslated...")
+                progress_callback("reading", 0, "convertedZepconverted...")
             
             reader = ZepEntityReader()
             
             if progress_callback:
-                progress_callback("reading", 30, "translated...")
+                progress_callback("reading", 30, "details...")
             
             filtered = reader.filter_defined_entities(
                 graph_id=state.graph_id,
@@ -289,29 +289,29 @@ class SimulationManager:
             if progress_callback:
                 progress_callback(
                     "reading", 100, 
-                    f"translated，translated {filtered.filtered_count} translated",
+                    f"details，details {filtered.filtered_count} details",
                     current=filtered.filtered_count,
                     total=filtered.filtered_count
                 )
             
             if filtered.filtered_count == 0:
                 state.status = SimulationStatus.FAILED
-                state.error = "translated，translated"
+                state.error = "details，details"
                 self._save_simulation_state(state)
                 return state
             
-            # ========== translated2: translatedAgent Profile ==========
+            # ========== converted2: convertedAgent Profile ==========
             total_entities = len(filtered.entities)
             
             if progress_callback:
                 progress_callback(
                     "generating_profiles", 0, 
-                    "translated...",
+                    "details...",
                     current=0,
                     total=total_entities
                 )
             
-            # translatedgraph_idtranslatedZeptranslated，translated
+            # convertedgraph_idconvertedZepconverted，details
             generator = OasisProfileGenerator(graph_id=state.graph_id)
             
             def profile_progress(current, total, msg):
@@ -325,7 +325,7 @@ class SimulationManager:
                         item_name=msg
                     )
             
-            # translated（translated Reddit JSON translated）
+            # details（details Reddit JSON details）
             realtime_output_path = None
             realtime_platform = "reddit"
             if state.enable_reddit:
@@ -339,20 +339,20 @@ class SimulationManager:
                 entities=filtered.entities,
                 use_llm=use_llm_for_profiles,
                 progress_callback=profile_progress,
-                graph_id=state.graph_id,  # translatedgraph_idtranslatedZeptranslated
-                parallel_count=parallel_profile_count,  # translated
-                realtime_output_path=realtime_output_path,  # translated
-                output_platform=realtime_platform  # translated
+                graph_id=state.graph_id,  # convertedgraph_idconvertedZepconverted
+                parallel_count=parallel_profile_count,  # details
+                realtime_output_path=realtime_output_path,  # details
+                output_platform=realtime_platform  # details
             )
             
             state.profiles_count = len(profiles)
             
-            # translatedProfiletranslated（translated：TwittertranslatedCSVtranslated，ReddittranslatedJSONtranslated）
-            # Reddit translated，translated
+            # convertedProfileconverted（details：TwitterconvertedCSVconverted，RedditconvertedJSONconverted）
+            # Reddit details，details
             if progress_callback:
                 progress_callback(
                     "generating_profiles", 95, 
-                    "translatedProfiletranslated...",
+                    "convertedProfileconverted...",
                     current=total_entities,
                     total=total_entities
                 )
@@ -365,7 +365,7 @@ class SimulationManager:
                 )
             
             if state.enable_twitter:
-                # TwittertranslatedCSVtranslated！translatedOASIStranslated
+                # TwitterconvertedCSVconverted！convertedOASISconverted
                 generator.save_profiles(
                     profiles=profiles,
                     file_path=os.path.join(sim_dir, "twitter_profiles.csv"),
@@ -375,16 +375,16 @@ class SimulationManager:
             if progress_callback:
                 progress_callback(
                     "generating_profiles", 100, 
-                    f"translated，translated {len(profiles)} translatedProfile",
+                    f"details，details {len(profiles)} convertedProfile",
                     current=len(profiles),
                     total=len(profiles)
                 )
             
-            # ========== translated3: LLMtranslated ==========
+            # ========== converted3: LLMconverted ==========
             if progress_callback:
                 progress_callback(
                     "generating_config", 0, 
-                    "translated...",
+                    "details...",
                     current=0,
                     total=3
                 )
@@ -394,7 +394,7 @@ class SimulationManager:
             if progress_callback:
                 progress_callback(
                     "generating_config", 30, 
-                    "translatedLLMtranslated...",
+                    "convertedLLMconverted...",
                     current=1,
                     total=3
                 )
@@ -413,12 +413,12 @@ class SimulationManager:
             if progress_callback:
                 progress_callback(
                     "generating_config", 70, 
-                    "translated...",
+                    "details...",
                     current=2,
                     total=3
                 )
             
-            # translated
+            # details
             config_path = os.path.join(sim_dir, "simulation_config.json")
             with open(config_path, 'w', encoding='utf-8') as f:
                 f.write(sim_params.to_json())
@@ -429,25 +429,25 @@ class SimulationManager:
             if progress_callback:
                 progress_callback(
                     "generating_config", 100, 
-                    "translated",
+                    "details",
                     current=3,
                     total=3
                 )
             
-            # translated：translated backend/scripts/ translated，translated
-            # translated，simulation_runner translated scripts/ translated
+            # details：details backend/scripts/ details，details
+            # details，simulation_runner details scripts/ details
             
-            # translated
+            # details
             state.status = SimulationStatus.READY
             self._save_simulation_state(state)
             
-            logger.info(f"translated: {simulation_id}, "
+            logger.info(f"details: {simulation_id}, "
                        f"entities={state.entities_count}, profiles={state.profiles_count}")
             
             return state
             
         except Exception as e:
-            logger.error(f"translated: {simulation_id}, error={str(e)}")
+            logger.error(f"details: {simulation_id}, error={str(e)}")
             import traceback
             logger.error(traceback.format_exc())
             state.status = SimulationStatus.FAILED
@@ -456,16 +456,16 @@ class SimulationManager:
             raise
     
     def get_simulation(self, simulation_id: str) -> Optional[SimulationState]:
-        """translated"""
+        """details"""
         return self._load_simulation_state(simulation_id)
     
     def list_simulations(self, project_id: Optional[str] = None) -> List[SimulationState]:
-        """translated"""
+        """details"""
         simulations = []
         
         if os.path.exists(self.SIMULATION_DATA_DIR):
             for sim_id in os.listdir(self.SIMULATION_DATA_DIR):
-                # translated（translated .DS_Store）translated
+                # details（details .DS_Store）details
                 sim_path = os.path.join(self.SIMULATION_DATA_DIR, sim_id)
                 if sim_id.startswith('.') or not os.path.isdir(sim_path):
                     continue
@@ -478,10 +478,10 @@ class SimulationManager:
         return simulations
     
     def get_profiles(self, simulation_id: str, platform: str = "reddit") -> List[Dict[str, Any]]:
-        """translatedAgent Profile"""
+        """convertedAgent Profile"""
         state = self._load_simulation_state(simulation_id)
         if not state:
-            raise ValueError(f"translated: {simulation_id}")
+            raise ValueError(f"details: {simulation_id}")
         
         sim_dir = self._get_simulation_dir(simulation_id)
         profile_path = os.path.join(sim_dir, f"{platform}_profiles.json")
@@ -493,7 +493,7 @@ class SimulationManager:
             return json.load(f)
     
     def get_simulation_config(self, simulation_id: str) -> Optional[Dict[str, Any]]:
-        """translated"""
+        """details"""
         sim_dir = self._get_simulation_dir(simulation_id)
         config_path = os.path.join(sim_dir, "simulation_config.json")
         
@@ -504,7 +504,7 @@ class SimulationManager:
             return json.load(f)
     
     def get_run_instructions(self, simulation_id: str) -> Dict[str, str]:
-        """translated"""
+        """details"""
         sim_dir = self._get_simulation_dir(simulation_id)
         config_path = os.path.join(sim_dir, "simulation_config.json")
         scripts_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../scripts'))
@@ -519,10 +519,10 @@ class SimulationManager:
                 "parallel": f"python {scripts_dir}/run_parallel_simulation.py --config {config_path}",
             },
             "instructions": (
-                f"1. translatedcondatranslated: conda activate MiroFish\n"
-                f"2. translated (translated {scripts_dir}):\n"
-                f"   - translatedTwitter: python {scripts_dir}/run_twitter_simulation.py --config {config_path}\n"
-                f"   - translatedReddit: python {scripts_dir}/run_reddit_simulation.py --config {config_path}\n"
-                f"   - translated: python {scripts_dir}/run_parallel_simulation.py --config {config_path}"
+                f"1. convertedcondaconverted: conda activate MiroFish\n"
+                f"2. details (details {scripts_dir}):\n"
+                f"   - convertedTwitter: python {scripts_dir}/run_twitter_simulation.py --config {config_path}\n"
+                f"   - convertedReddit: python {scripts_dir}/run_reddit_simulation.py --config {config_path}\n"
+                f"   - details: python {scripts_dir}/run_parallel_simulation.py --config {config_path}"
             )
         }

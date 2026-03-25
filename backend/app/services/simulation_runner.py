@@ -1,6 +1,6 @@
 """
-OASIStranslated
-translatedAgenttranslated，translated
+OASISconverted
+convertedAgentconverted，details
 """
 
 import os
@@ -25,15 +25,15 @@ from .simulation_ipc import SimulationIPCClient, CommandType, IPCResponse
 
 logger = get_logger('mirofish.simulation_runner')
 
-# translated
+# details
 _cleanup_registered = False
 
-# translated
+# details
 IS_WINDOWS = sys.platform == 'win32'
 
 
 class RunnerStatus(str, Enum):
-    """translated"""
+    """details"""
     IDLE = "idle"
     STARTING = "starting"
     RUNNING = "running"
@@ -46,7 +46,7 @@ class RunnerStatus(str, Enum):
 
 @dataclass
 class AgentAction:
-    """Agenttranslated"""
+    """Agentconverted"""
     round_num: int
     timestamp: str
     platform: str  # twitter / reddit
@@ -73,7 +73,7 @@ class AgentAction:
 
 @dataclass
 class RoundSummary:
-    """translated"""
+    """details"""
     round_num: int
     start_time: str
     end_time: Optional[str] = None
@@ -99,52 +99,52 @@ class RoundSummary:
 
 @dataclass
 class SimulationRunState:
-    """translated（translated）"""
+    """details（details）"""
     simulation_id: str
     runner_status: RunnerStatus = RunnerStatus.IDLE
     
-    # translated
+    # details
     current_round: int = 0
     total_rounds: int = 0
     simulated_hours: int = 0
     total_simulation_hours: int = 0
     
-    # translated（translated）
+    # details（details）
     twitter_current_round: int = 0
     reddit_current_round: int = 0
     twitter_simulated_hours: int = 0
     reddit_simulated_hours: int = 0
     
-    # translated
+    # details
     twitter_running: bool = False
     reddit_running: bool = False
     twitter_actions_count: int = 0
     reddit_actions_count: int = 0
     
-    # translated（translated actions.jsonl translated simulation_end translated）
+    # details（details actions.jsonl details simulation_end details）
     twitter_completed: bool = False
     reddit_completed: bool = False
     
-    # translated
+    # details
     rounds: List[RoundSummary] = field(default_factory=list)
     
-    # translated（translated）
+    # details（details）
     recent_actions: List[AgentAction] = field(default_factory=list)
     max_recent_actions: int = 50
     
-    # translated
+    # details
     started_at: Optional[str] = None
     updated_at: str = field(default_factory=lambda: datetime.now().isoformat())
     completed_at: Optional[str] = None
     
-    # translated
+    # details
     error: Optional[str] = None
     
-    # translatedID（translated）
+    # convertedID（details）
     process_pid: Optional[int] = None
     
     def add_action(self, action: AgentAction):
-        """translated"""
+        """details"""
         self.recent_actions.insert(0, action)
         if len(self.recent_actions) > self.max_recent_actions:
             self.recent_actions = self.recent_actions[:self.max_recent_actions]
@@ -165,7 +165,7 @@ class SimulationRunState:
             "simulated_hours": self.simulated_hours,
             "total_simulation_hours": self.total_simulation_hours,
             "progress_percent": round(self.current_round / max(self.total_rounds, 1) * 100, 1),
-            # translated
+            # details
             "twitter_current_round": self.twitter_current_round,
             "reddit_current_round": self.reddit_current_round,
             "twitter_simulated_hours": self.twitter_simulated_hours,
@@ -185,7 +185,7 @@ class SimulationRunState:
         }
     
     def to_detail_dict(self) -> Dict[str, Any]:
-        """translated"""
+        """details"""
         result = self.to_dict()
         result["recent_actions"] = [a.to_dict() for a in self.recent_actions]
         result["rounds_count"] = len(self.rounds)
@@ -194,45 +194,45 @@ class SimulationRunState:
 
 class SimulationRunner:
     """
-    translated
+    details
     
-    translated：
-    1. translatedOASIStranslated
-    2. translated，translatedAgenttranslated
-    3. translated
-    4. translated/translated/translated
+    details：
+    1. convertedOASISconverted
+    2. details，convertedAgentconverted
+    3. details
+    4. details/details/details
     """
     
-    # translated
+    # details
     RUN_STATE_DIR = os.path.join(
         os.path.dirname(__file__),
         '../../uploads/simulations'
     )
     
-    # translated
+    # details
     SCRIPTS_DIR = os.path.join(
         os.path.dirname(__file__),
         '../../scripts'
     )
     
-    # translated
+    # details
     _run_states: Dict[str, SimulationRunState] = {}
     _processes: Dict[str, subprocess.Popen] = {}
     _action_queues: Dict[str, Queue] = {}
     _monitor_threads: Dict[str, threading.Thread] = {}
-    _stdout_files: Dict[str, Any] = {}  # translated stdout translated
-    _stderr_files: Dict[str, Any] = {}  # translated stderr translated
+    _stdout_files: Dict[str, Any] = {}  # details stdout details
+    _stderr_files: Dict[str, Any] = {}  # details stderr details
     
-    # translated
+    # details
     _graph_memory_enabled: Dict[str, bool] = {}  # simulation_id -> enabled
     
     @classmethod
     def get_run_state(cls, simulation_id: str) -> Optional[SimulationRunState]:
-        """translated"""
+        """details"""
         if simulation_id in cls._run_states:
             return cls._run_states[simulation_id]
         
-        # translated
+        # details
         state = cls._load_run_state(simulation_id)
         if state:
             cls._run_states[simulation_id] = state
@@ -240,7 +240,7 @@ class SimulationRunner:
     
     @classmethod
     def _load_run_state(cls, simulation_id: str) -> Optional[SimulationRunState]:
-        """translated"""
+        """details"""
         state_file = os.path.join(cls.RUN_STATE_DIR, simulation_id, "run_state.json")
         if not os.path.exists(state_file):
             return None
@@ -256,7 +256,7 @@ class SimulationRunner:
                 total_rounds=data.get("total_rounds", 0),
                 simulated_hours=data.get("simulated_hours", 0),
                 total_simulation_hours=data.get("total_simulation_hours", 0),
-                # translated
+                # details
                 twitter_current_round=data.get("twitter_current_round", 0),
                 reddit_current_round=data.get("reddit_current_round", 0),
                 twitter_simulated_hours=data.get("twitter_simulated_hours", 0),
@@ -274,7 +274,7 @@ class SimulationRunner:
                 process_pid=data.get("process_pid"),
             )
             
-            # translated
+            # details
             actions_data = data.get("recent_actions", [])
             for a in actions_data:
                 state.recent_actions.append(AgentAction(
@@ -291,12 +291,12 @@ class SimulationRunner:
             
             return state
         except Exception as e:
-            logger.error(f"translated: {str(e)}")
+            logger.error(f"details: {str(e)}")
             return None
     
     @classmethod
     def _save_run_state(cls, state: SimulationRunState):
-        """translated"""
+        """details"""
         sim_dir = os.path.join(cls.RUN_STATE_DIR, state.simulation_id)
         os.makedirs(sim_dir, exist_ok=True)
         state_file = os.path.join(sim_dir, "run_state.json")
@@ -313,50 +313,50 @@ class SimulationRunner:
         cls,
         simulation_id: str,
         platform: str = "parallel",  # twitter / reddit / parallel
-        max_rounds: int = None,  # translated（translated，translated）
-        enable_graph_memory_update: bool = False,  # translatedZeptranslated
-        graph_id: str = None  # ZeptranslatedID（translated）
+        max_rounds: int = None,  # details（details，details）
+        enable_graph_memory_update: bool = False,  # convertedZepconverted
+        graph_id: str = None  # ZepconvertedID（details）
     ) -> SimulationRunState:
         """
-        translated
+        details
         
         Args:
-            simulation_id: translatedID
-            platform: translated (twitter/reddit/parallel)
-            max_rounds: translated（translated，translated）
-            enable_graph_memory_update: translatedAgenttranslatedZeptranslated
-            graph_id: ZeptranslatedID（translated）
+            simulation_id: convertedID
+            platform: details (twitter/reddit/parallel)
+            max_rounds: details（details，details）
+            enable_graph_memory_update: convertedAgentconvertedZepconverted
+            graph_id: ZepconvertedID（details）
             
         Returns:
             SimulationRunState
         """
-        # translated
+        # details
         existing = cls.get_run_state(simulation_id)
         if existing and existing.runner_status in [RunnerStatus.RUNNING, RunnerStatus.STARTING]:
-            raise ValueError(f"translated: {simulation_id}")
+            raise ValueError(f"details: {simulation_id}")
         
-        # translated
+        # details
         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
         config_path = os.path.join(sim_dir, "simulation_config.json")
         
         if not os.path.exists(config_path):
-            raise ValueError(f"translated，translated /prepare translated")
+            raise ValueError(f"details，details /prepare details")
         
         with open(config_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
         
-        # translated
+        # details
         time_config = config.get("time_config", {})
         total_hours = time_config.get("total_simulation_hours", 72)
         minutes_per_round = time_config.get("minutes_per_round", 30)
         total_rounds = int(total_hours * 60 / minutes_per_round)
         
-        # translated，translated
+        # details，details
         if max_rounds is not None and max_rounds > 0:
             original_rounds = total_rounds
             total_rounds = min(total_rounds, max_rounds)
             if total_rounds < original_rounds:
-                logger.info(f"translated: {original_rounds} -> {total_rounds} (max_rounds={max_rounds})")
+                logger.info(f"details: {original_rounds} -> {total_rounds} (max_rounds={max_rounds})")
         
         state = SimulationRunState(
             simulation_id=simulation_id,
@@ -368,22 +368,22 @@ class SimulationRunner:
         
         cls._save_run_state(state)
         
-        # translated，translated
+        # details，details
         if enable_graph_memory_update:
             if not graph_id:
-                raise ValueError("translated graph_id")
+                raise ValueError("details graph_id")
             
             try:
                 ZepGraphMemoryManager.create_updater(simulation_id, graph_id)
                 cls._graph_memory_enabled[simulation_id] = True
-                logger.info(f"translated: simulation_id={simulation_id}, graph_id={graph_id}")
+                logger.info(f"details: simulation_id={simulation_id}, graph_id={graph_id}")
             except Exception as e:
-                logger.error(f"translated: {e}")
+                logger.error(f"details: {e}")
                 cls._graph_memory_enabled[simulation_id] = False
         else:
             cls._graph_memory_enabled[simulation_id] = False
         
-        # translated（translated backend/scripts/ translated）
+        # details（details backend/scripts/ details）
         if platform == "twitter":
             script_name = "run_twitter_simulation.py"
             state.twitter_running = True
@@ -398,64 +398,64 @@ class SimulationRunner:
         script_path = os.path.join(cls.SCRIPTS_DIR, script_name)
         
         if not os.path.exists(script_path):
-            raise ValueError(f"translated: {script_path}")
+            raise ValueError(f"details: {script_path}")
         
-        # translated
+        # details
         action_queue = Queue()
         cls._action_queues[simulation_id] = action_queue
         
-        # translated
+        # details
         try:
-            # translated，translated
-            # translated：
-            #   twitter/actions.jsonl - Twitter translated
-            #   reddit/actions.jsonl  - Reddit translated
-            #   simulation.log        - translated
+            # details，details
+            # details：
+            #   twitter/actions.jsonl - Twitter details
+            #   reddit/actions.jsonl  - Reddit details
+            #   simulation.log        - details
             
             cmd = [
-                sys.executable,  # Pythontranslated
+                sys.executable,  # Pythonconverted
                 script_path,
-                "--config", config_path,  # translated
+                "--config", config_path,  # details
             ]
             
-            # translated，translated
+            # details，details
             if max_rounds is not None and max_rounds > 0:
                 cmd.extend(["--max-rounds", str(max_rounds)])
             
-            # translated，translated stdout/stderr translated
+            # details，details stdout/stderr details
             main_log_path = os.path.join(sim_dir, "simulation.log")
             main_log_file = open(main_log_path, 'w', encoding='utf-8')
             
-            # translated，translated Windows translated UTF-8 translated
-            # translated（translated OASIS）translated
+            # details，details Windows details UTF-8 details
+            # details（details OASIS）details
             env = os.environ.copy()
-            env['PYTHONUTF8'] = '1'  # Python 3.7+ translated，translated open() translated UTF-8
-            env['PYTHONIOENCODING'] = 'utf-8'  # translated stdout/stderr translated UTF-8
+            env['PYTHONUTF8'] = '1'  # Python 3.7+ details，details open() details UTF-8
+            env['PYTHONIOENCODING'] = 'utf-8'  # details stdout/stderr details UTF-8
             
-            # translated（translated）
-            # translated start_new_session=True translated，translated os.killpg translated
+            # details（details）
+            # details start_new_session=True details，details os.killpg details
             process = subprocess.Popen(
                 cmd,
                 cwd=sim_dir,
                 stdout=main_log_file,
-                stderr=subprocess.STDOUT,  # stderr translated
+                stderr=subprocess.STDOUT,  # stderr details
                 text=True,
-                encoding='utf-8',  # translated
+                encoding='utf-8',  # details
                 bufsize=1,
-                env=env,  # translated UTF-8 translated
-                start_new_session=True,  # translated，translated
+                env=env,  # details UTF-8 details
+                start_new_session=True,  # details，details
             )
             
-            # translated
+            # details
             cls._stdout_files[simulation_id] = main_log_file
-            cls._stderr_files[simulation_id] = None  # translated stderr
+            cls._stderr_files[simulation_id] = None  # details stderr
             
             state.process_pid = process.pid
             state.runner_status = RunnerStatus.RUNNING
             cls._processes[simulation_id] = process
             cls._save_run_state(state)
             
-            # translated
+            # details
             monitor_thread = threading.Thread(
                 target=cls._monitor_simulation,
                 args=(simulation_id,),
@@ -464,7 +464,7 @@ class SimulationRunner:
             monitor_thread.start()
             cls._monitor_threads[simulation_id] = monitor_thread
             
-            logger.info(f"translated: {simulation_id}, pid={process.pid}, platform={platform}")
+            logger.info(f"details: {simulation_id}, pid={process.pid}, platform={platform}")
             
         except Exception as e:
             state.runner_status = RunnerStatus.FAILED
@@ -476,10 +476,10 @@ class SimulationRunner:
     
     @classmethod
     def _monitor_simulation(cls, simulation_id: str):
-        """translated，translated"""
+        """details，details"""
         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
         
-        # translated：translated
+        # details：details
         twitter_actions_log = os.path.join(sim_dir, "twitter", "actions.jsonl")
         reddit_actions_log = os.path.join(sim_dir, "reddit", "actions.jsonl")
         
@@ -493,75 +493,75 @@ class SimulationRunner:
         reddit_position = 0
         
         try:
-            while process.poll() is None:  # translated
-                # translated Twitter translated
+            while process.poll() is None:  # details
+                # details Twitter details
                 if os.path.exists(twitter_actions_log):
                     twitter_position = cls._read_action_log(
                         twitter_actions_log, twitter_position, state, "twitter"
                     )
                 
-                # translated Reddit translated
+                # details Reddit details
                 if os.path.exists(reddit_actions_log):
                     reddit_position = cls._read_action_log(
                         reddit_actions_log, reddit_position, state, "reddit"
                     )
                 
-                # translated
+                # details
                 cls._save_run_state(state)
                 time.sleep(2)
             
-            # translated，translated
+            # details，details
             if os.path.exists(twitter_actions_log):
                 cls._read_action_log(twitter_actions_log, twitter_position, state, "twitter")
             if os.path.exists(reddit_actions_log):
                 cls._read_action_log(reddit_actions_log, reddit_position, state, "reddit")
             
-            # translated
+            # details
             exit_code = process.returncode
             
             if exit_code == 0:
                 state.runner_status = RunnerStatus.COMPLETED
                 state.completed_at = datetime.now().isoformat()
-                logger.info(f"translated: {simulation_id}")
+                logger.info(f"details: {simulation_id}")
             else:
                 state.runner_status = RunnerStatus.FAILED
-                # translated
+                # details
                 main_log_path = os.path.join(sim_dir, "simulation.log")
                 error_info = ""
                 try:
                     if os.path.exists(main_log_path):
                         with open(main_log_path, 'r', encoding='utf-8') as f:
-                            error_info = f.read()[-2000:]  # translated2000translated
+                            error_info = f.read()[-2000:]  # converted2000converted
                 except Exception:
                     pass
-                state.error = f"translated: {exit_code}, translated: {error_info}"
-                logger.error(f"translated: {simulation_id}, error={state.error}")
+                state.error = f"details: {exit_code}, details: {error_info}"
+                logger.error(f"details: {simulation_id}, error={state.error}")
             
             state.twitter_running = False
             state.reddit_running = False
             cls._save_run_state(state)
             
         except Exception as e:
-            logger.error(f"translated: {simulation_id}, error={str(e)}")
+            logger.error(f"details: {simulation_id}, error={str(e)}")
             state.runner_status = RunnerStatus.FAILED
             state.error = str(e)
             cls._save_run_state(state)
         
         finally:
-            # translated
+            # details
             if cls._graph_memory_enabled.get(simulation_id, False):
                 try:
                     ZepGraphMemoryManager.stop_updater(simulation_id)
-                    logger.info(f"translated: simulation_id={simulation_id}")
+                    logger.info(f"details: simulation_id={simulation_id}")
                 except Exception as e:
-                    logger.error(f"translated: {e}")
+                    logger.error(f"details: {e}")
                 cls._graph_memory_enabled.pop(simulation_id, None)
             
-            # translated
+            # details
             cls._processes.pop(simulation_id, None)
             cls._action_queues.pop(simulation_id, None)
             
-            # translated
+            # details
             if simulation_id in cls._stdout_files:
                 try:
                     cls._stdout_files[simulation_id].close()
@@ -584,18 +584,18 @@ class SimulationRunner:
         platform: str
     ) -> int:
         """
-        translated
+        details
         
         Args:
-            log_path: translated
-            position: translated
-            state: translated
-            platform: translated (twitter/reddit)
+            log_path: details
+            position: details
+            state: details
+            platform: details (twitter/reddit)
             
         Returns:
-            translated
+            details
         """
-        # translated
+        # details
         graph_memory_enabled = cls._graph_memory_enabled.get(state.simulation_id, False)
         graph_updater = None
         if graph_memory_enabled:
@@ -610,36 +610,36 @@ class SimulationRunner:
                         try:
                             action_data = json.loads(line)
                             
-                            # translated
+                            # details
                             if "event_type" in action_data:
                                 event_type = action_data.get("event_type")
                                 
-                                # translated simulation_end translated，translated
+                                # details simulation_end details，details
                                 if event_type == "simulation_end":
                                     if platform == "twitter":
                                         state.twitter_completed = True
                                         state.twitter_running = False
-                                        logger.info(f"Twitter translated: {state.simulation_id}, total_rounds={action_data.get('total_rounds')}, total_actions={action_data.get('total_actions')}")
+                                        logger.info(f"Twitter details: {state.simulation_id}, total_rounds={action_data.get('total_rounds')}, total_actions={action_data.get('total_actions')}")
                                     elif platform == "reddit":
                                         state.reddit_completed = True
                                         state.reddit_running = False
-                                        logger.info(f"Reddit translated: {state.simulation_id}, total_rounds={action_data.get('total_rounds')}, total_actions={action_data.get('total_actions')}")
+                                        logger.info(f"Reddit details: {state.simulation_id}, total_rounds={action_data.get('total_rounds')}, total_actions={action_data.get('total_actions')}")
                                     
-                                    # translated
-                                    # translated，translated
-                                    # translated，translated
+                                    # details
+                                    # details，details
+                                    # details，details
                                     all_completed = cls._check_all_platforms_completed(state)
                                     if all_completed:
                                         state.runner_status = RunnerStatus.COMPLETED
                                         state.completed_at = datetime.now().isoformat()
-                                        logger.info(f"translated: {state.simulation_id}")
+                                        logger.info(f"details: {state.simulation_id}")
                                 
-                                # translated（translated round_end translated）
+                                # details（details round_end details）
                                 elif event_type == "round_end":
                                     round_num = action_data.get("round", 0)
                                     simulated_hours = action_data.get("simulated_hours", 0)
                                     
-                                    # translated
+                                    # details
                                     if platform == "twitter":
                                         if round_num > state.twitter_current_round:
                                             state.twitter_current_round = round_num
@@ -649,10 +649,10 @@ class SimulationRunner:
                                             state.reddit_current_round = round_num
                                         state.reddit_simulated_hours = simulated_hours
                                     
-                                    # translated
+                                    # details
                                     if round_num > state.current_round:
                                         state.current_round = round_num
-                                    # translated
+                                    # details
                                     state.simulated_hours = max(state.twitter_simulated_hours, state.reddit_simulated_hours)
                                 
                                 continue
@@ -670,11 +670,11 @@ class SimulationRunner:
                             )
                             state.add_action(action)
                             
-                            # translated
+                            # details
                             if action.round_num and action.round_num > state.current_round:
                                 state.current_round = action.round_num
                             
-                            # translated，translatedZep
+                            # details，convertedZep
                             if graph_updater:
                                 graph_updater.add_activity_from_dict(action_data, platform)
                             
@@ -682,52 +682,52 @@ class SimulationRunner:
                             pass
                 return f.tell()
         except Exception as e:
-            logger.warning(f"translated: {log_path}, error={e}")
+            logger.warning(f"details: {log_path}, error={e}")
             return position
     
     @classmethod
     def _check_all_platforms_completed(cls, state: SimulationRunState) -> bool:
         """
-        translated
+        details
         
-        translated actions.jsonl translated
+        details actions.jsonl details
         
         Returns:
-            True translated
+            True details
         """
         sim_dir = os.path.join(cls.RUN_STATE_DIR, state.simulation_id)
         twitter_log = os.path.join(sim_dir, "twitter", "actions.jsonl")
         reddit_log = os.path.join(sim_dir, "reddit", "actions.jsonl")
         
-        # translated（translated）
+        # details（details）
         twitter_enabled = os.path.exists(twitter_log)
         reddit_enabled = os.path.exists(reddit_log)
         
-        # translated，translated False
+        # details，details False
         if twitter_enabled and not state.twitter_completed:
             return False
         if reddit_enabled and not state.reddit_completed:
             return False
         
-        # translated
+        # details
         return twitter_enabled or reddit_enabled
     
     @classmethod
     def _terminate_process(cls, process: subprocess.Popen, simulation_id: str, timeout: int = 10):
         """
-        translated
+        details
         
         Args:
-            process: translated
-            simulation_id: translatedID（translated）
-            timeout: translated（translated）
+            process: details
+            simulation_id: convertedID（details）
+            timeout: details（details）
         """
         if IS_WINDOWS:
-            # Windows: translated taskkill translated
-            # /F = translated, /T = translated（translated）
-            logger.info(f"translated (Windows): simulation={simulation_id}, pid={process.pid}")
+            # Windows: details taskkill details
+            # /F = details, /T = details（details）
+            logger.info(f"details (Windows): simulation={simulation_id}, pid={process.pid}")
             try:
-                # translated
+                # details
                 subprocess.run(
                     ['taskkill', '/PID', str(process.pid), '/T'],
                     capture_output=True,
@@ -736,8 +736,8 @@ class SimulationRunner:
                 try:
                     process.wait(timeout=timeout)
                 except subprocess.TimeoutExpired:
-                    # translated
-                    logger.warning(f"translated，translated: {simulation_id}")
+                    # details
+                    logger.warning(f"details，details: {simulation_id}")
                     subprocess.run(
                         ['taskkill', '/F', '/PID', str(process.pid), '/T'],
                         capture_output=True,
@@ -745,53 +745,53 @@ class SimulationRunner:
                     )
                     process.wait(timeout=5)
             except Exception as e:
-                logger.warning(f"taskkill translated，translated terminate: {e}")
+                logger.warning(f"taskkill details，details terminate: {e}")
                 process.terminate()
                 try:
                     process.wait(timeout=5)
                 except subprocess.TimeoutExpired:
                     process.kill()
         else:
-            # Unix: translated
-            # translated start_new_session=True，translated ID translated PID
+            # Unix: details
+            # details start_new_session=True，details ID details PID
             pgid = os.getpgid(process.pid)
-            logger.info(f"translated (Unix): simulation={simulation_id}, pgid={pgid}")
+            logger.info(f"details (Unix): simulation={simulation_id}, pgid={pgid}")
             
-            # translated SIGTERM translated
+            # details SIGTERM details
             os.killpg(pgid, signal.SIGTERM)
             
             try:
                 process.wait(timeout=timeout)
             except subprocess.TimeoutExpired:
-                # translated，translated SIGKILL
-                logger.warning(f"translated SIGTERM，translated: {simulation_id}")
+                # details，details SIGKILL
+                logger.warning(f"details SIGTERM，details: {simulation_id}")
                 os.killpg(pgid, signal.SIGKILL)
                 process.wait(timeout=5)
     
     @classmethod
     def stop_simulation(cls, simulation_id: str) -> SimulationRunState:
-        """translated"""
+        """details"""
         state = cls.get_run_state(simulation_id)
         if not state:
-            raise ValueError(f"translated: {simulation_id}")
+            raise ValueError(f"details: {simulation_id}")
         
         if state.runner_status not in [RunnerStatus.RUNNING, RunnerStatus.PAUSED]:
-            raise ValueError(f"translated: {simulation_id}, status={state.runner_status}")
+            raise ValueError(f"details: {simulation_id}, status={state.runner_status}")
         
         state.runner_status = RunnerStatus.STOPPING
         cls._save_run_state(state)
         
-        # translated
+        # details
         process = cls._processes.get(simulation_id)
         if process and process.poll() is None:
             try:
                 cls._terminate_process(process, simulation_id)
             except ProcessLookupError:
-                # translated
+                # details
                 pass
             except Exception as e:
-                logger.error(f"translated: {simulation_id}, error={e}")
-                # translated
+                logger.error(f"details: {simulation_id}, error={e}")
+                # details
                 try:
                     process.terminate()
                     process.wait(timeout=5)
@@ -804,16 +804,16 @@ class SimulationRunner:
         state.completed_at = datetime.now().isoformat()
         cls._save_run_state(state)
         
-        # translated
+        # details
         if cls._graph_memory_enabled.get(simulation_id, False):
             try:
                 ZepGraphMemoryManager.stop_updater(simulation_id)
-                logger.info(f"translated: simulation_id={simulation_id}")
+                logger.info(f"details: simulation_id={simulation_id}")
             except Exception as e:
-                logger.error(f"translated: {e}")
+                logger.error(f"details: {e}")
             cls._graph_memory_enabled.pop(simulation_id, None)
         
-        logger.info(f"translated: {simulation_id}")
+        logger.info(f"details: {simulation_id}")
         return state
     
     @classmethod
@@ -826,14 +826,14 @@ class SimulationRunner:
         round_num: Optional[int] = None
     ) -> List[AgentAction]:
         """
-        translated
+        details
         
         Args:
-            file_path: translated
-            default_platform: translated（translated platform translated）
-            platform_filter: translated
-            agent_id: translated Agent ID
-            round_num: translated
+            file_path: details
+            default_platform: details（details platform details）
+            platform_filter: details
+            agent_id: details Agent ID
+            round_num: details
         """
         if not os.path.exists(file_path):
             return []
@@ -849,18 +849,18 @@ class SimulationRunner:
                 try:
                     data = json.loads(line)
                     
-                    # translated（translated simulation_start, round_start, round_end translated）
+                    # details（details simulation_start, round_start, round_end details）
                     if "event_type" in data:
                         continue
                     
-                    # translated agent_id translated（translated Agent translated）
+                    # details agent_id details（details Agent details）
                     if "agent_id" not in data:
                         continue
                     
-                    # translated：translated platform，translated
+                    # details：details platform，details
                     record_platform = data.get("platform") or default_platform or ""
                     
-                    # translated
+                    # details
                     if platform_filter and record_platform != platform_filter:
                         continue
                     if agent_id is not None and data.get("agent_id") != agent_id:
@@ -894,54 +894,54 @@ class SimulationRunner:
         round_num: Optional[int] = None
     ) -> List[AgentAction]:
         """
-        translated（translated）
+        details（details）
         
         Args:
-            simulation_id: translatedID
-            platform: translated（twitter/reddit）
-            agent_id: translatedAgent
-            round_num: translated
+            simulation_id: convertedID
+            platform: details（twitter/reddit）
+            agent_id: convertedAgent
+            round_num: details
             
         Returns:
-            translated（translated，translated）
+            details（details，details）
         """
         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
         actions = []
         
-        # translated Twitter translated（translated platform translated twitter）
+        # details Twitter details（details platform details twitter）
         twitter_actions_log = os.path.join(sim_dir, "twitter", "actions.jsonl")
         if not platform or platform == "twitter":
             actions.extend(cls._read_actions_from_file(
                 twitter_actions_log,
-                default_platform="twitter",  # translated platform translated
+                default_platform="twitter",  # details platform details
                 platform_filter=platform,
                 agent_id=agent_id, 
                 round_num=round_num
             ))
         
-        # translated Reddit translated（translated platform translated reddit）
+        # details Reddit details（details platform details reddit）
         reddit_actions_log = os.path.join(sim_dir, "reddit", "actions.jsonl")
         if not platform or platform == "reddit":
             actions.extend(cls._read_actions_from_file(
                 reddit_actions_log,
-                default_platform="reddit",  # translated platform translated
+                default_platform="reddit",  # details platform details
                 platform_filter=platform,
                 agent_id=agent_id,
                 round_num=round_num
             ))
         
-        # translated，translated
+        # details，details
         if not actions:
             actions_log = os.path.join(sim_dir, "actions.jsonl")
             actions = cls._read_actions_from_file(
                 actions_log,
-                default_platform=None,  # translated platform translated
+                default_platform=None,  # details platform details
                 platform_filter=platform,
                 agent_id=agent_id,
                 round_num=round_num
             )
         
-        # translated（translated）
+        # details（details）
         actions.sort(key=lambda x: x.timestamp, reverse=True)
         
         return actions
@@ -957,18 +957,18 @@ class SimulationRunner:
         round_num: Optional[int] = None
     ) -> List[AgentAction]:
         """
-        translated（translated）
+        details（details）
         
         Args:
-            simulation_id: translatedID
-            limit: translated
-            offset: translated
-            platform: translated
-            agent_id: translatedAgent
-            round_num: translated
+            simulation_id: convertedID
+            limit: details
+            offset: details
+            platform: details
+            agent_id: convertedAgent
+            round_num: details
             
         Returns:
-            translated
+            details
         """
         actions = cls.get_all_actions(
             simulation_id=simulation_id,
@@ -977,7 +977,7 @@ class SimulationRunner:
             round_num=round_num
         )
         
-        # translated
+        # details
         return actions[offset:offset + limit]
     
     @classmethod
@@ -988,19 +988,19 @@ class SimulationRunner:
         end_round: Optional[int] = None
     ) -> List[Dict[str, Any]]:
         """
-        translated（translated）
+        details（details）
         
         Args:
-            simulation_id: translatedID
-            start_round: translated
-            end_round: translated
+            simulation_id: convertedID
+            start_round: details
+            end_round: details
             
         Returns:
-            translated
+            details
         """
         actions = cls.get_actions(simulation_id, limit=10000)
         
-        # translated
+        # details
         rounds: Dict[int, Dict[str, Any]] = {}
         
         for action in actions:
@@ -1033,7 +1033,7 @@ class SimulationRunner:
             r["action_types"][action.action_type] = r["action_types"].get(action.action_type, 0) + 1
             r["last_action_time"] = action.timestamp
         
-        # translated
+        # details
         result = []
         for round_num in sorted(rounds.keys()):
             r = rounds[round_num]
@@ -1054,10 +1054,10 @@ class SimulationRunner:
     @classmethod
     def get_agent_stats(cls, simulation_id: str) -> List[Dict[str, Any]]:
         """
-        translatedAgenttranslated
+        convertedAgentconverted
         
         Returns:
-            Agenttranslated
+            Agentconverted
         """
         actions = cls.get_actions(simulation_id, limit=10000)
         
@@ -1089,7 +1089,7 @@ class SimulationRunner:
             stats["action_types"][action.action_type] = stats["action_types"].get(action.action_type, 0) + 1
             stats["last_action_time"] = action.timestamp
         
-        # translated
+        # details
         result = sorted(agent_stats.values(), key=lambda x: x["total_actions"], reverse=True)
         
         return result
@@ -1097,51 +1097,51 @@ class SimulationRunner:
     @classmethod
     def cleanup_simulation_logs(cls, simulation_id: str) -> Dict[str, Any]:
         """
-        translated（translated）
+        details（details）
         
-        translated：
+        details：
         - run_state.json
         - twitter/actions.jsonl
         - reddit/actions.jsonl
         - simulation.log
         - stdout.log / stderr.log
-        - twitter_simulation.db（translated）
-        - reddit_simulation.db（translated）
-        - env_status.json（translated）
+        - twitter_simulation.db（details）
+        - reddit_simulation.db（details）
+        - env_status.json（details）
         
-        translated：translated（simulation_config.json）translated profile translated
+        details：details（simulation_config.json）details profile details
         
         Args:
-            simulation_id: translatedID
+            simulation_id: convertedID
             
         Returns:
-            translated
+            details
         """
         import shutil
         
         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
         
         if not os.path.exists(sim_dir):
-            return {"success": True, "message": "translated，translated"}
+            return {"success": True, "message": "details，details"}
         
         cleaned_files = []
         errors = []
         
-        # translated（translated）
+        # details（details）
         files_to_delete = [
             "run_state.json",
             "simulation.log",
             "stdout.log",
             "stderr.log",
-            "twitter_simulation.db",  # Twitter translated
-            "reddit_simulation.db",   # Reddit translated
-            "env_status.json",        # translated
+            "twitter_simulation.db",  # Twitter details
+            "reddit_simulation.db",   # Reddit details
+            "env_status.json",        # details
         ]
         
-        # translated（translated）
+        # details（details）
         dirs_to_clean = ["twitter", "reddit"]
         
-        # translated
+        # details
         for filename in files_to_delete:
             file_path = os.path.join(sim_dir, filename)
             if os.path.exists(file_path):
@@ -1149,9 +1149,9 @@ class SimulationRunner:
                     os.remove(file_path)
                     cleaned_files.append(filename)
                 except Exception as e:
-                    errors.append(f"translated {filename} translated: {str(e)}")
+                    errors.append(f"details {filename} details: {str(e)}")
         
-        # translated
+        # details
         for dir_name in dirs_to_clean:
             dir_path = os.path.join(sim_dir, dir_name)
             if os.path.exists(dir_path):
@@ -1161,13 +1161,13 @@ class SimulationRunner:
                         os.remove(actions_file)
                         cleaned_files.append(f"{dir_name}/actions.jsonl")
                     except Exception as e:
-                        errors.append(f"translated {dir_name}/actions.jsonl translated: {str(e)}")
+                        errors.append(f"details {dir_name}/actions.jsonl details: {str(e)}")
         
-        # translated
+        # details
         if simulation_id in cls._run_states:
             del cls._run_states[simulation_id]
         
-        logger.info(f"translated: {simulation_id}, translated: {cleaned_files}")
+        logger.info(f"details: {simulation_id}, details: {cleaned_files}")
         
         return {
             "success": len(errors) == 0,
@@ -1175,71 +1175,71 @@ class SimulationRunner:
             "errors": errors if errors else None
         }
     
-    # translated
+    # details
     _cleanup_done = False
     
     @classmethod
     def cleanup_all_simulations(cls):
         """
-        translated
+        details
         
-        translated，translated
+        details，details
         """
-        # translated
+        # details
         if cls._cleanup_done:
             return
         cls._cleanup_done = True
         
-        # translated（translated）
+        # details（details）
         has_processes = bool(cls._processes)
         has_updaters = bool(cls._graph_memory_enabled)
         
         if not has_processes and not has_updaters:
-            return  # translated，translated
+            return  # details，details
         
-        logger.info("translated...")
+        logger.info("details...")
         
-        # translated（stop_all translated）
+        # details（stop_all details）
         try:
             ZepGraphMemoryManager.stop_all()
         except Exception as e:
-            logger.error(f"translated: {e}")
+            logger.error(f"details: {e}")
         cls._graph_memory_enabled.clear()
         
-        # translated
+        # details
         processes = list(cls._processes.items())
         
         for simulation_id, process in processes:
             try:
-                if process.poll() is None:  # translated
-                    logger.info(f"translated: {simulation_id}, pid={process.pid}")
+                if process.poll() is None:  # details
+                    logger.info(f"details: {simulation_id}, pid={process.pid}")
                     
                     try:
-                        # translated
+                        # details
                         cls._terminate_process(process, simulation_id, timeout=5)
                     except (ProcessLookupError, OSError):
-                        # translated，translated
+                        # details，details
                         try:
                             process.terminate()
                             process.wait(timeout=3)
                         except Exception:
                             process.kill()
                     
-                    # translated run_state.json
+                    # details run_state.json
                     state = cls.get_run_state(simulation_id)
                     if state:
                         state.runner_status = RunnerStatus.STOPPED
                         state.twitter_running = False
                         state.reddit_running = False
                         state.completed_at = datetime.now().isoformat()
-                        state.error = "translated，translated"
+                        state.error = "details，details"
                         cls._save_run_state(state)
                     
-                    # translated state.json，translated stopped
+                    # details state.json，details stopped
                     try:
                         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
                         state_file = os.path.join(sim_dir, "state.json")
-                        logger.info(f"translated state.json: {state_file}")
+                        logger.info(f"details state.json: {state_file}")
                         if os.path.exists(state_file):
                             with open(state_file, 'r', encoding='utf-8') as f:
                                 state_data = json.load(f)
@@ -1247,16 +1247,16 @@ class SimulationRunner:
                             state_data['updated_at'] = datetime.now().isoformat()
                             with open(state_file, 'w', encoding='utf-8') as f:
                                 json.dump(state_data, f, indent=2, ensure_ascii=False)
-                            logger.info(f"translated state.json translated stopped: {simulation_id}")
+                            logger.info(f"details state.json details stopped: {simulation_id}")
                         else:
-                            logger.warning(f"state.json translated: {state_file}")
+                            logger.warning(f"state.json details: {state_file}")
                     except Exception as state_err:
-                        logger.warning(f"translated state.json translated: {simulation_id}, error={state_err}")
+                        logger.warning(f"details state.json details: {simulation_id}, error={state_err}")
                         
             except Exception as e:
-                logger.error(f"translated: {simulation_id}, error={e}")
+                logger.error(f"details: {simulation_id}, error={e}")
         
-        # translated
+        # details
         for simulation_id, file_handle in list(cls._stdout_files.items()):
             try:
                 if file_handle:
@@ -1273,89 +1273,89 @@ class SimulationRunner:
                 pass
         cls._stderr_files.clear()
         
-        # translated
+        # details
         cls._processes.clear()
         cls._action_queues.clear()
         
-        logger.info("translated")
+        logger.info("details")
     
     @classmethod
     def register_cleanup(cls):
         """
-        translated
+        details
         
-        translated Flask translated，translated
+        details Flask details，details
         """
         global _cleanup_registered
         
         if _cleanup_registered:
             return
         
-        # Flask debug translated，translated reloader translated（translated）
-        # WERKZEUG_RUN_MAIN=true translated reloader translated
-        # translated debug translated，translated，translated
+        # Flask debug details，details reloader details（details）
+        # WERKZEUG_RUN_MAIN=true details reloader details
+        # details debug details，details，details
         is_reloader_process = os.environ.get('WERKZEUG_RUN_MAIN') == 'true'
         is_debug_mode = os.environ.get('FLASK_DEBUG') == '1' or os.environ.get('WERKZEUG_RUN_MAIN') is not None
         
-        # translated debug translated，translated reloader translated；translated debug translated
+        # details debug details，details reloader details；details debug details
         if is_debug_mode and not is_reloader_process:
-            _cleanup_registered = True  # translated，translated
+            _cleanup_registered = True  # details，details
             return
         
-        # translated
+        # details
         original_sigint = signal.getsignal(signal.SIGINT)
         original_sigterm = signal.getsignal(signal.SIGTERM)
-        # SIGHUP translated Unix translated（macOS/Linux），Windows translated
+        # SIGHUP details Unix details（macOS/Linux），Windows details
         original_sighup = None
         has_sighup = hasattr(signal, 'SIGHUP')
         if has_sighup:
             original_sighup = signal.getsignal(signal.SIGHUP)
         
         def cleanup_handler(signum=None, frame=None):
-            """translated：translated，translated"""
-            # translated
+            """details：details，details"""
+            # details
             if cls._processes or cls._graph_memory_enabled:
-                logger.info(f"translated {signum}，translated...")
+                logger.info(f"details {signum}，details...")
             cls.cleanup_all_simulations()
             
-            # translated，translated Flask translated
+            # details，details Flask details
             if signum == signal.SIGINT and callable(original_sigint):
                 original_sigint(signum, frame)
             elif signum == signal.SIGTERM and callable(original_sigterm):
                 original_sigterm(signum, frame)
             elif has_sighup and signum == signal.SIGHUP:
-                # SIGHUP: translated
+                # SIGHUP: details
                 if callable(original_sighup):
                     original_sighup(signum, frame)
                 else:
-                    # translated：translated
+                    # details：details
                     sys.exit(0)
             else:
-                # translated（translated SIG_DFL），translated
+                # details（details SIG_DFL），details
                 raise KeyboardInterrupt
         
-        # translated atexit translated（translated）
+        # details atexit details（details）
         atexit.register(cls.cleanup_all_simulations)
         
-        # translated（translated）
+        # details（details）
         try:
-            # SIGTERM: kill translated
+            # SIGTERM: kill details
             signal.signal(signal.SIGTERM, cleanup_handler)
             # SIGINT: Ctrl+C
             signal.signal(signal.SIGINT, cleanup_handler)
-            # SIGHUP: translated（translated Unix translated）
+            # SIGHUP: details（details Unix details）
             if has_sighup:
                 signal.signal(signal.SIGHUP, cleanup_handler)
         except ValueError:
-            # translated，translated atexit
-            logger.warning("translated（translated），translated atexit")
+            # details，details atexit
+            logger.warning("details（details），details atexit")
         
         _cleanup_registered = True
     
     @classmethod
     def get_running_simulations(cls) -> List[str]:
         """
-        translatedIDtranslated
+        convertedIDconverted
         """
         running = []
         for sim_id, process in cls._processes.items():
@@ -1363,18 +1363,18 @@ class SimulationRunner:
                 running.append(sim_id)
         return running
     
-    # ============== Interview translated ==============
+    # ============== Interview details ==============
     
     @classmethod
     def check_env_alive(cls, simulation_id: str) -> bool:
         """
-        translated（translatedInterviewtranslated）
+        details（convertedInterviewconverted）
 
         Args:
-            simulation_id: translatedID
+            simulation_id: convertedID
 
         Returns:
-            True translated，False translated
+            True details，False details
         """
         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
         if not os.path.exists(sim_dir):
@@ -1386,13 +1386,13 @@ class SimulationRunner:
     @classmethod
     def get_env_status_detail(cls, simulation_id: str) -> Dict[str, Any]:
         """
-        translated
+        details
 
         Args:
-            simulation_id: translatedID
+            simulation_id: convertedID
 
         Returns:
-            translated，translated status, twitter_available, reddit_available, timestamp
+            details，details status, twitter_available, reddit_available, timestamp
         """
         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
         status_file = os.path.join(sim_dir, "env_status.json")
@@ -1429,35 +1429,35 @@ class SimulationRunner:
         timeout: float = 60.0
     ) -> Dict[str, Any]:
         """
-        translatedAgent
+        convertedAgent
 
         Args:
-            simulation_id: translatedID
+            simulation_id: convertedID
             agent_id: Agent ID
-            prompt: translated
-            platform: translated（translated）
-                - "twitter": translatedTwittertranslated
-                - "reddit": translatedReddittranslated
-                - None: translated，translated
-            timeout: translated（translated）
+            prompt: details
+            platform: details（details）
+                - "twitter": convertedTwitterconverted
+                - "reddit": convertedRedditconverted
+                - None: details，details
+            timeout: details（details）
 
         Returns:
-            translated
+            details
 
         Raises:
-            ValueError: translated
-            TimeoutError: translated
+            ValueError: details
+            TimeoutError: details
         """
         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
         if not os.path.exists(sim_dir):
-            raise ValueError(f"translated: {simulation_id}")
+            raise ValueError(f"details: {simulation_id}")
 
         ipc_client = SimulationIPCClient(sim_dir)
 
         if not ipc_client.check_env_alive():
-            raise ValueError(f"translated，translatedInterview: {simulation_id}")
+            raise ValueError(f"details，convertedInterview: {simulation_id}")
 
-        logger.info(f"translatedInterviewtranslated: simulation_id={simulation_id}, agent_id={agent_id}, platform={platform}")
+        logger.info(f"convertedInterviewconverted: simulation_id={simulation_id}, agent_id={agent_id}, platform={platform}")
 
         response = ipc_client.send_interview(
             agent_id=agent_id,
@@ -1492,34 +1492,34 @@ class SimulationRunner:
         timeout: float = 120.0
     ) -> Dict[str, Any]:
         """
-        translatedAgent
+        convertedAgent
 
         Args:
-            simulation_id: translatedID
-            interviews: translated，translated {"agent_id": int, "prompt": str, "platform": str(translated)}
-            platform: translated（translated，translatedplatformtranslated）
-                - "twitter": translatedTwittertranslated
-                - "reddit": translatedReddittranslated
-                - None: translatedAgenttranslated
-            timeout: translated（translated）
+            simulation_id: convertedID
+            interviews: details，details {"agent_id": int, "prompt": str, "platform": str(details)}
+            platform: details（details，convertedplatformconverted）
+                - "twitter": convertedTwitterconverted
+                - "reddit": convertedRedditconverted
+                - None: convertedAgentconverted
+            timeout: details（details）
 
         Returns:
-            translated
+            details
 
         Raises:
-            ValueError: translated
-            TimeoutError: translated
+            ValueError: details
+            TimeoutError: details
         """
         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
         if not os.path.exists(sim_dir):
-            raise ValueError(f"translated: {simulation_id}")
+            raise ValueError(f"details: {simulation_id}")
 
         ipc_client = SimulationIPCClient(sim_dir)
 
         if not ipc_client.check_env_alive():
-            raise ValueError(f"translated，translatedInterview: {simulation_id}")
+            raise ValueError(f"details，convertedInterview: {simulation_id}")
 
-        logger.info(f"translatedInterviewtranslated: simulation_id={simulation_id}, count={len(interviews)}, platform={platform}")
+        logger.info(f"convertedInterviewconverted: simulation_id={simulation_id}, count={len(interviews)}, platform={platform}")
 
         response = ipc_client.send_batch_interview(
             interviews=interviews,
@@ -1551,39 +1551,39 @@ class SimulationRunner:
         timeout: float = 180.0
     ) -> Dict[str, Any]:
         """
-        translatedAgent（translated）
+        convertedAgent（details）
 
-        translatedAgent
+        convertedAgent
 
         Args:
-            simulation_id: translatedID
-            prompt: translated（translatedAgenttranslated）
-            platform: translated（translated）
-                - "twitter": translatedTwittertranslated
-                - "reddit": translatedReddittranslated
-                - None: translatedAgenttranslated
-            timeout: translated（translated）
+            simulation_id: convertedID
+            prompt: details（convertedAgentconverted）
+            platform: details（details）
+                - "twitter": convertedTwitterconverted
+                - "reddit": convertedRedditconverted
+                - None: convertedAgentconverted
+            timeout: details（details）
 
         Returns:
-            translated
+            details
         """
         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
         if not os.path.exists(sim_dir):
-            raise ValueError(f"translated: {simulation_id}")
+            raise ValueError(f"details: {simulation_id}")
 
-        # translatedAgenttranslated
+        # convertedAgentconverted
         config_path = os.path.join(sim_dir, "simulation_config.json")
         if not os.path.exists(config_path):
-            raise ValueError(f"translated: {simulation_id}")
+            raise ValueError(f"details: {simulation_id}")
 
         with open(config_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
 
         agent_configs = config.get("agent_configs", [])
         if not agent_configs:
-            raise ValueError(f"translatedAgent: {simulation_id}")
+            raise ValueError(f"convertedAgent: {simulation_id}")
 
-        # translated
+        # details
         interviews = []
         for agent_config in agent_configs:
             agent_id = agent_config.get("agent_id")
@@ -1593,7 +1593,7 @@ class SimulationRunner:
                     "prompt": prompt
                 })
 
-        logger.info(f"translatedInterviewtranslated: simulation_id={simulation_id}, agent_count={len(interviews)}, platform={platform}")
+        logger.info(f"convertedInterviewconverted: simulation_id={simulation_id}, agent_count={len(interviews)}, platform={platform}")
 
         return cls.interview_agents_batch(
             simulation_id=simulation_id,
@@ -1609,45 +1609,45 @@ class SimulationRunner:
         timeout: float = 30.0
     ) -> Dict[str, Any]:
         """
-        translated（translated）
+        details（details）
         
-        translated，translated
+        details，details
         
         Args:
-            simulation_id: translatedID
-            timeout: translated（translated）
+            simulation_id: convertedID
+            timeout: details（details）
             
         Returns:
-            translated
+            details
         """
         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
         if not os.path.exists(sim_dir):
-            raise ValueError(f"translated: {simulation_id}")
+            raise ValueError(f"details: {simulation_id}")
         
         ipc_client = SimulationIPCClient(sim_dir)
         
         if not ipc_client.check_env_alive():
             return {
                 "success": True,
-                "message": "translated"
+                "message": "details"
             }
         
-        logger.info(f"translated: simulation_id={simulation_id}")
+        logger.info(f"details: simulation_id={simulation_id}")
         
         try:
             response = ipc_client.send_close_env(timeout=timeout)
             
             return {
                 "success": response.status.value == "completed",
-                "message": "translated",
+                "message": "details",
                 "result": response.result,
                 "timestamp": response.timestamp
             }
         except TimeoutError:
-            # translated
+            # details
             return {
                 "success": True,
-                "message": "translated（translated，translated）"
+                "message": "details（details，details）"
             }
     
     @classmethod
@@ -1658,7 +1658,7 @@ class SimulationRunner:
         agent_id: Optional[int] = None,
         limit: int = 100
     ) -> List[Dict[str, Any]]:
-        """translatedInterviewtranslated"""
+        """convertedInterviewconverted"""
         import sqlite3
         
         if not os.path.exists(db_path):
@@ -1704,7 +1704,7 @@ class SimulationRunner:
             conn.close()
             
         except Exception as e:
-            logger.error(f"translatedInterviewtranslated ({platform_name}): {e}")
+            logger.error(f"convertedInterviewconverted ({platform_name}): {e}")
         
         return results
 
@@ -1717,29 +1717,29 @@ class SimulationRunner:
         limit: int = 100
     ) -> List[Dict[str, Any]]:
         """
-        translatedInterviewtranslated（translated）
+        convertedInterviewconverted（details）
         
         Args:
-            simulation_id: translatedID
-            platform: translated（reddit/twitter/None）
-                - "reddit": translatedReddittranslated
-                - "twitter": translatedTwittertranslated
-                - None: translated
-            agent_id: translatedAgent ID（translated，translatedAgenttranslated）
-            limit: translated
+            simulation_id: convertedID
+            platform: details（reddit/twitter/None）
+                - "reddit": convertedRedditconverted
+                - "twitter": convertedTwitterconverted
+                - None: details
+            agent_id: convertedAgent ID（details，convertedAgentconverted）
+            limit: details
             
         Returns:
-            Interviewtranslated
+            Interviewconverted
         """
         sim_dir = os.path.join(cls.RUN_STATE_DIR, simulation_id)
         
         results = []
         
-        # translated
+        # details
         if platform in ("reddit", "twitter"):
             platforms = [platform]
         else:
-            # translatedplatformtranslated，translated
+            # convertedplatformconverted，details
             platforms = ["twitter", "reddit"]
         
         for p in platforms:
@@ -1752,10 +1752,10 @@ class SimulationRunner:
             )
             results.extend(platform_results)
         
-        # translated
+        # details
         results.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
         
-        # translated，translated
+        # details，details
         if len(platforms) > 1 and len(results) > limit:
             results = results[:limit]
         

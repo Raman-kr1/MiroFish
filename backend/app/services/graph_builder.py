@@ -45,7 +45,7 @@ class GraphBuilderService:
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or Config.ZEP_API_KEY
         if not self.api_key:
-            raise ValueError("ZEP_API_KEY translated")
+            raise ValueError("ZEP_API_KEY details")
         
         self.client = Zep(api_key=self.api_key)
         self.task_manager = TaskManager()
@@ -109,7 +109,7 @@ class GraphBuilderService:
                 task_id,
                 status=TaskStatus.PROCESSING,
                 progress=5,
-                message="translated..."
+                message="details..."
             )
             
             # 1. Create graph
@@ -117,7 +117,7 @@ class GraphBuilderService:
             self.task_manager.update_task(
                 task_id,
                 progress=10,
-                message=f"translated: {graph_id}"
+                message=f"details: {graph_id}"
             )
             
             # 2. Set ontology
@@ -125,7 +125,7 @@ class GraphBuilderService:
             self.task_manager.update_task(
                 task_id,
                 progress=15,
-                message="translated"
+                message="details"
             )
             
             # 3. Split text into chunks
@@ -134,7 +134,7 @@ class GraphBuilderService:
             self.task_manager.update_task(
                 task_id,
                 progress=20,
-                message=f"translated {total_chunks} translated"
+                message=f"details {total_chunks} details"
             )
             
             # 4. Send data in batches
@@ -151,7 +151,7 @@ class GraphBuilderService:
             self.task_manager.update_task(
                 task_id,
                 progress=60,
-                message="translatedZeptranslated..."
+                message="convertedZepconverted..."
             )
             
             self._wait_for_episodes(
@@ -167,7 +167,7 @@ class GraphBuilderService:
             self.task_manager.update_task(
                 task_id,
                 progress=90,
-                message="translated..."
+                message="details..."
             )
             
             graph_info = self._get_graph_info(graph_id)
@@ -304,7 +304,7 @@ class GraphBuilderService:
             if progress_callback:
                 progress = (i + len(batch_chunks)) / total_chunks
                 progress_callback(
-                    f"translated {batch_num}/{total_batches} translated ({len(batch_chunks)} translated)...",
+                    f"details {batch_num}/{total_batches} details ({len(batch_chunks)} details)...",
                     progress
                 )
             
@@ -333,7 +333,7 @@ class GraphBuilderService:
                 
             except Exception as e:
                 if progress_callback:
-                    progress_callback(f"translated {batch_num} translated: {str(e)}", 0)
+                    progress_callback(f"details {batch_num} details: {str(e)}", 0)
                 raise
         
         return episode_uuids
@@ -347,7 +347,7 @@ class GraphBuilderService:
         """Wait for all episodes to finish processing (by querying the processed status of each episode)"""
         if not episode_uuids:
             if progress_callback:
-                progress_callback("translated（translated episode）", 1.0)
+                progress_callback("details（details episode）", 1.0)
             return
         
         start_time = time.time()
@@ -356,13 +356,13 @@ class GraphBuilderService:
         total_episodes = len(episode_uuids)
         
         if progress_callback:
-            progress_callback(f"translated {total_episodes} translated...", 0)
+            progress_callback(f"details {total_episodes} details...", 0)
         
         while pending_episodes:
             if time.time() - start_time > timeout:
                 if progress_callback:
                     progress_callback(
-                        f"translated，translated {completed_count}/{total_episodes}",
+                        f"details，details {completed_count}/{total_episodes}",
                         completed_count / total_episodes
                     )
                 break
@@ -384,7 +384,7 @@ class GraphBuilderService:
             elapsed = int(time.time() - start_time)
             if progress_callback:
                 progress_callback(
-                    f"Zeptranslated... {completed_count}/{total_episodes} translated, {len(pending_episodes)} translated ({elapsed}translated)",
+                    f"Zepconverted... {completed_count}/{total_episodes} details, {len(pending_episodes)} details ({elapsed}details)",
                     completed_count / total_episodes if total_episodes > 0 else 0
                 )
             
@@ -392,7 +392,7 @@ class GraphBuilderService:
                 time.sleep(3)  # Check every 3 seconds
         
         if progress_callback:
-            progress_callback(f"translated: {completed_count}/{total_episodes}", 1.0)
+            progress_callback(f"details: {completed_count}/{total_episodes}", 1.0)
     
     def _get_graph_info(self, graph_id: str) -> GraphInfo:
         """Get graph information"""

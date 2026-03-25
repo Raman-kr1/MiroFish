@@ -1,6 +1,6 @@
 """
-translatedAPItranslated
-translated，translated
+convertedAPIconverted
+details，details
 """
 
 import os
@@ -18,31 +18,31 @@ from ..utils.logger import get_logger
 from ..models.task import TaskManager, TaskStatus
 from ..models.project import ProjectManager, ProjectStatus
 
-# translated
+# details
 logger = get_logger('mirofish.api')
 
 
 def allowed_file(filename: str) -> bool:
-    """translated"""
+    """details"""
     if not filename or '.' not in filename:
         return False
     ext = os.path.splitext(filename)[1].lower().lstrip('.')
     return ext in Config.ALLOWED_EXTENSIONS
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @graph_bp.route('/project/<project_id>', methods=['GET'])
 def get_project(project_id: str):
     """
-    translated
+    details
     """
     project = ProjectManager.get_project(project_id)
     
     if not project:
         return jsonify({
             "success": False,
-            "error": f"translated: {project_id}"
+            "error": f"details: {project_id}"
         }), 404
     
     return jsonify({
@@ -54,7 +54,7 @@ def get_project(project_id: str):
 @graph_bp.route('/project/list', methods=['GET'])
 def list_projects():
     """
-    translated
+    details
     """
     limit = request.args.get('limit', 50, type=int)
     projects = ProjectManager.list_projects(limit=limit)
@@ -69,36 +69,36 @@ def list_projects():
 @graph_bp.route('/project/<project_id>', methods=['DELETE'])
 def delete_project(project_id: str):
     """
-    translated
+    details
     """
     success = ProjectManager.delete_project(project_id)
     
     if not success:
         return jsonify({
             "success": False,
-            "error": f"translated: {project_id}"
+            "error": f"details: {project_id}"
         }), 404
     
     return jsonify({
         "success": True,
-        "message": f"translated: {project_id}"
+        "message": f"details: {project_id}"
     })
 
 
 @graph_bp.route('/project/<project_id>/reset', methods=['POST'])
 def reset_project(project_id: str):
     """
-    translated（translated）
+    details（details）
     """
     project = ProjectManager.get_project(project_id)
     
     if not project:
         return jsonify({
             "success": False,
-            "error": f"translated: {project_id}"
+            "error": f"details: {project_id}"
         }), 404
     
-    # translated
+    # details
     if project.ontology:
         project.status = ProjectStatus.ONTOLOGY_GENERATED
     else:
@@ -111,27 +111,27 @@ def reset_project(project_id: str):
     
     return jsonify({
         "success": True,
-        "message": f"translated: {project_id}",
+        "message": f"details: {project_id}",
         "data": project.to_dict()
     })
 
 
-# ============== translated1：translated ==============
+# ============== converted1：details ==============
 
 @graph_bp.route('/ontology/generate', methods=['POST'])
 def generate_ontology():
     """
-    translated1：translated，translated
+    converted1：details，details
     
-    translated：multipart/form-data
+    details：multipart/form-data
     
-    translated：
-        files: translated（PDF/MD/TXT），translated
-        simulation_requirement: translated（translated）
-        project_name: translated（translated）
-        additional_context: translated（translated）
+    details：
+        files: details（PDF/MD/TXT），details
+        simulation_requirement: details（details）
+        project_name: details（details）
+        additional_context: details（details）
         
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -147,42 +147,42 @@ def generate_ontology():
         }
     """
     try:
-        logger.info("=== translated ===")
+        logger.info("=== details ===")
         
-        # translated
+        # details
         simulation_requirement = request.form.get('simulation_requirement', '')
         project_name = request.form.get('project_name', 'Unnamed Project')
         additional_context = request.form.get('additional_context', '')
         
-        logger.debug(f"translated: {project_name}")
-        logger.debug(f"translated: {simulation_requirement[:100]}...")
+        logger.debug(f"details: {project_name}")
+        logger.debug(f"details: {simulation_requirement[:100]}...")
         
         if not simulation_requirement:
             return jsonify({
                 "success": False,
-                "error": "translated (simulation_requirement)"
+                "error": "details (simulation_requirement)"
             }), 400
         
-        # translated
+        # details
         uploaded_files = request.files.getlist('files')
         if not uploaded_files or all(not f.filename for f in uploaded_files):
             return jsonify({
                 "success": False,
-                "error": "translated"
+                "error": "details"
             }), 400
         
-        # translated
+        # details
         project = ProjectManager.create_project(name=project_name)
         project.simulation_requirement = simulation_requirement
-        logger.info(f"translated: {project.project_id}")
+        logger.info(f"details: {project.project_id}")
         
-        # translated
+        # details
         document_texts = []
         all_text = ""
         
         for file in uploaded_files:
             if file and file.filename and allowed_file(file.filename):
-                # translated
+                # details
                 file_info = ProjectManager.save_file_to_project(
                     project.project_id, 
                     file, 
@@ -193,7 +193,7 @@ def generate_ontology():
                     "size": file_info["size"]
                 })
                 
-                # translated
+                # details
                 text = FileParser.extract_text(file_info["path"])
                 text = TextProcessor.preprocess_text(text)
                 document_texts.append(text)
@@ -203,16 +203,16 @@ def generate_ontology():
             ProjectManager.delete_project(project.project_id)
             return jsonify({
                 "success": False,
-                "error": "translated，translated"
+                "error": "details，details"
             }), 400
         
-        # translated
+        # details
         project.total_text_length = len(all_text)
         ProjectManager.save_extracted_text(project.project_id, all_text)
-        logger.info(f"translated，translated {len(all_text)} translated")
+        logger.info(f"details，details {len(all_text)} details")
         
-        # translated
-        logger.info("translated LLM translated...")
+        # details
+        logger.info("details LLM details...")
         generator = OntologyGenerator()
         ontology = generator.generate(
             document_texts=document_texts,
@@ -220,10 +220,10 @@ def generate_ontology():
             additional_context=additional_context if additional_context else None
         )
         
-        # translated
+        # details
         entity_count = len(ontology.get("entity_types", []))
         edge_count = len(ontology.get("edge_types", []))
-        logger.info(f"translated: {entity_count} translated, {edge_count} translated")
+        logger.info(f"details: {entity_count} details, {edge_count} details")
         
         project.ontology = {
             "entity_types": ontology.get("entity_types", []),
@@ -232,7 +232,7 @@ def generate_ontology():
         project.analysis_summary = ontology.get("analysis_summary", "")
         project.status = ProjectStatus.ONTOLOGY_GENERATED
         ProjectManager.save_project(project)
-        logger.info(f"=== translated === translatedID: {project.project_id}")
+        logger.info(f"=== details === convertedID: {project.project_id}")
         
         return jsonify({
             "success": True,
@@ -254,140 +254,140 @@ def generate_ontology():
         }), 500
 
 
-# ============== translated2：translated ==============
+# ============== converted2：details ==============
 
 @graph_bp.route('/build', methods=['POST'])
 def build_graph():
     """
-    translated2：translatedproject_idtranslated
+    converted2：convertedproject_idconverted
     
-    translated（JSON）：
+    details（JSON）：
         {
-            "project_id": "proj_xxxx",  // translated，translated1
-            "graph_name": "translated",    // translated
-            "chunk_size": 500,          // translated，translated500
-            "chunk_overlap": 50         // translated，translated50
+            "project_id": "proj_xxxx",  // details，converted1
+            "graph_name": "details",    // details
+            "chunk_size": 500,          // details，converted500
+            "chunk_overlap": 50         // details，converted50
         }
         
-    translated：
+    details：
         {
             "success": true,
             "data": {
                 "project_id": "proj_xxxx",
                 "task_id": "task_xxxx",
-                "message": "translated"
+                "message": "details"
             }
         }
     """
     try:
-        logger.info("=== translated ===")
+        logger.info("=== details ===")
         
-        # translated
+        # details
         errors = []
         if not Config.ZEP_API_KEY:
-            errors.append("ZEP_API_KEYtranslated")
+            errors.append("ZEP_API_KEYconverted")
         if errors:
-            logger.error(f"translated: {errors}")
+            logger.error(f"details: {errors}")
             return jsonify({
                 "success": False,
-                "error": "translated: " + "; ".join(errors)
+                "error": "details: " + "; ".join(errors)
             }), 500
         
-        # translated
+        # details
         data = request.get_json() or {}
         project_id = data.get('project_id')
-        logger.debug(f"translated: project_id={project_id}")
+        logger.debug(f"details: project_id={project_id}")
         
         if not project_id:
             return jsonify({
                 "success": False,
-                "error": "translated project_id"
+                "error": "details project_id"
             }), 400
         
-        # translated
+        # details
         project = ProjectManager.get_project(project_id)
         if not project:
             return jsonify({
                 "success": False,
-                "error": f"translated: {project_id}"
+                "error": f"details: {project_id}"
             }), 404
         
-        # translated
-        force = data.get('force', False)  # translated
+        # details
+        force = data.get('force', False)  # details
         
         if project.status == ProjectStatus.CREATED:
             return jsonify({
                 "success": False,
-                "error": "translated，translated /ontology/generate"
+                "error": "details，details /ontology/generate"
             }), 400
         
         if project.status == ProjectStatus.GRAPH_BUILDING and not force:
             return jsonify({
                 "success": False,
-                "error": "translated，translated。translated，translated force: true",
+                "error": "details，details。details，details force: true",
                 "task_id": project.graph_build_task_id
             }), 400
         
-        # translated，translated
+        # details，details
         if force and project.status in [ProjectStatus.GRAPH_BUILDING, ProjectStatus.FAILED, ProjectStatus.GRAPH_COMPLETED]:
             project.status = ProjectStatus.ONTOLOGY_GENERATED
             project.graph_id = None
             project.graph_build_task_id = None
             project.error = None
         
-        # translated
+        # details
         graph_name = data.get('graph_name', project.name or 'MiroFish Graph')
         chunk_size = data.get('chunk_size', project.chunk_size or Config.DEFAULT_CHUNK_SIZE)
         chunk_overlap = data.get('chunk_overlap', project.chunk_overlap or Config.DEFAULT_CHUNK_OVERLAP)
         
-        # translated
+        # details
         project.chunk_size = chunk_size
         project.chunk_overlap = chunk_overlap
         
-        # translated
+        # details
         text = ProjectManager.get_extracted_text(project_id)
         if not text:
             return jsonify({
                 "success": False,
-                "error": "translated"
+                "error": "details"
             }), 400
         
-        # translated
+        # details
         ontology = project.ontology
         if not ontology:
             return jsonify({
                 "success": False,
-                "error": "translated"
+                "error": "details"
             }), 400
         
-        # translated
+        # details
         task_manager = TaskManager()
-        task_id = task_manager.create_task(f"translated: {graph_name}")
-        logger.info(f"translated: task_id={task_id}, project_id={project_id}")
+        task_id = task_manager.create_task(f"details: {graph_name}")
+        logger.info(f"details: task_id={task_id}, project_id={project_id}")
         
-        # translated
+        # details
         project.status = ProjectStatus.GRAPH_BUILDING
         project.graph_build_task_id = task_id
         ProjectManager.save_project(project)
         
-        # translated
+        # details
         def build_task():
             build_logger = get_logger('mirofish.build')
             try:
-                build_logger.info(f"[{task_id}] translated...")
+                build_logger.info(f"[{task_id}] details...")
                 task_manager.update_task(
                     task_id, 
                     status=TaskStatus.PROCESSING,
-                    message="translated..."
+                    message="details..."
                 )
                 
-                # translated
+                # details
                 builder = GraphBuilderService(api_key=Config.ZEP_API_KEY)
                 
-                # translated
+                # details
                 task_manager.update_task(
                     task_id,
-                    message="translated...",
+                    message="details...",
                     progress=5
                 )
                 chunks = TextProcessor.split_text(
@@ -397,27 +397,27 @@ def build_graph():
                 )
                 total_chunks = len(chunks)
                 
-                # translated
+                # details
                 task_manager.update_task(
                     task_id,
-                    message="translatedZeptranslated...",
+                    message="convertedZepconverted...",
                     progress=10
                 )
                 graph_id = builder.create_graph(name=graph_name)
                 
-                # translatedgraph_id
+                # convertedgraph_id
                 project.graph_id = graph_id
                 ProjectManager.save_project(project)
                 
-                # translated
+                # details
                 task_manager.update_task(
                     task_id,
-                    message="translated...",
+                    message="details...",
                     progress=15
                 )
                 builder.set_ontology(graph_id, ontology)
                 
-                # translated（progress_callback translated (msg, progress_ratio)）
+                # details（progress_callback details (msg, progress_ratio)）
                 def add_progress_callback(msg, progress_ratio):
                     progress = 15 + int(progress_ratio * 40)  # 15% - 55%
                     task_manager.update_task(
@@ -428,7 +428,7 @@ def build_graph():
                 
                 task_manager.update_task(
                     task_id,
-                    message=f"translated {total_chunks} translated...",
+                    message=f"details {total_chunks} details...",
                     progress=15
                 )
                 
@@ -439,10 +439,10 @@ def build_graph():
                     progress_callback=add_progress_callback
                 )
                 
-                # translatedZeptranslated（translatedepisodetranslatedprocessedtranslated）
+                # convertedZepconverted（convertedepisodeconvertedprocessedconverted）
                 task_manager.update_task(
                     task_id,
-                    message="translatedZeptranslated...",
+                    message="convertedZepconverted...",
                     progress=55
                 )
                 
@@ -456,27 +456,27 @@ def build_graph():
                 
                 builder._wait_for_episodes(episode_uuids, wait_progress_callback)
                 
-                # translated
+                # details
                 task_manager.update_task(
                     task_id,
-                    message="translated...",
+                    message="details...",
                     progress=95
                 )
                 graph_data = builder.get_graph_data(graph_id)
                 
-                # translated
+                # details
                 project.status = ProjectStatus.GRAPH_COMPLETED
                 ProjectManager.save_project(project)
                 
                 node_count = graph_data.get("node_count", 0)
                 edge_count = graph_data.get("edge_count", 0)
-                build_logger.info(f"[{task_id}] translated: graph_id={graph_id}, translated={node_count}, translated={edge_count}")
+                build_logger.info(f"[{task_id}] details: graph_id={graph_id}, details={node_count}, details={edge_count}")
                 
-                # translated
+                # details
                 task_manager.update_task(
                     task_id,
                     status=TaskStatus.COMPLETED,
-                    message="translated",
+                    message="details",
                     progress=100,
                     result={
                         "project_id": project_id,
@@ -488,8 +488,8 @@ def build_graph():
                 )
                 
             except Exception as e:
-                # translated
-                build_logger.error(f"[{task_id}] translated: {str(e)}")
+                # details
+                build_logger.error(f"[{task_id}] details: {str(e)}")
                 build_logger.debug(traceback.format_exc())
                 
                 project.status = ProjectStatus.FAILED
@@ -499,11 +499,11 @@ def build_graph():
                 task_manager.update_task(
                     task_id,
                     status=TaskStatus.FAILED,
-                    message=f"translated: {str(e)}",
+                    message=f"details: {str(e)}",
                     error=traceback.format_exc()
                 )
         
-        # translated
+        # details
         thread = threading.Thread(target=build_task, daemon=True)
         thread.start()
         
@@ -512,7 +512,7 @@ def build_graph():
             "data": {
                 "project_id": project_id,
                 "task_id": task_id,
-                "message": "translated，translated /task/{task_id} translated"
+                "message": "details，details /task/{task_id} details"
             }
         })
         
@@ -524,19 +524,19 @@ def build_graph():
         }), 500
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @graph_bp.route('/task/<task_id>', methods=['GET'])
 def get_task(task_id: str):
     """
-    translated
+    details
     """
     task = TaskManager().get_task(task_id)
     
     if not task:
         return jsonify({
             "success": False,
-            "error": f"translated: {task_id}"
+            "error": f"details: {task_id}"
         }), 404
     
     return jsonify({
@@ -548,7 +548,7 @@ def get_task(task_id: str):
 @graph_bp.route('/tasks', methods=['GET'])
 def list_tasks():
     """
-    translated
+    details
     """
     tasks = TaskManager().list_tasks()
     
@@ -559,18 +559,18 @@ def list_tasks():
     })
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @graph_bp.route('/data/<graph_id>', methods=['GET'])
 def get_graph_data(graph_id: str):
     """
-    translated（translated）
+    details（details）
     """
     try:
         if not Config.ZEP_API_KEY:
             return jsonify({
                 "success": False,
-                "error": "ZEP_API_KEYtranslated"
+                "error": "ZEP_API_KEYconverted"
             }), 500
         
         builder = GraphBuilderService(api_key=Config.ZEP_API_KEY)
@@ -592,13 +592,13 @@ def get_graph_data(graph_id: str):
 @graph_bp.route('/delete/<graph_id>', methods=['DELETE'])
 def delete_graph(graph_id: str):
     """
-    translatedZeptranslated
+    convertedZepconverted
     """
     try:
         if not Config.ZEP_API_KEY:
             return jsonify({
                 "success": False,
-                "error": "ZEP_API_KEYtranslated"
+                "error": "ZEP_API_KEYconverted"
             }), 500
         
         builder = GraphBuilderService(api_key=Config.ZEP_API_KEY)
@@ -606,7 +606,7 @@ def delete_graph(graph_id: str):
         
         return jsonify({
             "success": True,
-            "message": f"translated: {graph_id}"
+            "message": f"details: {graph_id}"
         })
         
     except Exception as e:

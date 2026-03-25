@@ -68,8 +68,8 @@ class Config:
         """Validate required configuration"""
         errors = []
         if not cls.LLM_API_KEY:
-            errors.append("LLM_API_KEY translated")
+            errors.append("LLM_API_KEY details")
         if not cls.ZEP_API_KEY:
-            errors.append("ZEP_API_KEY translated")
+            errors.append("ZEP_API_KEY details")
         return errors
 

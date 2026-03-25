@@ -288,7 +288,7 @@ class ActionLogger:
             f.write(json.dumps(entry, ensure_ascii=False) + '\n')
 
 
-# translated（translated）
+# details（details）
 _global_logger: Optional[ActionLogger] = None
 
 

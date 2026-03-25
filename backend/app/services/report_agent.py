@@ -1,12 +1,12 @@
 """
-Report Agenttranslated
-translatedLangChain + ZeptranslatedReACTtranslated
+Report Agentconverted
+convertedLangChain + ZepconvertedReACTconverted
 
-translated：
-1. translatedZeptranslated
-2. translated，translated
-3. translatedReACTtranslated
-4. translated，translated
+details：
+1. convertedZepconverted
+2. details，details
+3. convertedReACTconverted
+4. details，details
 """
 
 import os
@@ -34,18 +34,18 @@ logger = get_logger('mirofish.report_agent')
 
 class ReportLogger:
     """
-    Report Agent translated
+    Report Agent details
     
-    translated agent_log.jsonl translated，translated。
-    translated JSON translated，translated、translated、translated。
+    details agent_log.jsonl details，details。
+    details JSON details，details、details、details。
     """
     
     def __init__(self, report_id: str):
         """
-        translated
+        details
         
         Args:
-            report_id: translatedID，translated
+            report_id: convertedID，details
         """
         self.report_id = report_id
         self.log_file_path = os.path.join(
@@ -55,12 +55,12 @@ class ReportLogger:
         self._ensure_log_file()
     
     def _ensure_log_file(self):
-        """translated"""
+        """details"""
         log_dir = os.path.dirname(self.log_file_path)
         os.makedirs(log_dir, exist_ok=True)
     
     def _get_elapsed_time(self) -> float:
-        """translated（translated）"""
+        """details（details）"""
         return (datetime.now() - self.start_time).total_seconds()
     
     def log(
@@ -72,14 +72,14 @@ class ReportLogger:
         section_index: int = None
     ):
         """
-        translated
+        details
         
         Args:
-            action: translated，translated 'start', 'tool_call', 'llm_response', 'section_complete' translated
-            stage: translated，translated 'planning', 'generating', 'completed'
-            details: translated，translated
-            section_title: translated（translated）
-            section_index: translated（translated）
+            action: details，details 'start', 'tool_call', 'llm_response', 'section_complete' details
+            stage: details，details 'planning', 'generating', 'completed'
+            details: details，details
+            section_title: details（details）
+            section_index: details（details）
         """
         log_entry = {
             "timestamp": datetime.now().isoformat(),
@@ -92,12 +92,12 @@ class ReportLogger:
             "details": details
         }
         
-        # translated JSONL translated
+        # details JSONL details
         with open(self.log_file_path, 'a', encoding='utf-8') as f:
             f.write(json.dumps(log_entry, ensure_ascii=False) + '\n')
     
     def log_start(self, simulation_id: str, graph_id: str, simulation_requirement: str):
-        """translated"""
+        """details"""
         self.log(
             action="report_start",
             stage="pending",
@@ -105,52 +105,52 @@ class ReportLogger:
                 "simulation_id": simulation_id,
                 "graph_id": graph_id,
                 "simulation_requirement": simulation_requirement,
-                "message": "translated"
+                "message": "details"
             }
         )
     
     def log_planning_start(self):
-        """translated"""
+        """details"""
         self.log(
             action="planning_start",
             stage="planning",
-            details={"message": "translated"}
+            details={"message": "details"}
         )
     
     def log_planning_context(self, context: Dict[str, Any]):
-        """translated"""
+        """details"""
         self.log(
             action="planning_context",
             stage="planning",
             details={
-                "message": "translated",
+                "message": "details",
                 "context": context
             }
         )
     
     def log_planning_complete(self, outline_dict: Dict[str, Any]):
-        """translated"""
+        """details"""
         self.log(
             action="planning_complete",
             stage="planning",
             details={
-                "message": "translated",
+                "message": "details",
                 "outline": outline_dict
             }
         )
     
     def log_section_start(self, section_title: str, section_index: int):
-        """translated"""
+        """details"""
         self.log(
             action="section_start",
             stage="generating",
             section_title=section_title,
             section_index=section_index,
-            details={"message": f"translated: {section_title}"}
+            details={"message": f"details: {section_title}"}
         )
     
     def log_react_thought(self, section_title: str, section_index: int, iteration: int, thought: str):
-        """translated ReACT translated"""
+        """details ReACT details"""
         self.log(
             action="react_thought",
             stage="generating",
@@ -159,7 +159,7 @@ class ReportLogger:
             details={
                 "iteration": iteration,
                 "thought": thought,
-                "message": f"ReACT translated{iteration}translated"
+                "message": f"ReACT details{iteration}details"
             }
         )
     
@@ -171,7 +171,7 @@ class ReportLogger:
         parameters: Dict[str, Any],
         iteration: int
     ):
-        """translated"""
+        """details"""
         self.log(
             action="tool_call",
             stage="generating",
@@ -181,7 +181,7 @@ class ReportLogger:
                 "iteration": iteration,
                 "tool_name": tool_name,
                 "parameters": parameters,
-                "message": f"translated: {tool_name}"
+                "message": f"details: {tool_name}"
             }
         )
     
@@ -193,7 +193,7 @@ class ReportLogger:
         result: str,
         iteration: int
     ):
-        """translated（translated，translated）"""
+        """details（details，details）"""
         self.log(
             action="tool_result",
             stage="generating",
@@ -202,9 +202,9 @@ class ReportLogger:
             details={
                 "iteration": iteration,
                 "tool_name": tool_name,
-                "result": result,  # translated，translated
+                "result": result,  # details，details
                 "result_length": len(result),
-                "message": f"translated {tool_name} translated"
+                "message": f"details {tool_name} details"
             }
         )
     
@@ -217,7 +217,7 @@ class ReportLogger:
         has_tool_calls: bool,
         has_final_answer: bool
     ):
-        """translated LLM translated（translated，translated）"""
+        """details LLM details（details，details）"""
         self.log(
             action="llm_response",
             stage="generating",
@@ -225,11 +225,11 @@ class ReportLogger:
             section_index=section_index,
             details={
                 "iteration": iteration,
-                "response": response,  # translated，translated
+                "response": response,  # details，details
                 "response_length": len(response),
                 "has_tool_calls": has_tool_calls,
                 "has_final_answer": has_final_answer,
-                "message": f"LLM translated (translated: {has_tool_calls}, translated: {has_final_answer})"
+                "message": f"LLM details (details: {has_tool_calls}, details: {has_final_answer})"
             }
         )
     
@@ -240,17 +240,17 @@ class ReportLogger:
         content: str,
         tool_calls_count: int
     ):
-        """translated（translated，translated）"""
+        """details（details，details）"""
         self.log(
             action="section_content",
             stage="generating",
             section_title=section_title,
             section_index=section_index,
             details={
-                "content": content,  # translated，translated
+                "content": content,  # details，details
                 "content_length": len(content),
                 "tool_calls_count": tool_calls_count,
-                "message": f"translated {section_title} translated"
+                "message": f"details {section_title} details"
             }
         )
     
@@ -261,9 +261,9 @@ class ReportLogger:
         full_content: str
     ):
         """
-        translated
+        details
 
-        translated，translated
+        details，details
         """
         self.log(
             action="section_complete",
@@ -273,24 +273,24 @@ class ReportLogger:
             details={
                 "content": full_content,
                 "content_length": len(full_content),
-                "message": f"translated {section_title} translated"
+                "message": f"details {section_title} details"
             }
         )
     
     def log_report_complete(self, total_sections: int, total_time_seconds: float):
-        """translated"""
+        """details"""
         self.log(
             action="report_complete",
             stage="completed",
             details={
                 "total_sections": total_sections,
                 "total_time_seconds": round(total_time_seconds, 2),
-                "message": "translated"
+                "message": "details"
             }
         )
     
     def log_error(self, error_message: str, stage: str, section_title: str = None):
-        """translated"""
+        """details"""
         self.log(
             action="error",
             stage=stage,
@@ -298,25 +298,25 @@ class ReportLogger:
             section_index=None,
             details={
                 "error": error_message,
-                "message": f"translated: {error_message}"
+                "message": f"details: {error_message}"
             }
         )
 
 
 class ReportConsoleLogger:
     """
-    Report Agent translated
+    Report Agent details
     
-    translated（INFO、WARNINGtranslated）translated console_log.txt translated。
-    translated agent_log.jsonl translated，translated。
+    details（INFO、WARNINGconverted）details console_log.txt details。
+    details agent_log.jsonl details，details。
     """
     
     def __init__(self, report_id: str):
         """
-        translated
+        details
         
         Args:
-            report_id: translatedID，translated
+            report_id: convertedID，details
         """
         self.report_id = report_id
         self.log_file_path = os.path.join(
@@ -327,15 +327,15 @@ class ReportConsoleLogger:
         self._setup_file_handler()
     
     def _ensure_log_file(self):
-        """translated"""
+        """details"""
         log_dir = os.path.dirname(self.log_file_path)
         os.makedirs(log_dir, exist_ok=True)
     
     def _setup_file_handler(self):
-        """translated，translated"""
+        """details，details"""
         import logging
         
-        # translated
+        # details
         self._file_handler = logging.FileHandler(
             self.log_file_path,
             mode='a',
@@ -343,14 +343,14 @@ class ReportConsoleLogger:
         )
         self._file_handler.setLevel(logging.INFO)
         
-        # translated
+        # details
         formatter = logging.Formatter(
             '[%(asctime)s] %(levelname)s: %(message)s',
             datefmt='%H:%M:%S'
         )
         self._file_handler.setFormatter(formatter)
         
-        # translated report_agent translated logger
+        # details report_agent details logger
         loggers_to_attach = [
             'mirofish.report_agent',
             'mirofish.zep_tools',
@@ -358,12 +358,12 @@ class ReportConsoleLogger:
         
         for logger_name in loggers_to_attach:
             target_logger = logging.getLogger(logger_name)
-            # translated
+            # details
             if self._file_handler not in target_logger.handlers:
                 target_logger.addHandler(self._file_handler)
     
     def close(self):
-        """translated logger translated"""
+        """details logger details"""
         import logging
         
         if self._file_handler:
@@ -381,12 +381,12 @@ class ReportConsoleLogger:
             self._file_handler = None
     
     def __del__(self):
-        """translated"""
+        """details"""
         self.close()
 
 
 class ReportStatus(str, Enum):
-    """translated"""
+    """details"""
     PENDING = "pending"
     PLANNING = "planning"
     GENERATING = "generating"
@@ -396,7 +396,7 @@ class ReportStatus(str, Enum):
 
 @dataclass
 class ReportSection:
-    """translated"""
+    """details"""
     title: str
     content: str = ""
 
@@ -407,7 +407,7 @@ class ReportSection:
         }
 
     def to_markdown(self, level: int = 2) -> str:
-        """translatedMarkdowntranslated"""
+        """convertedMarkdownconverted"""
         md = f"{'#' * level} {self.title}\n\n"
         if self.content:
             md += f"{self.content}\n\n"
@@ -416,7 +416,7 @@ class ReportSection:
 
 @dataclass
 class ReportOutline:
-    """translated"""
+    """details"""
     title: str
     summary: str
     sections: List[ReportSection]
@@ -429,7 +429,7 @@ class ReportOutline:
         }
     
     def to_markdown(self) -> str:
-        """translatedMarkdowntranslated"""
+        """convertedMarkdownconverted"""
         md = f"# {self.title}\n\n"
         md += f"> {self.summary}\n\n"
         for section in self.sections:
@@ -439,7 +439,7 @@ class ReportOutline:
 
 @dataclass
 class Report:
-    """translated"""
+    """details"""
     report_id: str
     simulation_id: str
     graph_id: str
@@ -467,417 +467,417 @@ class Report:
 
 
 # ═══════════════════════════════════════════════════════════════
-# Prompt translated
+# Prompt details
 # ═══════════════════════════════════════════════════════════════
 
-# ── translated ──
+# ── details ──
 
 TOOL_DESC_INSIGHT_FORGE = """\
-【translated - translated】
-translated，translated。translated：
-1. translated
-2. translated
-3. translated、translated、translated
-4. translated、translated
+【details - details】
+details，details。details：
+1. details
+2. details
+3. details、details、details
+4. details、details
 
-【translated】
-- translated
-- translated
-- translated
+【details】
+- details
+- details
+- details
 
-【translated】
-- translated（translated）
-- translated
-- translated"""
+【details】
+- details（details）
+- details
+- details"""
 
 TOOL_DESC_PANORAMA_SEARCH = """\
-【translated - translated】
-translated，translated。translated：
-1. translated
-2. translated/translated
-3. translated
+【details - details】
+details，details。details：
+1. details
+2. details/details
+3. details
 
-【translated】
-- translated
-- translated
-- translated
+【details】
+- details
+- details
+- details
 
-【translated】
-- translated（translated）
-- translated/translated（translated）
-- translated"""
+【details】
+- details（details）
+- details/details（details）
+- details"""
 
 TOOL_DESC_QUICK_SEARCH = """\
-【translated - translated】
-translated，translated、translated。
+【details - details】
+details，details、details。
 
-【translated】
-- translated
-- translated
-- translated
+【details】
+- details
+- details
+- details
 
-【translated】
-- translated"""
+【details】
+- details"""
 
 TOOL_DESC_INTERVIEW_AGENTS = """\
-【translated - translatedAgenttranslated（translated）】
-translatedOASIStranslatedAPI，translatedAgenttranslated！
-translatedLLMtranslated，translatedAgenttranslated。
-translatedTwittertranslatedReddittranslated，translated。
+【details - convertedAgentconverted（details）】
+convertedOASISconvertedAPI，convertedAgentconverted！
+convertedLLMconverted，convertedAgentconverted。
+convertedTwitterconvertedRedditconverted，details。
 
-translated：
-1. translated，translatedAgent
-2. translatedAgent（translated、translated、translated）
-3. translated
-4. translated /api/simulation/interview/batch translated
-5. translated，translated
+details：
+1. details，convertedAgent
+2. convertedAgent（details、details、details）
+3. details
+4. details /api/simulation/interview/batch details
+5. details，details
 
-【translated】
-- translated（translated？translated？translated？）
-- translated
-- translatedAgenttranslated（translatedOASIStranslated）
-- translated，translated"translated"
+【details】
+- details（details？details？details？）
+- details
+- convertedAgentconverted（convertedOASISconverted）
+- details，details"details"
 
-【translated】
-- translatedAgenttranslated
-- translatedAgenttranslatedTwittertranslatedReddittranslated
-- translated（translated）
-- translated
+【details】
+- convertedAgentconverted
+- convertedAgentconvertedTwitterconvertedRedditconverted
+- details（details）
+- details
 
-【translated】translatedOASIStranslated！"""
+【details】convertedOASISconverted！"""
 
-# ── translated prompt ──
+# ── details prompt ──
 
 PLAN_SYSTEM_PROMPT = """\
-translated「translated」translated，translated「translated」——translatedAgenttranslated、translated。
+details「details」details，details「details」——convertedAgentconverted、details。
 
-【translated】
-translated，translated「translated」translated。translated，translated。translated"translated"，translated"translated"。
+【details】
+details，details「details」details。details，details。details"details"，details"details"。
 
-【translated】
-translated「translated」，translated：
-1. translated，translated？
-2. translatedAgent（translated）translated？
-3. translated？
+【details】
+details「details」，details：
+1. details，details？
+2. convertedAgent（details）details？
+3. details？
 
-【translated】
-- ✅ translated，translated"translated，translated"
-- ✅ translated：translated、translated、translated、translated
-- ✅ translatedAgenttranslated
-- ❌ translated
-- ❌ translated
+【details】
+- ✅ details，details"details，details"
+- ✅ details：details、details、details、details
+- ✅ convertedAgentconverted
+- ❌ details
+- ❌ details
 
-【translated】
-- translated2translated，translated5translated
-- translated，translated
-- translated，translated
-- translated
+【details】
+- converted2converted，converted5converted
+- details，details
+- details，details
+- details
 
-translatedJSONtranslated，translated：
+convertedJSONconverted，details：
 {
-    "title": "translated",
-    "summary": "translated（translated）",
+    "title": "details",
+    "summary": "details（details）",
     "sections": [
         {
-            "title": "translated",
-            "description": "translated"
+            "title": "details",
+            "description": "details"
         }
     ]
 }
 
-translated：sectionstranslated2translated，translated5translated！"""
+details：sectionsconverted2converted，converted5converted！"""
 
 PLAN_USER_PROMPT_TEMPLATE = """\
-【translated】
-translated（translated）：{simulation_requirement}
+【details】
+details（details）：{simulation_requirement}
 
-【translated】
-- translated: {total_nodes}
-- translated: {total_edges}
-- translated: {entity_types}
-- translatedAgenttranslated: {total_entities}
+【details】
+- details: {total_nodes}
+- details: {total_edges}
+- details: {entity_types}
+- convertedAgentconverted: {total_entities}
 
-【translated】
+【details】
 {related_facts_json}
 
-translated「translated」translated：
-1. translated，translated？
-2. translated（Agent）translated？
-3. translated？
+details「details」details：
+1. details，details？
+2. details（Agent）details？
+3. details？
 
-translated，translated。
+details，details。
 
-【translated】translated：translated2translated，translated5translated，translated。"""
+【details】details：converted2converted，converted5converted，details。"""
 
-# ── translated prompt ──
+# ── details prompt ──
 
 SECTION_SYSTEM_PROMPT_TEMPLATE = """\
-translated「translated」translated，translated。
+details「details」details，details。
 
-translated: {report_title}
-translated: {report_summary}
-translated（translated）: {simulation_requirement}
+details: {report_title}
+details: {report_summary}
+details（details）: {simulation_requirement}
 
-translated: {section_title}
-
-═══════════════════════════════════════════════════════════════
-【translated】
-═══════════════════════════════════════════════════════════════
-
-translated。translated（translated），
-translatedAgenttranslated，translated。
-
-translated：
-- translated，translated
-- translated（Agent）translated
-- translated、translated
-
-❌ translated
-✅ translated"translated"——translated
+details: {section_title}
 
 ═══════════════════════════════════════════════════════════════
-【translated - translated】
+【details】
 ═══════════════════════════════════════════════════════════════
 
-1. 【translated】
-   - translated「translated」translated
-   - translatedAgenttranslated
-   - translated
-   - translated3translated（translated5translated）translated，translated
+details。details（details），
+convertedAgentconverted，details。
 
-2. 【translatedAgenttranslated】
-   - Agenttranslated
-   - translated，translated：
-     > "translated：translated..."
-   - translated
+details：
+- details，details
+- details（Agent）details
+- details、details
 
-3. 【translated - translated】
-   - translated
-   - translated，translated
-   - translated，translated
-   - translated，translated
-   - translated（> translated）translated
-
-4. 【translated】
-   - translated
-   - translated
-   - translated，translated
+❌ details
+✅ details"details"——details
 
 ═══════════════════════════════════════════════════════════════
-【⚠️ translated - translated！】
+【details - details】
 ═══════════════════════════════════════════════════════════════
 
-【translated = translated】
-- translated
-- ❌ translated Markdown translated（#、##、###、#### translated）
-- ❌ translated
-- ✅ translated，translated
-- ✅ translated**translated**、translated、translated、translated，translated
+1. 【details】
+   - details「details」details
+   - convertedAgentconverted
+   - details
+   - converted3converted（converted5converted）details，details
 
-【translated】
+2. 【convertedAgentconverted】
+   - Agentconverted
+   - details，details：
+     > "details：details..."
+   - details
+
+3. 【details - details】
+   - details
+   - details，details
+   - details，details
+   - details，details
+   - details（> details）details
+
+4. 【details】
+   - details
+   - details
+   - details，details
+
+═══════════════════════════════════════════════════════════════
+【⚠️ details - details！】
+═══════════════════════════════════════════════════════════════
+
+【details = details】
+- details
+- ❌ details Markdown details（#、##、###、#### details）
+- ❌ details
+- ✅ details，details
+- ✅ details**details**、details、details、details，details
+
+【details】
 ```
-translated。translated，translated...
+details。details，details...
 
-**translated**
+**details**
 
-translated，translated：
+details，details：
 
-> "translated68%translated..."
+> "converted68%details..."
 
-**translated**
+**details**
 
-translated：
+details：
 
-- translated
-- translated
-```
-
-【translated】
-```
-## translated          ← translated！translated
-### translated、translated     ← translated！translated###translated
-#### 1.1 translated   ← translated！translated####translated
-
-translated...
+- details
+- details
 ```
 
+【details】
+```
+## details          ← details！details
+### details、details     ← details！details###details
+#### 1.1 details   ← details！details####details
+
+details...
+```
+
 ═══════════════════════════════════════════════════════════════
-【translated】（translated3-5translated）
+【details】（converted3-5converted）
 ═══════════════════════════════════════════════════════════════
 
 {tools_description}
 
-【translated - translated，translated】
-- insight_forge: translated，translated
-- panorama_search: translated，translated、translated
-- quick_search: translated
-- interview_agents: translatedAgent，translated
+【details - details，details】
+- insight_forge: details，details
+- panorama_search: details，details、details
+- quick_search: details
+- interview_agents: convertedAgent，details
 
 ═══════════════════════════════════════════════════════════════
-【translated】
+【details】
 ═══════════════════════════════════════════════════════════════
 
-translated（translated）：
+details（details）：
 
-translatedA - translated：
-translated，translated：
+convertedA - details：
+details，details：
 <tool_call>
-{{"name": "translated", "parameters": {{"translated": "translated"}}}}
+{{"name": "details", "parameters": {{"details": "details"}}}}
 </tool_call>
-translated。translated。
+details。details。
 
-translatedB - translated：
-translated，translated "Final Answer:" translated。
+convertedB - details：
+details，details "Final Answer:" details。
 
-⚠️ translated：
-- translated Final Answer
-- translated（Observation），translated
-- translated
+⚠️ details：
+- details Final Answer
+- details（Observation），details
+- details
 
 ═══════════════════════════════════════════════════════════════
-【translated】
+【details】
 ═══════════════════════════════════════════════════════════════
 
-1. translated
-2. translated
-3. translatedMarkdowntranslated（translated）：
-   - translated **translated** translated（translated）
-   - translated（-translated1.2.3.）translated
-   - translated
-   - ❌ translated #、##、###、#### translated
-4. 【translated - translated】
-   translated，translated，translated：
+1. details
+2. details
+3. convertedMarkdownconverted（details）：
+   - details **details** details（details）
+   - details（-converted1.2.3.）details
+   - details
+   - ❌ details #、##、###、#### details
+4. 【details - details】
+   details，details，details：
 
-   ✅ translated：
+   ✅ details：
    ```
-   translated。
+   details。
 
-   > "translated。"
+   > "details。"
 
-   translated。
+   details。
    ```
 
-   ❌ translated：
+   ❌ details：
    ```
-   translated。> "translated..." translated...
+   details。> "details..." details...
    ```
-5. translated
-6. 【translated】translated，translated
-7. 【translated】translated！translated**translated**translated"""
+5. details
+6. 【details】details，details
+7. 【details】details！details**details**details"""
 
 SECTION_USER_PROMPT_TEMPLATE = """\
-translated（translated，translated）：
+details（details，details）：
 {previous_content}
 
 ═══════════════════════════════════════════════════════════════
-【translated】translated: {section_title}
+【details】details: {section_title}
 ═══════════════════════════════════════════════════════════════
 
-【translated】
-1. translated，translated！
-2. translated
-3. translated，translated
-4. translated，translated
+【details】
+1. details，details！
+2. details
+3. details，details
+4. details，details
 
-【⚠️ translated - translated】
-- ❌ translated（#、##、###、####translated）
-- ❌ translated"{section_title}"translated
-- ✅ translated
-- ✅ translated，translated**translated**translated
+【⚠️ details - details】
+- ❌ details（#、##、###、####details）
+- ❌ details"{section_title}"details
+- ✅ details
+- ✅ details，details**details**details
 
-translated：
-1. translated（Thought）translated
-2. translated（Action）translated
-3. translated Final Answer（translated，translated）"""
+details：
+1. details（Thought）details
+2. details（Action）details
+3. details Final Answer（details，details）"""
 
-# ── ReACT translated ──
+# ── ReACT details ──
 
 REACT_OBSERVATION_TEMPLATE = """\
-Observation（translated）:
+Observation（details）:
 
-═══ translated {tool_name} translated ═══
+═══ details {tool_name} details ═══
 {result}
 
 ═══════════════════════════════════════════════════════════════
-translated {tool_calls_count}/{max_tool_calls} translated（translated: {used_tools_str}）{unused_hint}
-- translated：translated "Final Answer:" translated（translated）
-- translated：translated
+details {tool_calls_count}/{max_tool_calls} details（details: {used_tools_str}）{unused_hint}
+- details：details "Final Answer:" details（details）
+- details：details
 ═══════════════════════════════════════════════════════════════"""
 
 REACT_INSUFFICIENT_TOOLS_MSG = (
-    "【translated】translated{tool_calls_count}translated，translated{min_tool_calls}translated。"
-    "translated，translated Final Answer。{unused_hint}"
+    "【details】details{tool_calls_count}details，details{min_tool_calls}details。"
+    "details，details Final Answer。{unused_hint}"
 )
 
 REACT_INSUFFICIENT_TOOLS_MSG_ALT = (
-    "translated {tool_calls_count} translated，translated {min_tool_calls} translated。"
-    "translated。{unused_hint}"
+    "details {tool_calls_count} details，details {min_tool_calls} details。"
+    "details。{unused_hint}"
 )
 
 REACT_TOOL_LIMIT_MSG = (
-    "translated（{tool_calls_count}/{max_tool_calls}），translated。"
-    'translated，translated "Final Answer:" translated。'
+    "details（{tool_calls_count}/{max_tool_calls}），details。"
+    'details，details "Final Answer:" details。'
 )
 
-REACT_UNUSED_TOOLS_HINT = "\n💡 translated: {unused_list}，translated"
+REACT_UNUSED_TOOLS_HINT = "\n💡 details: {unused_list}，details"
 
-REACT_FORCE_FINAL_MSG = "translated，translated Final Answer: translated。"
+REACT_FORCE_FINAL_MSG = "details，details Final Answer: details。"
 
 # ── Chat prompt ──
 
 CHAT_SYSTEM_PROMPT_TEMPLATE = """\
-translated。
+details。
 
-【translated】
-translated: {simulation_requirement}
+【details】
+details: {simulation_requirement}
 
-【translated】
+【details】
 {report_content}
 
-【translated】
-1. translated
-2. translated，translated
-3. translated，translated
-4. translated、translated、translated
+【details】
+1. details
+2. details，details
+3. details，details
+4. details、details、details
 
-【translated】（translated，translated1-2translated）
+【details】（details，converted1-2converted）
 {tools_description}
 
-【translated】
+【details】
 <tool_call>
-{{"name": "translated", "parameters": {{"translated": "translated"}}}}
+{{"name": "details", "parameters": {{"details": "details"}}}}
 </tool_call>
 
-【translated】
-- translated，translated
-- translated > translated
-- translated，translated"""
+【details】
+- details，details
+- details > details
+- details，details"""
 
-CHAT_OBSERVATION_SUFFIX = "\n\ntranslated。"
+CHAT_OBSERVATION_SUFFIX = "\n\nconverted。"
 
 
 # ═══════════════════════════════════════════════════════════════
-# ReportAgent translated
+# ReportAgent details
 # ═══════════════════════════════════════════════════════════════
 
 
 class ReportAgent:
     """
-    Report Agent - translatedAgent
+    Report Agent - convertedAgent
 
-    translatedReACT（Reasoning + Acting）translated：
-    1. translated：translated，translated
-    2. translated：translated，translated
-    3. translated：translated
+    convertedReACT（Reasoning + Acting）details：
+    1. details：details，details
+    2. details：details，details
+    3. details：details
     """
     
-    # translated（translated）
+    # details（details）
     MAX_TOOL_CALLS_PER_SECTION = 5
     
-    # translated
+    # details
     MAX_REFLECTION_ROUNDS = 3
     
-    # translated
+    # details
     MAX_TOOL_CALLS_PER_CHAT = 2
     
     def __init__(
@@ -889,14 +889,14 @@ class ReportAgent:
         zep_tools: Optional[ZepToolsService] = None
     ):
         """
-        translatedReport Agent
+        convertedReport Agent
         
         Args:
-            graph_id: translatedID
-            simulation_id: translatedID
-            simulation_requirement: translated
-            llm_client: LLMtranslated（translated）
-            zep_tools: Zeptranslated（translated）
+            graph_id: convertedID
+            simulation_id: convertedID
+            simulation_requirement: details
+            llm_client: LLMconverted（details）
+            zep_tools: Zepconverted（details）
         """
         self.graph_id = graph_id
         self.simulation_id = simulation_id
@@ -905,66 +905,66 @@ class ReportAgent:
         self.llm = llm_client or LLMClient()
         self.zep_tools = zep_tools or ZepToolsService()
         
-        # translated
+        # details
         self.tools = self._define_tools()
         
-        # translated（translated generate_report translated）
+        # details（details generate_report details）
         self.report_logger: Optional[ReportLogger] = None
-        # translated（translated generate_report translated）
+        # details（details generate_report details）
         self.console_logger: Optional[ReportConsoleLogger] = None
         
-        logger.info(f"ReportAgent translated: graph_id={graph_id}, simulation_id={simulation_id}")
+        logger.info(f"ReportAgent details: graph_id={graph_id}, simulation_id={simulation_id}")
     
     def _define_tools(self) -> Dict[str, Dict[str, Any]]:
-        """translated"""
+        """details"""
         return {
             "insight_forge": {
                 "name": "insight_forge",
                 "description": TOOL_DESC_INSIGHT_FORGE,
                 "parameters": {
-                    "query": "translated",
-                    "report_context": "translated（translated，translated）"
+                    "query": "details",
+                    "report_context": "details（details，details）"
                 }
             },
             "panorama_search": {
                 "name": "panorama_search",
                 "description": TOOL_DESC_PANORAMA_SEARCH,
                 "parameters": {
-                    "query": "translated，translated",
-                    "include_expired": "translated/translated（translatedTrue）"
+                    "query": "details，details",
+                    "include_expired": "details/details（convertedTrue）"
                 }
             },
             "quick_search": {
                 "name": "quick_search",
                 "description": TOOL_DESC_QUICK_SEARCH,
                 "parameters": {
-                    "query": "translated",
-                    "limit": "translated（translated，translated10）"
+                    "query": "details",
+                    "limit": "details（details，converted10）"
                 }
             },
             "interview_agents": {
                 "name": "interview_agents",
                 "description": TOOL_DESC_INTERVIEW_AGENTS,
                 "parameters": {
-                    "interview_topic": "translated（translated：'translated'）",
-                    "max_agents": "translatedAgenttranslated（translated，translated5，translated10）"
+                    "interview_topic": "details（details：'details'）",
+                    "max_agents": "convertedAgentconverted（details，converted5，converted10）"
                 }
             }
         }
     
     def _execute_tool(self, tool_name: str, parameters: Dict[str, Any], report_context: str = "") -> str:
         """
-        translated
+        details
         
         Args:
-            tool_name: translated
-            parameters: translated
-            report_context: translated（translatedInsightForge）
+            tool_name: details
+            parameters: details
+            report_context: details（convertedInsightForge）
             
         Returns:
-            translated（translated）
+            details（details）
         """
-        logger.info(f"translated: {tool_name}, translated: {parameters}")
+        logger.info(f"details: {tool_name}, details: {parameters}")
         
         try:
             if tool_name == "insight_forge":
@@ -979,7 +979,7 @@ class ReportAgent:
                 return result.to_text()
             
             elif tool_name == "panorama_search":
-                # translated - translated
+                # details - details
                 query = parameters.get("query", "")
                 include_expired = parameters.get("include_expired", True)
                 if isinstance(include_expired, str):
@@ -992,7 +992,7 @@ class ReportAgent:
                 return result.to_text()
             
             elif tool_name == "quick_search":
-                # translated - translated
+                # details - details
                 query = parameters.get("query", "")
                 limit = parameters.get("limit", 10)
                 if isinstance(limit, str):
@@ -1005,7 +1005,7 @@ class ReportAgent:
                 return result.to_text()
             
             elif tool_name == "interview_agents":
-                # translated - translatedOASIStranslatedAPItranslatedAgenttranslated（translated）
+                # details - convertedOASISconvertedAPIconvertedAgentconverted（details）
                 interview_topic = parameters.get("interview_topic", parameters.get("query", ""))
                 max_agents = parameters.get("max_agents", 5)
                 if isinstance(max_agents, str):
@@ -1019,11 +1019,11 @@ class ReportAgent:
                 )
                 return result.to_text()
             
-            # ========== translated（translated） ==========
+            # ========== details（details） ==========
             
             elif tool_name == "search_graph":
-                # translated quick_search
-                logger.info("search_graph translated quick_search")
+                # details quick_search
+                logger.info("search_graph details quick_search")
                 return self._execute_tool("quick_search", parameters, report_context)
             
             elif tool_name == "get_graph_statistics":
@@ -1039,8 +1039,8 @@ class ReportAgent:
                 return json.dumps(result, ensure_ascii=False, indent=2)
             
             elif tool_name == "get_simulation_context":
-                # translated insight_forge，translated
-                logger.info("get_simulation_context translated insight_forge")
+                # details insight_forge，details
+                logger.info("get_simulation_context details insight_forge")
                 query = parameters.get("query", self.simulation_requirement)
                 return self._execute_tool("insight_forge", {"query": query}, report_context)
             
@@ -1054,26 +1054,26 @@ class ReportAgent:
                 return json.dumps(result, ensure_ascii=False, indent=2)
             
             else:
-                return f"translated: {tool_name}。translated: insight_forge, panorama_search, quick_search"
+                return f"details: {tool_name}。details: insight_forge, panorama_search, quick_search"
                 
         except Exception as e:
-            logger.error(f"translated: {tool_name}, translated: {str(e)}")
-            return f"translated: {str(e)}"
+            logger.error(f"details: {tool_name}, details: {str(e)}")
+            return f"details: {str(e)}"
     
-    # translated，translated JSON translated
+    # details，details JSON details
     VALID_TOOL_NAMES = {"insight_forge", "panorama_search", "quick_search", "interview_agents"}
 
     def _parse_tool_calls(self, response: str) -> List[Dict[str, Any]]:
         """
-        translatedLLMtranslated
+        convertedLLMconverted
 
-        translated（translated）：
+        details（details）：
         1. <tool_call>{"name": "tool_name", "parameters": {...}}</tool_call>
-        2. translated JSON（translated JSON）
+        2. details JSON（details JSON）
         """
         tool_calls = []
 
-        # translated1: XMLtranslated（translated）
+        # converted1: XMLconverted（details）
         xml_pattern = r'<tool_call>\s*(\{.*?\})\s*</tool_call>'
         for match in re.finditer(xml_pattern, response, re.DOTALL):
             try:
@@ -1085,8 +1085,8 @@ class ReportAgent:
         if tool_calls:
             return tool_calls
 
-        # translated2: translated - LLM translated JSON（translated <tool_call> translated）
-        # translated1translated，translated JSON
+        # converted2: details - LLM details JSON（details <tool_call> details）
+        # converted1converted，details JSON
         stripped = response.strip()
         if stripped.startswith('{') and stripped.endswith('}'):
             try:
@@ -1097,7 +1097,7 @@ class ReportAgent:
             except json.JSONDecodeError:
                 pass
 
-        # translated + translated JSON，translated JSON translated
+        # details + details JSON，details JSON details
         json_pattern = r'(\{"(?:name|tool)"\s*:.*?\})\s*$'
         match = re.search(json_pattern, stripped, re.DOTALL)
         if match:
@@ -1111,11 +1111,11 @@ class ReportAgent:
         return tool_calls
 
     def _is_valid_tool_call(self, data: dict) -> bool:
-        """translated JSON translated"""
-        # translated {"name": ..., "parameters": ...} translated {"tool": ..., "params": ...} translated
+        """details JSON details"""
+        # details {"name": ..., "parameters": ...} details {"tool": ..., "params": ...} details
         tool_name = data.get("name") or data.get("tool")
         if tool_name and tool_name in self.VALID_TOOL_NAMES:
-            # translated name / parameters
+            # details name / parameters
             if "tool" in data:
                 data["name"] = data.pop("tool")
             if "params" in data and "parameters" not in data:
@@ -1124,13 +1124,13 @@ class ReportAgent:
         return False
     
     def _get_tools_description(self) -> str:
-        """translated"""
-        desc_parts = ["translated："]
+        """details"""
+        desc_parts = ["details："]
         for name, tool in self.tools.items():
             params_desc = ", ".join([f"{k}: {v}" for k, v in tool["parameters"].items()])
             desc_parts.append(f"- {name}: {tool['description']}")
             if params_desc:
-                desc_parts.append(f"  translated: {params_desc}")
+                desc_parts.append(f"  details: {params_desc}")
         return "\n".join(desc_parts)
     
     def plan_outline(
@@ -1138,29 +1138,29 @@ class ReportAgent:
         progress_callback: Optional[Callable] = None
     ) -> ReportOutline:
         """
-        translated
+        details
         
-        translatedLLMtranslated，translated
+        convertedLLMconverted，details
         
         Args:
-            progress_callback: translated
+            progress_callback: details
             
         Returns:
-            ReportOutline: translated
+            ReportOutline: details
         """
-        logger.info("translated...")
+        logger.info("details...")
         
         if progress_callback:
-            progress_callback("planning", 0, "translated...")
+            progress_callback("planning", 0, "details...")
         
-        # translated
+        # details
         context = self.zep_tools.get_simulation_context(
             graph_id=self.graph_id,
             simulation_requirement=self.simulation_requirement
         )
         
         if progress_callback:
-            progress_callback("planning", 30, "translated...")
+            progress_callback("planning", 30, "details...")
         
         system_prompt = PLAN_SYSTEM_PROMPT
         user_prompt = PLAN_USER_PROMPT_TEMPLATE.format(
@@ -1182,9 +1182,9 @@ class ReportAgent:
             )
             
             if progress_callback:
-                progress_callback("planning", 80, "translated...")
+                progress_callback("planning", 80, "details...")
             
-            # translated
+            # details
             sections = []
             for section_data in response.get("sections", []):
                 sections.append(ReportSection(
@@ -1193,27 +1193,27 @@ class ReportAgent:
                 ))
             
             outline = ReportOutline(
-                title=response.get("title", "translated"),
+                title=response.get("title", "details"),
                 summary=response.get("summary", ""),
                 sections=sections
             )
             
             if progress_callback:
-                progress_callback("planning", 100, "translated")
+                progress_callback("planning", 100, "details")
             
-            logger.info(f"translated: {len(sections)} translated")
+            logger.info(f"details: {len(sections)} details")
             return outline
             
         except Exception as e:
-            logger.error(f"translated: {str(e)}")
-            # translated（3translated，translatedfallback）
+            logger.error(f"details: {str(e)}")
+            # details（3converted，convertedfallback）
             return ReportOutline(
-                title="translated",
-                summary="translated",
+                title="details",
+                summary="details",
                 sections=[
-                    ReportSection(title="translated"),
-                    ReportSection(title="translated"),
-                    ReportSection(title="translated")
+                    ReportSection(title="details"),
+                    ReportSection(title="details"),
+                    ReportSection(title="details")
                 ]
             )
     
@@ -1226,28 +1226,28 @@ class ReportAgent:
         section_index: int = 0
     ) -> str:
         """
-        translatedReACTtranslated
+        convertedReACTconverted
         
-        ReACTtranslated：
-        1. Thought（translated）- translated
-        2. Action（translated）- translated
-        3. Observation（translated）- translated
-        4. translated
-        5. Final Answer（translated）- translated
+        ReACTconverted：
+        1. Thought（details）- details
+        2. Action（details）- details
+        3. Observation（details）- details
+        4. details
+        5. Final Answer（details）- details
         
         Args:
-            section: translated
-            outline: translated
-            previous_sections: translated（translated）
-            progress_callback: translated
-            section_index: translated（translated）
+            section: details
+            outline: details
+            previous_sections: details（details）
+            progress_callback: details
+            section_index: details（details）
             
         Returns:
-            translated（Markdowntranslated）
+            details（Markdownconverted）
         """
-        logger.info(f"ReACTtranslated: {section.title}")
+        logger.info(f"ReACTconverted: {section.title}")
         
-        # translated
+        # details
         if self.report_logger:
             self.report_logger.log_section_start(section.title, section_index)
         
@@ -1259,16 +1259,16 @@ class ReportAgent:
             tools_description=self._get_tools_description(),
         )
 
-        # translatedprompt - translated4000translated
+        # convertedprompt - converted4000converted
         if previous_sections:
             previous_parts = []
             for sec in previous_sections:
-                # translated4000translated
+                # converted4000converted
                 truncated = sec[:4000] + "..." if len(sec) > 4000 else sec
                 previous_parts.append(truncated)
             previous_content = "\n\n---\n\n".join(previous_parts)
         else:
-            previous_content = "（translated）"
+            previous_content = "（details）"
         
         user_prompt = SECTION_USER_PROMPT_TEMPLATE.format(
             previous_content=previous_content,
@@ -1280,77 +1280,77 @@ class ReportAgent:
             {"role": "user", "content": user_prompt}
         ]
         
-        # ReACTtranslated
+        # ReACTconverted
         tool_calls_count = 0
-        max_iterations = 5  # translated
-        min_tool_calls = 3  # translated
-        conflict_retries = 0  # translatedFinal Answertranslated
-        used_tools = set()  # translated
+        max_iterations = 5  # details
+        min_tool_calls = 3  # details
+        conflict_retries = 0  # convertedFinal Answerconverted
+        used_tools = set()  # details
         all_tools = {"insight_forge", "panorama_search", "quick_search", "interview_agents"}
 
-        # translated，translatedInsightForgetranslated
-        report_context = f"translated: {section.title}\ntranslated: {self.simulation_requirement}"
+        # details，convertedInsightForgeconverted
+        report_context = f"details: {section.title}\nconverted: {self.simulation_requirement}"
         
         for iteration in range(max_iterations):
             if progress_callback:
                 progress_callback(
                     "generating", 
                     int((iteration / max_iterations) * 100),
-                    f"translated ({tool_calls_count}/{self.MAX_TOOL_CALLS_PER_SECTION})"
+                    f"details ({tool_calls_count}/{self.MAX_TOOL_CALLS_PER_SECTION})"
                 )
             
-            # translatedLLM
+            # convertedLLM
             response = self.llm.chat(
                 messages=messages,
                 temperature=0.5,
                 max_tokens=4096
             )
 
-            # translated LLM translated None（API translated）
+            # details LLM details None（API details）
             if response is None:
-                logger.warning(f"translated {section.title} translated {iteration + 1} translated: LLM translated None")
-                # translated，translated
+                logger.warning(f"details {section.title} details {iteration + 1} details: LLM details None")
+                # details，details
                 if iteration < max_iterations - 1:
-                    messages.append({"role": "assistant", "content": "（translated）"})
-                    messages.append({"role": "user", "content": "translated。"})
+                    messages.append({"role": "assistant", "content": "（details）"})
+                    messages.append({"role": "user", "content": "details。"})
                     continue
-                # translated None，translated
+                # details None，details
                 break
 
-            logger.debug(f"LLMtranslated: {response[:200]}...")
+            logger.debug(f"LLMconverted: {response[:200]}...")
 
-            # translated，translated
+            # details，details
             tool_calls = self._parse_tool_calls(response)
             has_tool_calls = bool(tool_calls)
             has_final_answer = "Final Answer:" in response
 
-            # ── translated：LLM translated Final Answer ──
+            # ── details：LLM details Final Answer ──
             if has_tool_calls and has_final_answer:
                 conflict_retries += 1
                 logger.warning(
-                    f"translated {section.title} translated {iteration+1} translated: "
-                    f"LLM translated Final Answer（translated {conflict_retries} translated）"
+                    f"details {section.title} details {iteration+1} details: "
+                    f"LLM details Final Answer（details {conflict_retries} details）"
                 )
 
                 if conflict_retries <= 2:
-                    # translated：translated，translated LLM translated
+                    # details：details，details LLM details
                     messages.append({"role": "assistant", "content": response})
                     messages.append({
                         "role": "user",
                         "content": (
-                            "【translated】translated Final Answer，translated。\n"
-                            "translated：\n"
-                            "- translated（translated <tool_call> translated，translated Final Answer）\n"
-                            "- translated（translated 'Final Answer:' translated，translated <tool_call>）\n"
-                            "translated，translated。"
+                            "【details】details Final Answer，details。\n"
+                            "details：\n"
+                            "- details（details <tool_call> details，details Final Answer）\n"
+                            "- details（details 'Final Answer:' details，details <tool_call>）\n"
+                            "details，details。"
                         ),
                     })
                     continue
                 else:
-                    # translated：translated，translated，translated
+                    # details：details，details，details
                     logger.warning(
-                        f"translated {section.title}: translated {conflict_retries} translated，"
-                        "translated"
+                        f"details {section.title}: details {conflict_retries} details，"
+                        "details"
                     )
                     first_tool_end = response.find('</tool_call>')
                     if first_tool_end != -1:
@@ -1360,7 +1360,7 @@ class ReportAgent:
                     has_final_answer = False
                     conflict_retries = 0
 
-            # translated LLM translated
+            # details LLM details
             if self.report_logger:
                 self.report_logger.log_llm_response(
                     section_title=section.title,
@@ -1371,13 +1371,13 @@ class ReportAgent:
                     has_final_answer=has_final_answer
                 )
 
-            # ── translated1：LLM translated Final Answer ──
+            # ── converted1：LLM details Final Answer ──
             if has_final_answer:
-                # translated，translated
+                # details，details
                 if tool_calls_count < min_tool_calls:
                     messages.append({"role": "assistant", "content": response})
                     unused_tools = all_tools - used_tools
-                    unused_hint = f"（translated，translated: {', '.join(unused_tools)}）" if unused_tools else ""
+                    unused_hint = f"（details，details: {', '.join(unused_tools)}）" if unused_tools else ""
                     messages.append({
                         "role": "user",
                         "content": REACT_INSUFFICIENT_TOOLS_MSG.format(
@@ -1388,9 +1388,9 @@ class ReportAgent:
                     })
                     continue
 
-                # translated
+                # details
                 final_answer = response.split("Final Answer:")[-1].strip()
-                logger.info(f"translated {section.title} translated（translated: {tool_calls_count}translated）")
+                logger.info(f"details {section.title} details（details: {tool_calls_count}details）")
 
                 if self.report_logger:
                     self.report_logger.log_section_content(
@@ -1401,9 +1401,9 @@ class ReportAgent:
                     )
                 return final_answer
 
-            # ── translated2：LLM translated ──
+            # ── converted2：LLM details ──
             if has_tool_calls:
-                # translated → translated，translated Final Answer
+                # details → details，details Final Answer
                 if tool_calls_count >= self.MAX_TOOL_CALLS_PER_SECTION:
                     messages.append({"role": "assistant", "content": response})
                     messages.append({
@@ -1415,10 +1415,10 @@ class ReportAgent:
                     })
                     continue
 
-                # translated
+                # details
                 call = tool_calls[0]
                 if len(tool_calls) > 1:
-                    logger.info(f"LLM translated {len(tool_calls)} translated，translated: {call['name']}")
+                    logger.info(f"LLM details {len(tool_calls)} details，details: {call['name']}")
 
                 if self.report_logger:
                     self.report_logger.log_tool_call(
@@ -1447,7 +1447,7 @@ class ReportAgent:
                 tool_calls_count += 1
                 used_tools.add(call['name'])
 
-                # translated
+                # details
                 unused_tools = all_tools - used_tools
                 unused_hint = ""
                 if unused_tools and tool_calls_count < self.MAX_TOOL_CALLS_PER_SECTION:
@@ -1467,13 +1467,13 @@ class ReportAgent:
                 })
                 continue
 
-            # ── translated3：translated，translated Final Answer ──
+            # ── converted3：details，details Final Answer ──
             messages.append({"role": "assistant", "content": response})
 
             if tool_calls_count < min_tool_calls:
-                # translated，translated
+                # details，details
                 unused_tools = all_tools - used_tools
-                unused_hint = f"（translated，translated: {', '.join(unused_tools)}）" if unused_tools else ""
+                unused_hint = f"（details，details: {', '.join(unused_tools)}）" if unused_tools else ""
 
                 messages.append({
                     "role": "user",
@@ -1485,9 +1485,9 @@ class ReportAgent:
                 })
                 continue
 
-            # translated，LLM translated "Final Answer:" translated
-            # translated，translated
-            logger.info(f"translated {section.title} translated 'Final Answer:' translated，translatedLLMtranslated（translated: {tool_calls_count}translated）")
+            # details，LLM details "Final Answer:" details
+            # details，details
+            logger.info(f"details {section.title} details 'Final Answer:' details，convertedLLMconverted（details: {tool_calls_count}details）")
             final_answer = response.strip()
 
             if self.report_logger:
@@ -1499,8 +1499,8 @@ class ReportAgent:
                 )
             return final_answer
         
-        # translated，translated
-        logger.warning(f"translated {section.title} translated，translated")
+        # details，details
+        logger.warning(f"details {section.title} details，details")
         messages.append({"role": "user", "content": REACT_FORCE_FINAL_MSG})
         
         response = self.llm.chat(
@@ -1509,16 +1509,16 @@ class ReportAgent:
             max_tokens=4096
         )
 
-        # translated LLM translated None
+        # details LLM details None
         if response is None:
-            logger.error(f"translated {section.title} translated LLM translated None，translated")
-            final_answer = f"（translated：LLM translated，translated）"
+            logger.error(f"details {section.title} details LLM details None，details")
+            final_answer = f"（details：LLM details，details）"
         elif "Final Answer:" in response:
             final_answer = response.split("Final Answer:")[-1].strip()
         else:
             final_answer = response
         
-        # translated
+        # details
         if self.report_logger:
             self.report_logger.log_section_content(
                 section_title=section.title,
@@ -1535,29 +1535,29 @@ class ReportAgent:
         report_id: Optional[str] = None
     ) -> Report:
         """
-        translated（translated）
+        details（details）
         
-        translated，translated。
-        translated：
+        details，details。
+        details：
         reports/{report_id}/
-            meta.json       - translated
-            outline.json    - translated
-            progress.json   - translated
-            section_01.md   - translated1translated
-            section_02.md   - translated2translated
+            meta.json       - details
+            outline.json    - details
+            progress.json   - details
+            section_01.md   - converted1converted
+            section_02.md   - converted2converted
             ...
-            full_report.md  - translated
+            full_report.md  - details
         
         Args:
-            progress_callback: translated (stage, progress, message)
-            report_id: translatedID（translated，translated）
+            progress_callback: details (stage, progress, message)
+            report_id: convertedID（details，details）
             
         Returns:
-            Report: translated
+            Report: details
         """
         import uuid
         
-        # translated report_id，translated
+        # details report_id，details
         if not report_id:
             report_id = f"report_{uuid.uuid4().hex[:12]}"
         start_time = datetime.now()
@@ -1571,14 +1571,14 @@ class ReportAgent:
             created_at=datetime.now().isoformat()
         )
         
-        # translated（translated）
+        # details（details）
         completed_section_titles = []
         
         try:
-            # translated：translated
+            # details：details
             ReportManager._ensure_report_folder(report_id)
             
-            # translated（translated agent_log.jsonl）
+            # details（details agent_log.jsonl）
             self.report_logger = ReportLogger(report_id)
             self.report_logger.log_start(
                 simulation_id=self.simulation_id,
@@ -1586,27 +1586,27 @@ class ReportAgent:
                 simulation_requirement=self.simulation_requirement
             )
             
-            # translated（console_log.txt）
+            # details（console_log.txt）
             self.console_logger = ReportConsoleLogger(report_id)
             
             ReportManager.update_progress(
-                report_id, "pending", 0, "translated...",
+                report_id, "pending", 0, "details...",
                 completed_sections=[]
             )
             ReportManager.save_report(report)
             
-            # translated1: translated
+            # converted1: details
             report.status = ReportStatus.PLANNING
             ReportManager.update_progress(
-                report_id, "planning", 5, "translated...",
+                report_id, "planning", 5, "details...",
                 completed_sections=[]
             )
             
-            # translated
+            # details
             self.report_logger.log_planning_start()
             
             if progress_callback:
-                progress_callback("planning", 0, "translated...")
+                progress_callback("planning", 0, "details...")
             
             outline = self.plan_outline(
                 progress_callback=lambda stage, prog, msg: 
@@ -1614,33 +1614,33 @@ class ReportAgent:
             )
             report.outline = outline
             
-            # translated
+            # details
             self.report_logger.log_planning_complete(outline.to_dict())
             
-            # translated
+            # details
             ReportManager.save_outline(report_id, outline)
             ReportManager.update_progress(
-                report_id, "planning", 15, f"translated，translated{len(outline.sections)}translated",
+                report_id, "planning", 15, f"details，details{len(outline.sections)}details",
                 completed_sections=[]
             )
             ReportManager.save_report(report)
             
-            logger.info(f"translated: {report_id}/outline.json")
+            logger.info(f"details: {report_id}/outline.json")
             
-            # translated2: translated（translated）
+            # converted2: details（details）
             report.status = ReportStatus.GENERATING
             
             total_sections = len(outline.sections)
-            generated_sections = []  # translated
+            generated_sections = []  # details
             
             for i, section in enumerate(outline.sections):
                 section_num = i + 1
                 base_progress = 20 + int((i / total_sections) * 70)
                 
-                # translated
+                # details
                 ReportManager.update_progress(
                     report_id, "generating", base_progress,
-                    f"translated: {section.title} ({section_num}/{total_sections})",
+                    f"details: {section.title} ({section_num}/{total_sections})",
                     current_section=section.title,
                     completed_sections=completed_section_titles
                 )
@@ -1649,10 +1649,10 @@ class ReportAgent:
                     progress_callback(
                         "generating", 
                         base_progress, 
-                        f"translated: {section.title} ({section_num}/{total_sections})"
+                        f"details: {section.title} ({section_num}/{total_sections})"
                     )
                 
-                # translated
+                # details
                 section_content = self._generate_section_react(
                     section=section,
                     outline=outline,
@@ -1669,11 +1669,11 @@ class ReportAgent:
                 section.content = section_content
                 generated_sections.append(f"## {section.title}\n\n{section_content}")
 
-                # translated
+                # details
                 ReportManager.save_section(report_id, section_num, section)
                 completed_section_titles.append(section.title)
 
-                # translated
+                # details
                 full_section_content = f"## {section.title}\n\n{section_content}"
 
                 if self.report_logger:
@@ -1683,54 +1683,54 @@ class ReportAgent:
                         full_content=full_section_content.strip()
                     )
 
-                logger.info(f"translated: {report_id}/section_{section_num:02d}.md")
+                logger.info(f"details: {report_id}/section_{section_num:02d}.md")
                 
-                # translated
+                # details
                 ReportManager.update_progress(
                     report_id, "generating", 
                     base_progress + int(70 / total_sections),
-                    f"translated {section.title} translated",
+                    f"details {section.title} details",
                     current_section=None,
                     completed_sections=completed_section_titles
                 )
             
-            # translated3: translated
+            # converted3: details
             if progress_callback:
-                progress_callback("generating", 95, "translated...")
+                progress_callback("generating", 95, "details...")
             
             ReportManager.update_progress(
-                report_id, "generating", 95, "translated...",
+                report_id, "generating", 95, "details...",
                 completed_sections=completed_section_titles
             )
             
-            # translatedReportManagertranslated
+            # convertedReportManagerconverted
             report.markdown_content = ReportManager.assemble_full_report(report_id, outline)
             report.status = ReportStatus.COMPLETED
             report.completed_at = datetime.now().isoformat()
             
-            # translated
+            # details
             total_time_seconds = (datetime.now() - start_time).total_seconds()
             
-            # translated
+            # details
             if self.report_logger:
                 self.report_logger.log_report_complete(
                     total_sections=total_sections,
                     total_time_seconds=total_time_seconds
                 )
             
-            # translated
+            # details
             ReportManager.save_report(report)
             ReportManager.update_progress(
-                report_id, "completed", 100, "translated",
+                report_id, "completed", 100, "details",
                 completed_sections=completed_section_titles
             )
             
             if progress_callback:
-                progress_callback("completed", 100, "translated")
+                progress_callback("completed", 100, "details")
             
-            logger.info(f"translated: {report_id}")
+            logger.info(f"details: {report_id}")
             
-            # translated
+            # details
             if self.console_logger:
                 self.console_logger.close()
                 self.console_logger = None
@@ -1738,25 +1738,25 @@ class ReportAgent:
             return report
             
         except Exception as e:
-            logger.error(f"translated: {str(e)}")
+            logger.error(f"details: {str(e)}")
             report.status = ReportStatus.FAILED
             report.error = str(e)
             
-            # translated
+            # details
             if self.report_logger:
                 self.report_logger.log_error(str(e), "failed")
             
-            # translated
+            # details
             try:
                 ReportManager.save_report(report)
                 ReportManager.update_progress(
-                    report_id, "failed", -1, f"translated: {str(e)}",
+                    report_id, "failed", -1, f"details: {str(e)}",
                     completed_sections=completed_section_titles
                 )
             except Exception:
-                pass  # translated
+                pass  # details
             
-            # translated
+            # details
             if self.console_logger:
                 self.console_logger.close()
                 self.console_logger = None
@@ -1769,59 +1769,59 @@ class ReportAgent:
         chat_history: List[Dict[str, str]] = None
     ) -> Dict[str, Any]:
         """
-        translatedReport Agenttranslated
+        convertedReport Agentconverted
         
-        translatedAgenttranslated
+        convertedAgentconverted
         
         Args:
-            message: translated
-            chat_history: translated
+            message: details
+            chat_history: details
             
         Returns:
             {
-                "response": "Agenttranslated",
-                "tool_calls": [translated],
-                "sources": [translated]
+                "response": "Agentconverted",
+                "tool_calls": [details],
+                "sources": [details]
             }
         """
-        logger.info(f"Report Agenttranslated: {message[:50]}...")
+        logger.info(f"Report Agentconverted: {message[:50]}...")
         
         chat_history = chat_history or []
         
-        # translated
+        # details
         report_content = ""
         try:
             report = ReportManager.get_report_by_simulation(self.simulation_id)
             if report and report.markdown_content:
-                # translated，translated
+                # details，details
                 report_content = report.markdown_content[:15000]
                 if len(report.markdown_content) > 15000:
-                    report_content += "\n\n... [translated] ..."
+                    report_content += "\n\n... [details] ..."
         except Exception as e:
-            logger.warning(f"translated: {e}")
+            logger.warning(f"details: {e}")
         
         system_prompt = CHAT_SYSTEM_PROMPT_TEMPLATE.format(
             simulation_requirement=self.simulation_requirement,
-            report_content=report_content if report_content else "（translated）",
+            report_content=report_content if report_content else "（details）",
             tools_description=self._get_tools_description(),
         )
 
-        # translated
+        # details
         messages = [{"role": "system", "content": system_prompt}]
         
-        # translated
-        for h in chat_history[-10:]:  # translated
+        # details
+        for h in chat_history[-10:]:  # details
             messages.append(h)
         
-        # translated
+        # details
         messages.append({
             "role": "user", 
             "content": message
         })
         
-        # ReACTtranslated（translated）
+        # ReACTconverted（details）
         tool_calls_made = []
-        max_iterations = 2  # translated
+        max_iterations = 2  # details
         
         for iteration in range(max_iterations):
             response = self.llm.chat(
@@ -1829,11 +1829,11 @@ class ReportAgent:
                 temperature=0.5
             )
             
-            # translated
+            # details
             tool_calls = self._parse_tool_calls(response)
             
             if not tool_calls:
-                # translated，translated
+                # details，details
                 clean_response = re.sub(r'<tool_call>.*?</tool_call>', '', response, flags=re.DOTALL)
                 clean_response = re.sub(r'\[TOOL_CALL\].*?\)', '', clean_response)
                 
@@ -1843,33 +1843,33 @@ class ReportAgent:
                     "sources": [tc.get("parameters", {}).get("query", "") for tc in tool_calls_made]
                 }
             
-            # translated（translated）
+            # details（details）
             tool_results = []
-            for call in tool_calls[:1]:  # translated1translated
+            for call in tool_calls[:1]:  # converted1converted
                 if len(tool_calls_made) >= self.MAX_TOOL_CALLS_PER_CHAT:
                     break
                 result = self._execute_tool(call["name"], call.get("parameters", {}))
                 tool_results.append({
                     "tool": call["name"],
-                    "result": result[:1500]  # translated
+                    "result": result[:1500]  # details
                 })
                 tool_calls_made.append(call)
             
-            # translated
+            # details
             messages.append({"role": "assistant", "content": response})
-            observation = "\n".join([f"[{r['tool']}translated]\n{r['result']}" for r in tool_results])
+            observation = "\n".join([f"[{r['tool']}details]\n{r['result']}" for r in tool_results])
             messages.append({
                 "role": "user",
                 "content": observation + CHAT_OBSERVATION_SUFFIX
             })
         
-        # translated，translated
+        # details，details
         final_response = self.llm.chat(
             messages=messages,
             temperature=0.5
         )
         
-        # translated
+        # details
         clean_response = re.sub(r'<tool_call>.*?</tool_call>', '', final_response, flags=re.DOTALL)
         clean_response = re.sub(r'\[TOOL_CALL\].*?\)', '', clean_response)
         
@@ -1882,95 +1882,95 @@ class ReportAgent:
 
 class ReportManager:
     """
-    translated
+    details
     
-    translated
+    details
     
-    translated（translated）：
+    details（details）：
     reports/
       {report_id}/
-        meta.json          - translated
-        outline.json       - translated
-        progress.json      - translated
-        section_01.md      - translated1translated
-        section_02.md      - translated2translated
+        meta.json          - details
+        outline.json       - details
+        progress.json      - details
+        section_01.md      - converted1converted
+        section_02.md      - converted2converted
         ...
-        full_report.md     - translated
+        full_report.md     - details
     """
     
-    # translated
+    # details
     REPORTS_DIR = os.path.join(Config.UPLOAD_FOLDER, 'reports')
     
     @classmethod
     def _ensure_reports_dir(cls):
-        """translated"""
+        """details"""
         os.makedirs(cls.REPORTS_DIR, exist_ok=True)
     
     @classmethod
     def _get_report_folder(cls, report_id: str) -> str:
-        """translated"""
+        """details"""
         return os.path.join(cls.REPORTS_DIR, report_id)
     
     @classmethod
     def _ensure_report_folder(cls, report_id: str) -> str:
-        """translated"""
+        """details"""
         folder = cls._get_report_folder(report_id)
         os.makedirs(folder, exist_ok=True)
         return folder
     
     @classmethod
     def _get_report_path(cls, report_id: str) -> str:
-        """translated"""
+        """details"""
         return os.path.join(cls._get_report_folder(report_id), "meta.json")
     
     @classmethod
     def _get_report_markdown_path(cls, report_id: str) -> str:
-        """translatedMarkdowntranslated"""
+        """convertedMarkdownconverted"""
         return os.path.join(cls._get_report_folder(report_id), "full_report.md")
     
     @classmethod
     def _get_outline_path(cls, report_id: str) -> str:
-        """translated"""
+        """details"""
         return os.path.join(cls._get_report_folder(report_id), "outline.json")
     
     @classmethod
     def _get_progress_path(cls, report_id: str) -> str:
-        """translated"""
+        """details"""
         return os.path.join(cls._get_report_folder(report_id), "progress.json")
     
     @classmethod
     def _get_section_path(cls, report_id: str, section_index: int) -> str:
-        """translatedMarkdowntranslated"""
+        """convertedMarkdownconverted"""
         return os.path.join(cls._get_report_folder(report_id), f"section_{section_index:02d}.md")
     
     @classmethod
     def _get_agent_log_path(cls, report_id: str) -> str:
-        """translated Agent translated"""
+        """details Agent details"""
         return os.path.join(cls._get_report_folder(report_id), "agent_log.jsonl")
     
     @classmethod
     def _get_console_log_path(cls, report_id: str) -> str:
-        """translated"""
+        """details"""
         return os.path.join(cls._get_report_folder(report_id), "console_log.txt")
     
     @classmethod
     def get_console_log(cls, report_id: str, from_line: int = 0) -> Dict[str, Any]:
         """
-        translated
+        details
         
-        translated（INFO、WARNINGtranslated），
-        translated agent_log.jsonl translated。
+        details（INFO、WARNINGconverted），
+        details agent_log.jsonl details。
         
         Args:
-            report_id: translatedID
-            from_line: translated（translated，0 translated）
+            report_id: convertedID
+            from_line: details（details，0 details）
             
         Returns:
             {
-                "logs": [translated],
-                "total_lines": translated,
-                "from_line": translated,
-                "has_more": translated
+                "logs": [details],
+                "total_lines": details,
+                "from_line": details,
+                "has_more": details
             }
         """
         log_path = cls._get_console_log_path(report_id)
@@ -1990,26 +1990,26 @@ class ReportManager:
             for i, line in enumerate(f):
                 total_lines = i + 1
                 if i >= from_line:
-                    # translated，translated
+                    # details，details
                     logs.append(line.rstrip('\n\r'))
         
         return {
             "logs": logs,
             "total_lines": total_lines,
             "from_line": from_line,
-            "has_more": False  # translated
+            "has_more": False  # details
         }
     
     @classmethod
     def get_console_log_stream(cls, report_id: str) -> List[str]:
         """
-        translated（translated）
+        details（details）
         
         Args:
-            report_id: translatedID
+            report_id: convertedID
             
         Returns:
-            translated
+            details
         """
         result = cls.get_console_log(report_id, from_line=0)
         return result["logs"]
@@ -2017,18 +2017,18 @@ class ReportManager:
     @classmethod
     def get_agent_log(cls, report_id: str, from_line: int = 0) -> Dict[str, Any]:
         """
-        translated Agent translated
+        details Agent details
         
         Args:
-            report_id: translatedID
-            from_line: translated（translated，0 translated）
+            report_id: convertedID
+            from_line: details（details，0 details）
             
         Returns:
             {
-                "logs": [translated],
-                "total_lines": translated,
-                "from_line": translated,
-                "has_more": translated
+                "logs": [details],
+                "total_lines": details,
+                "from_line": details,
+                "has_more": details
             }
         """
         log_path = cls._get_agent_log_path(report_id)
@@ -2052,26 +2052,26 @@ class ReportManager:
                         log_entry = json.loads(line.strip())
                         logs.append(log_entry)
                     except json.JSONDecodeError:
-                        # translated
+                        # details
                         continue
         
         return {
             "logs": logs,
             "total_lines": total_lines,
             "from_line": from_line,
-            "has_more": False  # translated
+            "has_more": False  # details
         }
     
     @classmethod
     def get_agent_log_stream(cls, report_id: str) -> List[Dict[str, Any]]:
         """
-        translated Agent translated（translated）
+        details Agent details（details）
         
         Args:
-            report_id: translatedID
+            report_id: convertedID
             
         Returns:
-            translated
+            details
         """
         result = cls.get_agent_log(report_id, from_line=0)
         return result["logs"]
@@ -2079,16 +2079,16 @@ class ReportManager:
     @classmethod
     def save_outline(cls, report_id: str, outline: ReportOutline) -> None:
         """
-        translated
+        details
         
-        translated
+        details
         """
         cls._ensure_report_folder(report_id)
         
         with open(cls._get_outline_path(report_id), 'w', encoding='utf-8') as f:
             json.dump(outline.to_dict(), f, ensure_ascii=False, indent=2)
         
-        logger.info(f"translated: {report_id}")
+        logger.info(f"details: {report_id}")
     
     @classmethod
     def save_section(
@@ -2098,49 +2098,49 @@ class ReportManager:
         section: ReportSection
     ) -> str:
         """
-        translated
+        details
 
-        translated，translated
+        details，details
 
         Args:
-            report_id: translatedID
-            section_index: translated（translated1translated）
-            section: translated
+            report_id: convertedID
+            section_index: details（converted1converted）
+            section: details
 
         Returns:
-            translated
+            details
         """
         cls._ensure_report_folder(report_id)
 
-        # translatedMarkdowntranslated - translated
+        # convertedMarkdownconverted - details
         cleaned_content = cls._clean_section_content(section.content, section.title)
         md_content = f"## {section.title}\n\n"
         if cleaned_content:
             md_content += f"{cleaned_content}\n\n"
 
-        # translated
+        # details
         file_suffix = f"section_{section_index:02d}.md"
         file_path = os.path.join(cls._get_report_folder(report_id), file_suffix)
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(md_content)
 
-        logger.info(f"translated: {report_id}/{file_suffix}")
+        logger.info(f"details: {report_id}/{file_suffix}")
         return file_path
     
     @classmethod
     def _clean_section_content(cls, content: str, section_title: str) -> str:
         """
-        translated
+        details
         
-        1. translatedMarkdowntranslated
-        2. translated ### translated
+        1. convertedMarkdownconverted
+        2. details ### details
         
         Args:
-            content: translated
-            section_title: translated
+            content: details
+            section_title: details
             
         Returns:
-            translated
+            details
         """
         import re
         
@@ -2155,26 +2155,26 @@ class ReportManager:
         for i, line in enumerate(lines):
             stripped = line.strip()
             
-            # translatedMarkdowntranslated
+            # convertedMarkdownconverted
             heading_match = re.match(r'^(#{1,6})\s+(.+)$', stripped)
             
             if heading_match:
                 level = len(heading_match.group(1))
                 title_text = heading_match.group(2).strip()
                 
-                # translated（translated5translated）
+                # details（converted5converted）
                 if i < 5:
                     if title_text == section_title or title_text.replace(' ', '') == section_title.replace(' ', ''):
                         skip_next_empty = True
                         continue
                 
-                # translated（#, ##, ###, ####translated）translated
-                # translated，translated
+                # details（#, ##, ###, ####details）details
+                # details，details
                 cleaned_lines.append(f"**{title_text}**")
-                cleaned_lines.append("")  # translated
+                cleaned_lines.append("")  # details
                 continue
             
-            # translated，translated，translated
+            # details，details，details
             if skip_next_empty and stripped == '':
                 skip_next_empty = False
                 continue
@@ -2182,14 +2182,14 @@ class ReportManager:
             skip_next_empty = False
             cleaned_lines.append(line)
         
-        # translated
+        # details
         while cleaned_lines and cleaned_lines[0].strip() == '':
             cleaned_lines.pop(0)
         
-        # translated
+        # details
         while cleaned_lines and cleaned_lines[0].strip() in ['---', '***', '___']:
             cleaned_lines.pop(0)
-            # translated
+            # details
             while cleaned_lines and cleaned_lines[0].strip() == '':
                 cleaned_lines.pop(0)
         
@@ -2206,9 +2206,9 @@ class ReportManager:
         completed_sections: List[str] = None
     ) -> None:
         """
-        translated
+        details
         
-        translatedprogress.jsontranslated
+        convertedprogress.jsonconverted
         """
         cls._ensure_report_folder(report_id)
         
@@ -2226,7 +2226,7 @@ class ReportManager:
     
     @classmethod
     def get_progress(cls, report_id: str) -> Optional[Dict[str, Any]]:
-        """translated"""
+        """details"""
         path = cls._get_progress_path(report_id)
         
         if not os.path.exists(path):
@@ -2238,9 +2238,9 @@ class ReportManager:
     @classmethod
     def get_generated_sections(cls, report_id: str) -> List[Dict[str, Any]]:
         """
-        translated
+        details
         
-        translated
+        details
         """
         folder = cls._get_report_folder(report_id)
         
@@ -2254,7 +2254,7 @@ class ReportManager:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
 
-                # translated
+                # details
                 parts = filename.replace('.md', '').split('_')
                 section_index = int(parts[1])
 
@@ -2269,48 +2269,48 @@ class ReportManager:
     @classmethod
     def assemble_full_report(cls, report_id: str, outline: ReportOutline) -> str:
         """
-        translated
+        details
         
-        translated，translated
+        details，details
         """
         folder = cls._get_report_folder(report_id)
         
-        # translated
+        # details
         md_content = f"# {outline.title}\n\n"
         md_content += f"> {outline.summary}\n\n"
         md_content += f"---\n\n"
         
-        # translated
+        # details
         sections = cls.get_generated_sections(report_id)
         for section_info in sections:
             md_content += section_info["content"]
         
-        # translated：translated
+        # details：details
         md_content = cls._post_process_report(md_content, outline)
         
-        # translated
+        # details
         full_path = cls._get_report_markdown_path(report_id)
         with open(full_path, 'w', encoding='utf-8') as f:
             f.write(md_content)
         
-        logger.info(f"translated: {report_id}")
+        logger.info(f"details: {report_id}")
         return md_content
     
     @classmethod
     def _post_process_report(cls, content: str, outline: ReportOutline) -> str:
         """
-        translated
+        details
         
-        1. translated
-        2. translated(#)translated(##)，translated(###, ####translated)
-        3. translated
+        1. details
+        2. details(#)details(##)，details(###, ####details)
+        3. details
         
         Args:
-            content: translated
-            outline: translated
+            content: details
+            outline: details
             
         Returns:
-            translated
+            details
         """
         import re
         
@@ -2318,7 +2318,7 @@ class ReportManager:
         processed_lines = []
         prev_was_heading = False
         
-        # translated
+        # details
         section_titles = set()
         for section in outline.sections:
             section_titles.add(section.title)
@@ -2328,14 +2328,14 @@ class ReportManager:
             line = lines[i]
             stripped = line.strip()
             
-            # translated
+            # details
             heading_match = re.match(r'^(#{1,6})\s+(.+)$', stripped)
             
             if heading_match:
                 level = len(heading_match.group(1))
                 title = heading_match.group(2).strip()
                 
-                # translated（translated5translated）
+                # details（converted5converted）
                 is_duplicate = False
                 for j in range(max(0, len(processed_lines) - 5), len(processed_lines)):
                     prev_line = processed_lines[j].strip()
@@ -2347,43 +2347,43 @@ class ReportManager:
                             break
                 
                 if is_duplicate:
-                    # translated
+                    # details
                     i += 1
                     while i < len(lines) and lines[i].strip() == '':
                         i += 1
                     continue
                 
-                # translated：
-                # - # (level=1) translated
-                # - ## (level=2) translated
-                # - ### translated (level>=3) translated
+                # details：
+                # - # (level=1) details
+                # - ## (level=2) details
+                # - ### details (level>=3) details
                 
                 if level == 1:
                     if title == outline.title:
-                        # translated
+                        # details
                         processed_lines.append(line)
                         prev_was_heading = True
                     elif title in section_titles:
-                        # translated#，translated##
+                        # details#，details##
                         processed_lines.append(f"## {title}")
                         prev_was_heading = True
                     else:
-                        # translated
+                        # details
                         processed_lines.append(f"**{title}**")
                         processed_lines.append("")
                         prev_was_heading = False
                 elif level == 2:
                     if title in section_titles or title == outline.title:
-                        # translated
+                        # details
                         processed_lines.append(line)
                         prev_was_heading = True
                     else:
-                        # translated
+                        # details
                         processed_lines.append(f"**{title}**")
                         processed_lines.append("")
                         prev_was_heading = False
                 else:
-                    # ### translated
+                    # ### details
                     processed_lines.append(f"**{title}**")
                     processed_lines.append("")
                     prev_was_heading = False
@@ -2392,12 +2392,12 @@ class ReportManager:
                 continue
             
             elif stripped == '---' and prev_was_heading:
-                # translated
+                # details
                 i += 1
                 continue
             
             elif stripped == '' and prev_was_heading:
-                # translated
+                # details
                 if processed_lines and processed_lines[-1].strip() != '':
                     processed_lines.append(line)
                 prev_was_heading = False
@@ -2408,7 +2408,7 @@ class ReportManager:
             
             i += 1
         
-        # translated（translated2translated）
+        # details（converted2converted）
         result_lines = []
         empty_count = 0
         for line in processed_lines:
@@ -2424,31 +2424,31 @@ class ReportManager:
     
     @classmethod
     def save_report(cls, report: Report) -> None:
-        """translated"""
+        """details"""
         cls._ensure_report_folder(report.report_id)
         
-        # translatedJSON
+        # convertedJSON
         with open(cls._get_report_path(report.report_id), 'w', encoding='utf-8') as f:
             json.dump(report.to_dict(), f, ensure_ascii=False, indent=2)
         
-        # translated
+        # details
         if report.outline:
             cls.save_outline(report.report_id, report.outline)
         
-        # translatedMarkdowntranslated
+        # convertedMarkdownconverted
         if report.markdown_content:
             with open(cls._get_report_markdown_path(report.report_id), 'w', encoding='utf-8') as f:
                 f.write(report.markdown_content)
         
-        logger.info(f"translated: {report.report_id}")
+        logger.info(f"details: {report.report_id}")
     
     @classmethod
     def get_report(cls, report_id: str) -> Optional[Report]:
-        """translated"""
+        """details"""
         path = cls._get_report_path(report_id)
         
         if not os.path.exists(path):
-            # translated：translatedreportstranslated
+            # details：convertedreportsconverted
             old_path = os.path.join(cls.REPORTS_DIR, f"{report_id}.json")
             if os.path.exists(old_path):
                 path = old_path
@@ -2458,7 +2458,7 @@ class ReportManager:
         with open(path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
-        # translatedReporttranslated
+        # convertedReportconverted
         outline = None
         if data.get('outline'):
             outline_data = data['outline']
@@ -2474,7 +2474,7 @@ class ReportManager:
                 sections=sections
             )
         
-        # translatedmarkdown_contenttranslated，translatedfull_report.mdtranslated
+        # convertedmarkdown_contentconverted，convertedfull_report.mdconverted
         markdown_content = data.get('markdown_content', '')
         if not markdown_content:
             full_report_path = cls._get_report_markdown_path(report_id)
@@ -2497,17 +2497,17 @@ class ReportManager:
     
     @classmethod
     def get_report_by_simulation(cls, simulation_id: str) -> Optional[Report]:
-        """translatedIDtranslated"""
+        """convertedIDconverted"""
         cls._ensure_reports_dir()
         
         for item in os.listdir(cls.REPORTS_DIR):
             item_path = os.path.join(cls.REPORTS_DIR, item)
-            # translated：translated
+            # details：details
             if os.path.isdir(item_path):
                 report = cls.get_report(item)
                 if report and report.simulation_id == simulation_id:
                     return report
-            # translated：JSONtranslated
+            # details：JSONconverted
             elif item.endswith('.json'):
                 report_id = item[:-5]
                 report = cls.get_report(report_id)
@@ -2518,19 +2518,19 @@ class ReportManager:
     
     @classmethod
     def list_reports(cls, simulation_id: Optional[str] = None, limit: int = 50) -> List[Report]:
-        """translated"""
+        """details"""
         cls._ensure_reports_dir()
         
         reports = []
         for item in os.listdir(cls.REPORTS_DIR):
             item_path = os.path.join(cls.REPORTS_DIR, item)
-            # translated：translated
+            # details：details
             if os.path.isdir(item_path):
                 report = cls.get_report(item)
                 if report:
                     if simulation_id is None or report.simulation_id == simulation_id:
                         reports.append(report)
-            # translated：JSONtranslated
+            # details：JSONconverted
             elif item.endswith('.json'):
                 report_id = item[:-5]
                 report = cls.get_report(report_id)
@@ -2538,25 +2538,25 @@ class ReportManager:
                     if simulation_id is None or report.simulation_id == simulation_id:
                         reports.append(report)
         
-        # translated
+        # details
         reports.sort(key=lambda r: r.created_at, reverse=True)
         
         return reports[:limit]
     
     @classmethod
     def delete_report(cls, report_id: str) -> bool:
-        """translated（translated）"""
+        """details（details）"""
         import shutil
         
         folder_path = cls._get_report_folder(report_id)
         
-        # translated：translated
+        # details：details
         if os.path.exists(folder_path) and os.path.isdir(folder_path):
             shutil.rmtree(folder_path)
-            logger.info(f"translated: {report_id}")
+            logger.info(f"details: {report_id}")
             return True
         
-        # translated：translated
+        # details：details
         deleted = False
         old_json_path = os.path.join(cls.REPORTS_DIR, f"{report_id}.json")
         old_md_path = os.path.join(cls.REPORTS_DIR, f"{report_id}.md")

@@ -9,149 +9,149 @@ from ..utils.llm_client import LLMClient
 
 
 # System prompt for ontology generation
-ONTOLOGY_SYSTEM_PROMPT = """translated。translated，translated**translated**translated。
+ONTOLOGY_SYSTEM_PROMPT = """details。details，details**details**details。
 
-**translated：translatedJSONtranslated，translated。**
+**details：convertedJSONconverted，details。**
 
-## translated
+## details
 
-translated**translated**。translated：
-- translated、translated、translated"translated"translated"translated"
-- translated、translated、translated、translated
-- translated
+details**details**。details：
+- details、details、details"details"details"details"
+- details、details、details、details
+- details
 
-translated，**translated、translated**：
+details，**details、details**：
 
-**translated**：
-- translated（translated、translated、translated、translated、translated）
-- translated、translated（translated）
-- translated（translated、translated、NGO、translated）
-- translated、translated
-- translated（translated、translated、translated、translated）
-- translated
-- translated（translated、translated、translated）
+**details**：
+- details（details、details、details、details、details）
+- details、details（details）
+- details（details、details、NGO、details）
+- details、details
+- details（details、details、details、details）
+- details
+- details（details、details、details）
 
-**translated**：
-- translated（translated"translated"、"translated"、"translated"）
-- translated/translated（translated"translated"、"translated"）
-- translated/translated（translated"translated"、"translated"）
+**details**：
+- details（details"details"、"details"、"details"）
+- details/details（details"details"、"details"）
+- details/details（details"details"、"details"）
 
-## translated
+## details
 
-translatedJSONtranslated，translated：
+convertedJSONconverted，details：
 
 ```json
 {
     "entity_types": [
         {
-            "name": "translated（translated，PascalCase）",
-            "description": "translated（translated，translated100translated）",
+            "name": "details（details，PascalCase）",
+            "description": "details（details，converted100converted）",
             "attributes": [
                 {
-                    "name": "translated（translated，snake_case）",
+                    "name": "details（details，snake_case）",
                     "type": "text",
-                    "description": "translated"
+                    "description": "details"
                 }
             ],
-            "examples": ["translated1", "translated2"]
+            "examples": ["converted1", "converted2"]
         }
     ],
     "edge_types": [
         {
-            "name": "translated（translated，UPPER_SNAKE_CASE）",
-            "description": "translated（translated，translated100translated）",
+            "name": "details（details，UPPER_SNAKE_CASE）",
+            "description": "details（details，converted100converted）",
             "source_targets": [
-                {"source": "translated", "target": "translated"}
+                {"source": "details", "target": "details"}
             ],
             "attributes": []
         }
     ],
-    "analysis_summary": "translated（translated）"
+    "analysis_summary": "details（details）"
 }
 ```
 
-## translated（translated！）
+## details（details！）
 
-### 1. translated - translated
+### 1. details - details
 
-**translated：translated10translated**
+**details：converted10converted**
 
-**translated（translated）**：
+**details（details）**：
 
-translated10translated：
+converted10converted：
 
-A. **translated（translated，translated2translated）**：
-   - `Person`: translated。translated，translated。
-   - `Organization`: translated。translated，translated。
+A. **details（details，converted2converted）**：
+   - `Person`: details。details，details。
+   - `Organization`: details。details，details。
 
-B. **translated（8translated，translated）**：
-   - translated，translated
-   - translated：translated，translated `Student`, `Professor`, `University`
-   - translated：translated，translated `Company`, `CEO`, `Employee`
+B. **details（8converted，details）**：
+   - details，details
+   - details：details，details `Student`, `Professor`, `University`
+   - details：details，details `Company`, `CEO`, `Employee`
 
-**translated**：
-- translated，translated"translated"、"translated"、"translated"
-- translated，translated `Person`
-- translated，translated、translated `Organization`
+**details**：
+- details，details"details"、"details"、"details"
+- details，details `Person`
+- details，details、details `Organization`
 
-**translated**：
-- translated
-- translated，translated
-- description translated
+**details**：
+- details
+- details，details
+- description details
 
-### 2. translated
+### 2. details
 
-- translated：6-10translated
-- translated
-- translated source_targets translated
+- details：6-10converted
+- details
+- details source_targets details
 
-### 3. translated
+### 3. details
 
-- translated1-3translated
-- **translated**：translated `name`、`uuid`、`group_id`、`created_at`、`summary`（translated）
-- translated：`full_name`, `title`, `role`, `position`, `location`, `description` translated
+- converted1-3converted
+- **details**：details `name`、`uuid`、`group_id`、`created_at`、`summary`（details）
+- details：`full_name`, `title`, `role`, `position`, `location`, `description` details
 
-## translated
+## details
 
-**translated（translated）**：
-- Student: translated
-- Professor: translated/translated
-- Journalist: translated
-- Celebrity: translated/translated
-- Executive: translated
-- Official: translated
-- Lawyer: translated
-- Doctor: translated
+**details（details）**：
+- Student: details
+- Professor: details/details
+- Journalist: details
+- Celebrity: details/details
+- Executive: details
+- Official: details
+- Lawyer: details
+- Doctor: details
 
-**translated（translated）**：
-- Person: translated（translated）
+**details（details）**：
+- Person: details（details）
 
-**translated（translated）**：
-- University: translated
-- Company: translated
-- GovernmentAgency: translated
-- MediaOutlet: translated
-- Hospital: translated
-- School: translated
-- NGO: translated
+**details（details）**：
+- University: details
+- Company: details
+- GovernmentAgency: details
+- MediaOutlet: details
+- Hospital: details
+- School: details
+- NGO: details
 
-**translated（translated）**：
-- Organization: translated（translated）
+**details（details）**：
+- Organization: details（details）
 
-## translated
+## details
 
-- WORKS_FOR: translated
-- STUDIES_AT: translated
-- AFFILIATED_WITH: translated
-- REPRESENTS: translated
-- REGULATES: translated
-- REPORTS_ON: translated
-- COMMENTS_ON: translated
-- RESPONDS_TO: translated
-- SUPPORTS: translated
-- OPPOSES: translated
-- COLLABORATES_WITH: translated
-- COMPETES_WITH: translated
+- WORKS_FOR: details
+- STUDIES_AT: details
+- AFFILIATED_WITH: details
+- REPRESENTS: details
+- REGULATES: details
+- REPORTS_ON: details
+- COMMENTS_ON: details
+- RESPONDS_TO: details
+- SUPPORTS: details
+- OPPOSES: details
+- COLLABORATES_WITH: details
+- COMPETES_WITH: details
 """
 
 
@@ -223,33 +223,33 @@ class OntologyGenerator:
         # If text exceeds 50,000 characters, truncate (only affects content sent to LLM, not graph construction)
         if len(combined_text) > self.MAX_TEXT_LENGTH_FOR_LLM:
             combined_text = combined_text[:self.MAX_TEXT_LENGTH_FOR_LLM]
-            combined_text += f"\n\n...(translated{original_length}translated，translated{self.MAX_TEXT_LENGTH_FOR_LLM}translated)..."
+            combined_text += f"\n\n...(details{original_length}details，details{self.MAX_TEXT_LENGTH_FOR_LLM}details)..."
         
-        message = f"""## translated
+        message = f"""## details
 
 {simulation_requirement}
 
-## translated
+## details
 
 {combined_text}
 """
         
         if additional_context:
             message += f"""
-## translated
+## details
 
 {additional_context}
 """
         
         message += """
-translated，translated。
+details，details。
 
-**translated**：
-1. translated10translated
-2. translated2translated：Person（translated）translated Organization（translated）
-3. translated8translated
-4. translated，translated
-5. translated name、uuid、group_id translated，translated full_name、org_name translated
+**details**：
+1. converted10converted
+2. converted2converted：Person（details）details Organization（details）
+3. converted8converted
+4. details，details
+5. details name、uuid、group_id details，details full_name、org_name details
 """
         
         return message

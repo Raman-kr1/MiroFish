@@ -68,79 +68,79 @@ def test_profile_formats():
         twitter_path = os.path.join(temp_dir, "twitter_profiles.csv")
         reddit_path = os.path.join(temp_dir, "reddit_profiles.json")
         
-        # translatedTwitter CSVtranslated
-        print("\n1. translatedTwitter Profile (CSVtranslated)")
+        # convertedTwitter CSVconverted
+        print("\n1. convertedTwitter Profile (CSVconverted)")
         print("-" * 40)
         generator._save_twitter_csv(test_profiles, twitter_path)
         
-        # translatedCSV
+        # convertedCSV
         with open(twitter_path, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             rows = list(reader)
             
-        print(f"   translated: {twitter_path}")
-        print(f"   translated: {len(rows)}")
-        print(f"   translated: {list(rows[0].keys())}")
-        print(f"\n   translated (translated1translated):")
+        print(f"   details: {twitter_path}")
+        print(f"   details: {len(rows)}")
+        print(f"   details: {list(rows[0].keys())}")
+        print(f"\n   details (converted1converted):")
         for key, value in rows[0].items():
             print(f"     {key}: {value}")
         
-        # translated
+        # details
         required_twitter_fields = ['user_id', 'user_name', 'name', 'bio', 
                                    'friend_count', 'follower_count', 'statuses_count', 'created_at']
         missing = set(required_twitter_fields) - set(rows[0].keys())
         if missing:
-            print(f"\n   [translated] translated: {missing}")
+            print(f"\n   [details] details: {missing}")
         else:
-            print(f"\n   [translated] translated")
+            print(f"\n   [details] details")
         
-        # translatedReddit JSONtranslated
-        print("\n2. translatedReddit Profile (JSONtranslated)")
+        # convertedReddit JSONconverted
+        print("\n2. convertedReddit Profile (JSONconverted)")
         print("-" * 40)
         generator._save_reddit_json(test_profiles, reddit_path)
         
-        # translatedJSON
+        # convertedJSON
         with open(reddit_path, 'r', encoding='utf-8') as f:
             reddit_data = json.load(f)
         
-        print(f"   translated: {reddit_path}")
-        print(f"   translated: {len(reddit_data)}")
-        print(f"   translated: {list(reddit_data[0].keys())}")
-        print(f"\n   translated (translated1translated):")
+        print(f"   details: {reddit_path}")
+        print(f"   details: {len(reddit_data)}")
+        print(f"   details: {list(reddit_data[0].keys())}")
+        print(f"\n   details (converted1converted):")
         print(json.dumps(reddit_data[0], ensure_ascii=False, indent=4))
         
-        # translated
+        # details
         required_reddit_fields = ['realname', 'username', 'bio', 'persona']
         optional_reddit_fields = ['age', 'gender', 'mbti', 'country', 'profession', 'interested_topics']
         
         missing = set(required_reddit_fields) - set(reddit_data[0].keys())
         if missing:
-            print(f"\n   [translated] translated: {missing}")
+            print(f"\n   [details] details: {missing}")
         else:
-            print(f"\n   [translated] translated")
+            print(f"\n   [details] details")
         
         present_optional = set(optional_reddit_fields) & set(reddit_data[0].keys())
-        print(f"   [translated] translated: {present_optional}")
+        print(f"   [details] details: {present_optional}")
     
     print("\n" + "=" * 60)
-    print("translated!")
+    print("details!")
     print("=" * 60)
 
 
 def show_expected_formats():
     """Display the profile format expected by OASIS"""
     print("\n" + "=" * 60)
-    print("OASIS translatedProfiletranslated")
+    print("OASIS convertedProfileconverted")
     print("=" * 60)
     
-    print("\n1. Twitter Profile (CSVtranslated)")
+    print("\n1. Twitter Profile (CSVconverted)")
     print("-" * 40)
     twitter_example = """user_id,user_name,name,bio,friend_count,follower_count,statuses_count,created_at
 0,user0,User Zero,I am user zero with interests in technology.,100,150,500,2023-01-01
 1,user1,User One,Tech enthusiast and coffee lover.,200,250,1000,2023-01-02"""
     print(twitter_example)
     
-    print("\n2. Reddit Profile (JSONtranslated)")
+    print("\n2. Reddit Profile (JSONconverted)")
     print("-" * 40)
     reddit_example = [
         {

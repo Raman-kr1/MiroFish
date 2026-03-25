@@ -148,7 +148,7 @@ class SimulationIPCClient:
         with open(command_file, 'w', encoding='utf-8') as f:
             json.dump(command.to_dict(), f, ensure_ascii=False, indent=2)
         
-        logger.info(f"translatedIPCtranslated: {command_type.value}, command_id={command_id}")
+        logger.info(f"convertedIPCconverted: {command_type.value}, command_id={command_id}")
         
         # Wait for response
         response_file = os.path.join(self.responses_dir, f"{command_id}.json")
@@ -168,15 +168,15 @@ class SimulationIPCClient:
                     except OSError:
                         pass
                     
-                    logger.info(f"translatedIPCtranslated: command_id={command_id}, status={response.status.value}")
+                    logger.info(f"convertedIPCconverted: command_id={command_id}, status={response.status.value}")
                     return response
                 except (json.JSONDecodeError, KeyError) as e:
-                    logger.warning(f"translated: {e}")
+                    logger.warning(f"details: {e}")
             
             time.sleep(poll_interval)
         
         # Timeout
-        logger.error(f"translatedIPCtranslated: command_id={command_id}")
+        logger.error(f"convertedIPCconverted: command_id={command_id}")
         
         # Clean up command file
         try:
@@ -184,7 +184,7 @@ class SimulationIPCClient:
         except OSError:
             pass
         
-        raise TimeoutError(f"translated ({timeout}translated)")
+        raise TimeoutError(f"details ({timeout}details)")
     
     def send_interview(
         self,
@@ -354,7 +354,7 @@ class SimulationIPCServer:
                     data = json.load(f)
                 return IPCCommand.from_dict(data)
             except (json.JSONDecodeError, KeyError, OSError) as e:
-                logger.warning(f"translated: {filepath}, {e}")
+                logger.warning(f"details: {filepath}, {e}")
                 continue
         
         return None

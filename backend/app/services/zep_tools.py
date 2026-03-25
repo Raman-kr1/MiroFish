@@ -1,11 +1,11 @@
 """
-Zeptranslated
-translated、translated、translated，translatedReport Agenttranslated
+Zepconverted
+details、details、details，convertedReport Agentconverted
 
-translated（translated）：
-1. InsightForge（translated）- translated，translated
-2. PanoramaSearch（translated）- translated，translated
-3. QuickSearch（translated）- translated
+details（details）：
+1. InsightForge（details）- details，details
+2. PanoramaSearch（details）- details，details
+3. QuickSearch（details）- details
 """
 
 import time
@@ -25,7 +25,7 @@ logger = get_logger('mirofish.zep_tools')
 
 @dataclass
 class SearchResult:
-    """translated"""
+    """details"""
     facts: List[str]
     edges: List[Dict[str, Any]]
     nodes: List[Dict[str, Any]]
@@ -42,11 +42,11 @@ class SearchResult:
         }
     
     def to_text(self) -> str:
-        """translated，translatedLLMtranslated"""
-        text_parts = [f"translated: {self.query}", f"translated {self.total_count} translated"]
+        """details，convertedLLMconverted"""
+        text_parts = [f"details: {self.query}", f"details {self.total_count} details"]
         
         if self.facts:
-            text_parts.append("\n### translated:")
+            text_parts.append("\n### details:")
             for i, fact in enumerate(self.facts, 1):
                 text_parts.append(f"{i}. {fact}")
         
@@ -55,7 +55,7 @@ class SearchResult:
 
 @dataclass
 class NodeInfo:
-    """translated"""
+    """details"""
     uuid: str
     name: str
     labels: List[str]
@@ -72,14 +72,14 @@ class NodeInfo:
         }
     
     def to_text(self) -> str:
-        """translated"""
-        entity_type = next((l for l in self.labels if l not in ["Entity", "Node"]), "translated")
-        return f"translated: {self.name} (translated: {entity_type})\ntranslated: {self.summary}"
+        """details"""
+        entity_type = next((l for l in self.labels if l not in ["Entity", "Node"]), "details")
+        return f"details: {self.name} (details: {entity_type})\nconverted: {self.summary}"
 
 
 @dataclass
 class EdgeInfo:
-    """translated"""
+    """details"""
     uuid: str
     name: str
     fact: str
@@ -87,7 +87,7 @@ class EdgeInfo:
     target_node_uuid: str
     source_node_name: Optional[str] = None
     target_node_name: Optional[str] = None
-    # translated
+    # details
     created_at: Optional[str] = None
     valid_at: Optional[str] = None
     invalid_at: Optional[str] = None
@@ -109,47 +109,47 @@ class EdgeInfo:
         }
     
     def to_text(self, include_temporal: bool = False) -> str:
-        """translated"""
+        """details"""
         source = self.source_node_name or self.source_node_uuid[:8]
         target = self.target_node_name or self.target_node_uuid[:8]
-        base_text = f"translated: {source} --[{self.name}]--> {target}\ntranslated: {self.fact}"
+        base_text = f"details: {source} --[{self.name}]--> {target}\nconverted: {self.fact}"
         
         if include_temporal:
-            valid_at = self.valid_at or "translated"
-            invalid_at = self.invalid_at or "translated"
-            base_text += f"\ntranslated: {valid_at} - {invalid_at}"
+            valid_at = self.valid_at or "details"
+            invalid_at = self.invalid_at or "details"
+            base_text += f"\nconverted: {valid_at} - {invalid_at}"
             if self.expired_at:
-                base_text += f" (translated: {self.expired_at})"
+                base_text += f" (details: {self.expired_at})"
         
         return base_text
     
     @property
     def is_expired(self) -> bool:
-        """translated"""
+        """details"""
         return self.expired_at is not None
     
     @property
     def is_invalid(self) -> bool:
-        """translated"""
+        """details"""
         return self.invalid_at is not None
 
 
 @dataclass
 class InsightForgeResult:
     """
-    translated (InsightForge)
-    translated，translated
+    details (InsightForge)
+    details，details
     """
     query: str
     simulation_requirement: str
     sub_queries: List[str]
     
-    # translated
-    semantic_facts: List[str] = field(default_factory=list)  # translated
-    entity_insights: List[Dict[str, Any]] = field(default_factory=list)  # translated
-    relationship_chains: List[str] = field(default_factory=list)  # translated
+    # details
+    semantic_facts: List[str] = field(default_factory=list)  # details
+    entity_insights: List[Dict[str, Any]] = field(default_factory=list)  # details
+    relationship_chains: List[str] = field(default_factory=list)  # details
     
-    # translated
+    # details
     total_facts: int = 0
     total_entities: int = 0
     total_relationships: int = 0
@@ -168,42 +168,42 @@ class InsightForgeResult:
         }
     
     def to_text(self) -> str:
-        """translated，translatedLLMtranslated"""
+        """details，convertedLLMconverted"""
         text_parts = [
-            f"## translated",
-            f"translated: {self.query}",
-            f"translated: {self.simulation_requirement}",
-            f"\n### translated",
-            f"- translated: {self.total_facts}translated",
-            f"- translated: {self.total_entities}translated",
-            f"- translated: {self.total_relationships}translated"
+            f"## details",
+            f"details: {self.query}",
+            f"details: {self.simulation_requirement}",
+            f"\n### details",
+            f"- details: {self.total_facts}details",
+            f"- details: {self.total_entities}details",
+            f"- details: {self.total_relationships}details"
         ]
         
-        # translated
+        # details
         if self.sub_queries:
-            text_parts.append(f"\n### translated")
+            text_parts.append(f"\n### details")
             for i, sq in enumerate(self.sub_queries, 1):
                 text_parts.append(f"{i}. {sq}")
         
-        # translated
+        # details
         if self.semantic_facts:
-            text_parts.append(f"\n### 【translated】(translated)")
+            text_parts.append(f"\n### 【details】(details)")
             for i, fact in enumerate(self.semantic_facts, 1):
                 text_parts.append(f"{i}. \"{fact}\"")
         
-        # translated
+        # details
         if self.entity_insights:
-            text_parts.append(f"\n### 【translated】")
+            text_parts.append(f"\n### 【details】")
             for entity in self.entity_insights:
-                text_parts.append(f"- **{entity.get('name', 'translated')}** ({entity.get('type', 'translated')})")
+                text_parts.append(f"- **{entity.get('name', 'details')}** ({entity.get('type', 'details')})")
                 if entity.get('summary'):
-                    text_parts.append(f"  translated: \"{entity.get('summary')}\"")
+                    text_parts.append(f"  details: \"{entity.get('summary')}\"")
                 if entity.get('related_facts'):
-                    text_parts.append(f"  translated: {len(entity.get('related_facts', []))}translated")
+                    text_parts.append(f"  details: {len(entity.get('related_facts', []))}details")
         
-        # translated
+        # details
         if self.relationship_chains:
-            text_parts.append(f"\n### 【translated】")
+            text_parts.append(f"\n### 【details】")
             for chain in self.relationship_chains:
                 text_parts.append(f"- {chain}")
         
@@ -213,21 +213,21 @@ class InsightForgeResult:
 @dataclass
 class PanoramaResult:
     """
-    translated (Panorama)
-    translated，translated
+    details (Panorama)
+    details，details
     """
     query: str
     
-    # translated
+    # details
     all_nodes: List[NodeInfo] = field(default_factory=list)
-    # translated（translated）
+    # details（details）
     all_edges: List[EdgeInfo] = field(default_factory=list)
-    # translated
+    # details
     active_facts: List[str] = field(default_factory=list)
-    # translated/translated（translated）
+    # details/details（details）
     historical_facts: List[str] = field(default_factory=list)
     
-    # translated
+    # details
     total_nodes: int = 0
     total_edges: int = 0
     active_count: int = 0
@@ -247,34 +247,34 @@ class PanoramaResult:
         }
     
     def to_text(self) -> str:
-        """translated（translated，translated）"""
+        """details（details，details）"""
         text_parts = [
-            f"## translated（translated）",
-            f"translated: {self.query}",
-            f"\n### translated",
-            f"- translated: {self.total_nodes}",
-            f"- translated: {self.total_edges}",
-            f"- translated: {self.active_count}translated",
-            f"- translated/translated: {self.historical_count}translated"
+            f"## details（details）",
+            f"details: {self.query}",
+            f"\n### details",
+            f"- details: {self.total_nodes}",
+            f"- details: {self.total_edges}",
+            f"- details: {self.active_count}details",
+            f"- details/details: {self.historical_count}details"
         ]
         
-        # translated（translated，translated）
+        # details（details，details）
         if self.active_facts:
-            text_parts.append(f"\n### 【translated】(translated)")
+            text_parts.append(f"\n### 【details】(details)")
             for i, fact in enumerate(self.active_facts, 1):
                 text_parts.append(f"{i}. \"{fact}\"")
         
-        # translated/translated（translated，translated）
+        # details/details（details，details）
         if self.historical_facts:
-            text_parts.append(f"\n### 【translated/translated】(translated)")
+            text_parts.append(f"\n### 【details/details】(details)")
             for i, fact in enumerate(self.historical_facts, 1):
                 text_parts.append(f"{i}. \"{fact}\"")
         
-        # translated（translated，translated）
+        # details（details，details）
         if self.all_nodes:
-            text_parts.append(f"\n### 【translated】")
+            text_parts.append(f"\n### 【details】")
             for node in self.all_nodes:
-                entity_type = next((l for l in node.labels if l not in ["Entity", "Node"]), "translated")
+                entity_type = next((l for l in node.labels if l not in ["Entity", "Node"]), "details")
                 text_parts.append(f"- **{node.name}** ({entity_type})")
         
         return "\n".join(text_parts)
@@ -282,13 +282,13 @@ class PanoramaResult:
 
 @dataclass
 class AgentInterview:
-    """translatedAgenttranslated"""
+    """convertedAgentconverted"""
     agent_name: str
-    agent_role: str  # translated（translated：translated、translated、translated）
-    agent_bio: str  # translated
-    question: str  # translated
-    response: str  # translated
-    key_quotes: List[str] = field(default_factory=list)  # translated
+    agent_role: str  # details（details：details、details、details）
+    agent_bio: str  # details
+    question: str  # details
+    response: str  # details
+    key_quotes: List[str] = field(default_factory=list)  # details
     
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -302,21 +302,21 @@ class AgentInterview:
     
     def to_text(self) -> str:
         text = f"**{self.agent_name}** ({self.agent_role})\n"
-        # translatedagent_bio，translated
-        text += f"_translated: {self.agent_bio}_\n\n"
+        # convertedagent_bio，details
+        text += f"_converted: {self.agent_bio}_\n\n"
         text += f"**Q:** {self.question}\n\n"
         text += f"**A:** {self.response}\n"
         if self.key_quotes:
-            text += "\n**translated:**\n"
+            text += "\n**details:**\n"
             for quote in self.key_quotes:
-                # translated
+                # details
                 clean_quote = quote.replace('\u201c', '').replace('\u201d', '').replace('"', '')
                 clean_quote = clean_quote.replace('\u300c', '').replace('\u300d', '')
                 clean_quote = clean_quote.strip()
-                # translated
+                # details
                 while clean_quote and clean_quote[0] in '，,；;：:、。！？\n\r\t ':
                     clean_quote = clean_quote[1:]
-                # translated（translated1-9）
+                # details（converted1-9）
                 skip = False
                 for d in '123456789':
                     if f'\u95ee\u9898{d}' in clean_quote:
@@ -324,7 +324,7 @@ class AgentInterview:
                         break
                 if skip:
                     continue
-                # translated（translated，translated）
+                # details（details，details）
                 if len(clean_quote) > 150:
                     dot_pos = clean_quote.find('\u3002', 80)
                     if dot_pos > 0:
@@ -339,23 +339,23 @@ class AgentInterview:
 @dataclass
 class InterviewResult:
     """
-    translated (Interview)
-    translatedAgenttranslated
+    details (Interview)
+    convertedAgentconverted
     """
-    interview_topic: str  # translated
-    interview_questions: List[str]  # translated
+    interview_topic: str  # details
+    interview_questions: List[str]  # details
     
-    # translatedAgent
+    # convertedAgent
     selected_agents: List[Dict[str, Any]] = field(default_factory=list)
-    # translatedAgenttranslated
+    # convertedAgentconverted
     interviews: List[AgentInterview] = field(default_factory=list)
     
-    # translatedAgenttranslated
+    # convertedAgentconverted
     selection_reasoning: str = ""
-    # translated
+    # details
     summary: str = ""
     
-    # translated
+    # details
     total_agents: int = 0
     interviewed_count: int = 0
     
@@ -372,74 +372,74 @@ class InterviewResult:
         }
     
     def to_text(self) -> str:
-        """translated，translatedLLMtranslated"""
+        """details，convertedLLMconverted"""
         text_parts = [
-            "## translated",
-            f"**translated:** {self.interview_topic}",
-            f"**translated:** {self.interviewed_count} / {self.total_agents} translatedAgent",
-            "\n### translated",
-            self.selection_reasoning or "（translated）",
+            "## details",
+            f"**details:** {self.interview_topic}",
+            f"**details:** {self.interviewed_count} / {self.total_agents} convertedAgent",
+            "\n### details",
+            self.selection_reasoning or "（details）",
             "\n---",
-            "\n### translated",
+            "\n### details",
         ]
 
         if self.interviews:
             for i, interview in enumerate(self.interviews, 1):
-                text_parts.append(f"\n#### translated #{i}: {interview.agent_name}")
+                text_parts.append(f"\n#### details #{i}: {interview.agent_name}")
                 text_parts.append(interview.to_text())
                 text_parts.append("\n---")
         else:
-            text_parts.append("（translated）\n\n---")
+            text_parts.append("（details）\n\n---")
 
-        text_parts.append("\n### translated")
-        text_parts.append(self.summary or "（translated）")
+        text_parts.append("\n### details")
+        text_parts.append(self.summary or "（details）")
 
         return "\n".join(text_parts)
 
 
 class ZepToolsService:
     """
-    Zeptranslated
+    Zepconverted
     
-    【translated - translated】
-    1. insight_forge - translated（translated，translated，translated）
-    2. panorama_search - translated（translated，translated）
-    3. quick_search - translated（translated）
-    4. interview_agents - translated（translatedAgent，translated）
+    【details - details】
+    1. insight_forge - details（details，details，details）
+    2. panorama_search - details（details，details）
+    3. quick_search - details（details）
+    4. interview_agents - details（convertedAgent，details）
     
-    【translated】
-    - search_graph - translated
-    - get_all_nodes - translated
-    - get_all_edges - translated（translated）
-    - get_node_detail - translated
-    - get_node_edges - translated
-    - get_entities_by_type - translated
-    - get_entity_summary - translated
+    【details】
+    - search_graph - details
+    - get_all_nodes - details
+    - get_all_edges - details（details）
+    - get_node_detail - details
+    - get_node_edges - details
+    - get_entities_by_type - details
+    - get_entity_summary - details
     """
     
-    # translated
+    # details
     MAX_RETRIES = 3
     RETRY_DELAY = 2.0
     
     def __init__(self, api_key: Optional[str] = None, llm_client: Optional[LLMClient] = None):
         self.api_key = api_key or Config.ZEP_API_KEY
         if not self.api_key:
-            raise ValueError("ZEP_API_KEY translated")
+            raise ValueError("ZEP_API_KEY details")
         
         self.client = Zep(api_key=self.api_key)
-        # LLMtranslatedInsightForgetranslated
+        # LLMconvertedInsightForgeconverted
         self._llm_client = llm_client
-        logger.info("ZepToolsService translated")
+        logger.info("ZepToolsService details")
     
     @property
     def llm(self) -> LLMClient:
-        """translatedLLMtranslated"""
+        """convertedLLMconverted"""
         if self._llm_client is None:
             self._llm_client = LLMClient()
         return self._llm_client
     
     def _call_with_retry(self, func, operation_name: str, max_retries: int = None):
-        """translatedAPItranslated"""
+        """convertedAPIconverted"""
         max_retries = max_retries or self.MAX_RETRIES
         last_exception = None
         delay = self.RETRY_DELAY
@@ -451,13 +451,13 @@ class ZepToolsService:
                 last_exception = e
                 if attempt < max_retries - 1:
                     logger.warning(
-                        f"Zep {operation_name} translated {attempt + 1} translated: {str(e)[:100]}, "
-                        f"{delay:.1f}translated..."
+                        f"Zep {operation_name} details {attempt + 1} details: {str(e)[:100]}, "
+                        f"{delay:.1f}details..."
                     )
                     time.sleep(delay)
                     delay *= 2
                 else:
-                    logger.error(f"Zep {operation_name} translated {max_retries} translated: {str(e)}")
+                    logger.error(f"Zep {operation_name} details {max_retries} details: {str(e)}")
         
         raise last_exception
     
@@ -469,23 +469,23 @@ class ZepToolsService:
         scope: str = "edges"
     ) -> SearchResult:
         """
-        translated
+        details
         
-        translated（translated+BM25）translated。
-        translatedZep Cloudtranslatedsearch APItranslated，translated。
+        details（details+BM25）details。
+        convertedZep Cloudconvertedsearch APIconverted，details。
         
         Args:
-            graph_id: translatedID (Standalone Graph)
-            query: translated
-            limit: translated
-            scope: translated，"edges" translated "nodes"
+            graph_id: convertedID (Standalone Graph)
+            query: details
+            limit: details
+            scope: details，"edges" details "nodes"
             
         Returns:
-            SearchResult: translated
+            SearchResult: details
         """
-        logger.info(f"translated: graph_id={graph_id}, query={query[:50]}...")
+        logger.info(f"details: graph_id={graph_id}, query={query[:50]}...")
         
-        # translatedZep Cloud Search API
+        # convertedZep Cloud Search API
         try:
             search_results = self._call_with_retry(
                 func=lambda: self.client.graph.search(
@@ -495,14 +495,14 @@ class ZepToolsService:
                     scope=scope,
                     reranker="cross_encoder"
                 ),
-                operation_name=f"translated(graph={graph_id})"
+                operation_name=f"details(graph={graph_id})"
             )
             
             facts = []
             edges = []
             nodes = []
             
-            # translated
+            # details
             if hasattr(search_results, 'edges') and search_results.edges:
                 for edge in search_results.edges:
                     if hasattr(edge, 'fact') and edge.fact:
@@ -515,7 +515,7 @@ class ZepToolsService:
                         "target_node_uuid": getattr(edge, 'target_node_uuid', ''),
                     })
             
-            # translated
+            # details
             if hasattr(search_results, 'nodes') and search_results.nodes:
                 for node in search_results.nodes:
                     nodes.append({
@@ -524,11 +524,11 @@ class ZepToolsService:
                         "labels": getattr(node, 'labels', []),
                         "summary": getattr(node, 'summary', ''),
                     })
-                    # translated
+                    # details
                     if hasattr(node, 'summary') and node.summary:
                         facts.append(f"[{node.name}]: {node.summary}")
             
-            logger.info(f"translated: translated {len(facts)} translated")
+            logger.info(f"details: details {len(facts)} details")
             
             return SearchResult(
                 facts=facts,
@@ -539,8 +539,8 @@ class ZepToolsService:
             )
             
         except Exception as e:
-            logger.warning(f"Zep Search APItranslated，translated: {str(e)}")
-            # translated：translated
+            logger.warning(f"Zep Search APIconverted，details: {str(e)}")
+            # details：details
             return self._local_search(graph_id, query, limit, scope)
     
     def _local_search(
@@ -551,38 +551,38 @@ class ZepToolsService:
         scope: str = "edges"
     ) -> SearchResult:
         """
-        translated（translatedZep Search APItranslated）
+        details（convertedZep Search APIconverted）
         
-        translated/translated，translated
+        details/details，details
         
         Args:
-            graph_id: translatedID
-            query: translated
-            limit: translated
-            scope: translated
+            graph_id: convertedID
+            query: details
+            limit: details
+            scope: details
             
         Returns:
-            SearchResult: translated
+            SearchResult: details
         """
-        logger.info(f"translated: query={query[:30]}...")
+        logger.info(f"details: query={query[:30]}...")
         
         facts = []
         edges_result = []
         nodes_result = []
         
-        # translated（translated）
+        # details（details）
         query_lower = query.lower()
         keywords = [w.strip() for w in query_lower.replace(',', ' ').replace('，', ' ').split() if len(w.strip()) > 1]
         
         def match_score(text: str) -> int:
-            """translated"""
+            """details"""
             if not text:
                 return 0
             text_lower = text.lower()
-            # translated
+            # details
             if query_lower in text_lower:
                 return 100
-            # translated
+            # details
             score = 0
             for keyword in keywords:
                 if keyword in text_lower:
@@ -591,7 +591,7 @@ class ZepToolsService:
         
         try:
             if scope in ["edges", "both"]:
-                # translated
+                # details
                 all_edges = self.get_all_edges(graph_id)
                 scored_edges = []
                 for edge in all_edges:
@@ -599,7 +599,7 @@ class ZepToolsService:
                     if score > 0:
                         scored_edges.append((score, edge))
                 
-                # translated
+                # details
                 scored_edges.sort(key=lambda x: x[0], reverse=True)
                 
                 for score, edge in scored_edges[:limit]:
@@ -614,7 +614,7 @@ class ZepToolsService:
                     })
             
             if scope in ["nodes", "both"]:
-                # translated
+                # details
                 all_nodes = self.get_all_nodes(graph_id)
                 scored_nodes = []
                 for node in all_nodes:
@@ -634,10 +634,10 @@ class ZepToolsService:
                     if node.summary:
                         facts.append(f"[{node.name}]: {node.summary}")
             
-            logger.info(f"translated: translated {len(facts)} translated")
+            logger.info(f"details: details {len(facts)} details")
             
         except Exception as e:
-            logger.error(f"translated: {str(e)}")
+            logger.error(f"details: {str(e)}")
         
         return SearchResult(
             facts=facts,
@@ -649,15 +649,15 @@ class ZepToolsService:
     
     def get_all_nodes(self, graph_id: str) -> List[NodeInfo]:
         """
-        translated（translated）
+        details（details）
 
         Args:
-            graph_id: translatedID
+            graph_id: convertedID
 
         Returns:
-            translated
+            details
         """
-        logger.info(f"translated {graph_id} translated...")
+        logger.info(f"details {graph_id} details...")
 
         nodes = fetch_all_nodes(self.client, graph_id)
 
@@ -672,21 +672,21 @@ class ZepToolsService:
                 attributes=node.attributes or {}
             ))
 
-        logger.info(f"translated {len(result)} translated")
+        logger.info(f"details {len(result)} details")
         return result
 
     def get_all_edges(self, graph_id: str, include_temporal: bool = True) -> List[EdgeInfo]:
         """
-        translated（translated，translated）
+        details（details，details）
 
         Args:
-            graph_id: translatedID
-            include_temporal: translated（translatedTrue）
+            graph_id: convertedID
+            include_temporal: details（convertedTrue）
 
         Returns:
-            translated（translatedcreated_at, valid_at, invalid_at, expired_at）
+            details（convertedcreated_at, valid_at, invalid_at, expired_at）
         """
-        logger.info(f"translated {graph_id} translated...")
+        logger.info(f"details {graph_id} details...")
 
         edges = fetch_all_edges(self.client, graph_id)
 
@@ -701,7 +701,7 @@ class ZepToolsService:
                 target_node_uuid=edge.target_node_uuid or ""
             )
 
-            # translated
+            # details
             if include_temporal:
                 edge_info.created_at = getattr(edge, 'created_at', None)
                 edge_info.valid_at = getattr(edge, 'valid_at', None)
@@ -710,25 +710,25 @@ class ZepToolsService:
 
             result.append(edge_info)
 
-        logger.info(f"translated {len(result)} translated")
+        logger.info(f"details {len(result)} details")
         return result
     
     def get_node_detail(self, node_uuid: str) -> Optional[NodeInfo]:
         """
-        translated
+        details
         
         Args:
-            node_uuid: translatedUUID
+            node_uuid: convertedUUID
             
         Returns:
-            translatedNone
+            convertedNone
         """
-        logger.info(f"translated: {node_uuid[:8]}...")
+        logger.info(f"details: {node_uuid[:8]}...")
         
         try:
             node = self._call_with_retry(
                 func=lambda: self.client.graph.node.get(uuid_=node_uuid),
-                operation_name=f"translated(uuid={node_uuid[:8]}...)"
+                operation_name=f"details(uuid={node_uuid[:8]}...)"
             )
             
             if not node:
@@ -742,39 +742,39 @@ class ZepToolsService:
                 attributes=node.attributes or {}
             )
         except Exception as e:
-            logger.error(f"translated: {str(e)}")
+            logger.error(f"details: {str(e)}")
             return None
     
     def get_node_edges(self, graph_id: str, node_uuid: str) -> List[EdgeInfo]:
         """
-        translated
+        details
         
-        translated，translated
+        details，details
         
         Args:
-            graph_id: translatedID
-            node_uuid: translatedUUID
+            graph_id: convertedID
+            node_uuid: convertedUUID
             
         Returns:
-            translated
+            details
         """
-        logger.info(f"translated {node_uuid[:8]}... translated")
+        logger.info(f"details {node_uuid[:8]}... details")
         
         try:
-            # translated，translated
+            # details，details
             all_edges = self.get_all_edges(graph_id)
             
             result = []
             for edge in all_edges:
-                # translated（translated）
+                # details（details）
                 if edge.source_node_uuid == node_uuid or edge.target_node_uuid == node_uuid:
                     result.append(edge)
             
-            logger.info(f"translated {len(result)} translated")
+            logger.info(f"details {len(result)} details")
             return result
             
         except Exception as e:
-            logger.warning(f"translated: {str(e)}")
+            logger.warning(f"details: {str(e)}")
             return []
     
     def get_entities_by_type(
@@ -783,26 +783,26 @@ class ZepToolsService:
         entity_type: str
     ) -> List[NodeInfo]:
         """
-        translated
+        details
         
         Args:
-            graph_id: translatedID
-            entity_type: translated（translated Student, PublicFigure translated）
+            graph_id: convertedID
+            entity_type: details（details Student, PublicFigure details）
             
         Returns:
-            translated
+            details
         """
-        logger.info(f"translated {entity_type} translated...")
+        logger.info(f"details {entity_type} details...")
         
         all_nodes = self.get_all_nodes(graph_id)
         
         filtered = []
         for node in all_nodes:
-            # translatedlabelstranslated
+            # convertedlabelsconverted
             if entity_type in node.labels:
                 filtered.append(node)
         
-        logger.info(f"translated {len(filtered)} translated {entity_type} translated")
+        logger.info(f"details {len(filtered)} details {entity_type} details")
         return filtered
     
     def get_entity_summary(
@@ -811,27 +811,27 @@ class ZepToolsService:
         entity_name: str
     ) -> Dict[str, Any]:
         """
-        translated
+        details
         
-        translated，translated
+        details，details
         
         Args:
-            graph_id: translatedID
-            entity_name: translated
+            graph_id: convertedID
+            entity_name: details
             
         Returns:
-            translated
+            details
         """
-        logger.info(f"translated {entity_name} translated...")
+        logger.info(f"details {entity_name} details...")
         
-        # translated
+        # details
         search_result = self.search_graph(
             graph_id=graph_id,
             query=entity_name,
             limit=20
         )
         
-        # translated
+        # details
         all_nodes = self.get_all_nodes(graph_id)
         entity_node = None
         for node in all_nodes:
@@ -841,7 +841,7 @@ class ZepToolsService:
         
         related_edges = []
         if entity_node:
-            # translatedgraph_idtranslated
+            # convertedgraph_idconverted
             related_edges = self.get_node_edges(graph_id, entity_node.uuid)
         
         return {
@@ -854,27 +854,27 @@ class ZepToolsService:
     
     def get_graph_statistics(self, graph_id: str) -> Dict[str, Any]:
         """
-        translated
+        details
         
         Args:
-            graph_id: translatedID
+            graph_id: convertedID
             
         Returns:
-            translated
+            details
         """
-        logger.info(f"translated {graph_id} translated...")
+        logger.info(f"details {graph_id} details...")
         
         nodes = self.get_all_nodes(graph_id)
         edges = self.get_all_edges(graph_id)
         
-        # translated
+        # details
         entity_types = {}
         for node in nodes:
             for label in node.labels:
                 if label not in ["Entity", "Node"]:
                     entity_types[label] = entity_types.get(label, 0) + 1
         
-        # translated
+        # details
         relation_types = {}
         for edge in edges:
             relation_types[edge.name] = relation_types.get(edge.name, 0) + 1
@@ -894,34 +894,34 @@ class ZepToolsService:
         limit: int = 30
     ) -> Dict[str, Any]:
         """
-        translated
+        details
         
-        translated
+        details
         
         Args:
-            graph_id: translatedID
-            simulation_requirement: translated
-            limit: translated
+            graph_id: convertedID
+            simulation_requirement: details
+            limit: details
             
         Returns:
-            translated
+            details
         """
-        logger.info(f"translated: {simulation_requirement[:50]}...")
+        logger.info(f"details: {simulation_requirement[:50]}...")
         
-        # translated
+        # details
         search_result = self.search_graph(
             graph_id=graph_id,
             query=simulation_requirement,
             limit=limit
         )
         
-        # translated
+        # details
         stats = self.get_graph_statistics(graph_id)
         
-        # translated
+        # details
         all_nodes = self.get_all_nodes(graph_id)
         
-        # translated（translatedEntitytranslated）
+        # details（convertedEntityconverted）
         entities = []
         for node in all_nodes:
             custom_labels = [l for l in node.labels if l not in ["Entity", "Node"]]
@@ -936,11 +936,11 @@ class ZepToolsService:
             "simulation_requirement": simulation_requirement,
             "related_facts": search_result.facts,
             "graph_statistics": stats,
-            "entities": entities[:limit],  # translated
+            "entities": entities[:limit],  # details
             "total_entities": len(entities)
         }
     
-    # ========== translated（translated） ==========
+    # ========== details（details） ==========
     
     def insight_forge(
         self,
@@ -951,26 +951,26 @@ class ZepToolsService:
         max_sub_queries: int = 5
     ) -> InsightForgeResult:
         """
-        【InsightForge - translated】
+        【InsightForge - details】
         
-        translated，translated：
-        1. translatedLLMtranslated
-        2. translated
-        3. translated
-        4. translated
-        5. translated，translated
+        details，details：
+        1. convertedLLMconverted
+        2. details
+        3. details
+        4. details
+        5. details，details
         
         Args:
-            graph_id: translatedID
-            query: translated
-            simulation_requirement: translated
-            report_context: translated（translated，translated）
-            max_sub_queries: translated
+            graph_id: convertedID
+            query: details
+            simulation_requirement: details
+            report_context: details（details，details）
+            max_sub_queries: details
             
         Returns:
-            InsightForgeResult: translated
+            InsightForgeResult: details
         """
-        logger.info(f"InsightForge translated: {query[:50]}...")
+        logger.info(f"InsightForge details: {query[:50]}...")
         
         result = InsightForgeResult(
             query=query,
@@ -978,7 +978,7 @@ class ZepToolsService:
             sub_queries=[]
         )
         
-        # Step 1: translatedLLMtranslated
+        # Step 1: convertedLLMconverted
         sub_queries = self._generate_sub_queries(
             query=query,
             simulation_requirement=simulation_requirement,
@@ -986,9 +986,9 @@ class ZepToolsService:
             max_queries=max_sub_queries
         )
         result.sub_queries = sub_queries
-        logger.info(f"translated {len(sub_queries)} translated")
+        logger.info(f"details {len(sub_queries)} details")
         
-        # Step 2: translated
+        # Step 2: details
         all_facts = []
         all_edges = []
         seen_facts = set()
@@ -1008,7 +1008,7 @@ class ZepToolsService:
             
             all_edges.extend(search_result.edges)
         
-        # translated
+        # details
         main_search = self.search_graph(
             graph_id=graph_id,
             query=query,
@@ -1023,7 +1023,7 @@ class ZepToolsService:
         result.semantic_facts = all_facts
         result.total_facts = len(all_facts)
         
-        # Step 3: translatedUUID，translated（translated）
+        # Step 3: convertedUUID，details（details）
         entity_uuids = set()
         for edge_data in all_edges:
             if isinstance(edge_data, dict):
@@ -1034,21 +1034,21 @@ class ZepToolsService:
                 if target_uuid:
                     entity_uuids.add(target_uuid)
         
-        # translated（translated，translated）
+        # details（details，details）
         entity_insights = []
-        node_map = {}  # translated
+        node_map = {}  # details
         
-        for uuid in list(entity_uuids):  # translated，translated
+        for uuid in list(entity_uuids):  # details，details
             if not uuid:
                 continue
             try:
-                # translated
+                # details
                 node = self.get_node_detail(uuid)
                 if node:
                     node_map[uuid] = node
-                    entity_type = next((l for l in node.labels if l not in ["Entity", "Node"]), "translated")
+                    entity_type = next((l for l in node.labels if l not in ["Entity", "Node"]), "details")
                     
-                    # translated（translated）
+                    # details（details）
                     related_facts = [
                         f for f in all_facts 
                         if node.name.lower() in f.lower()
@@ -1059,18 +1059,18 @@ class ZepToolsService:
                         "name": node.name,
                         "type": entity_type,
                         "summary": node.summary,
-                        "related_facts": related_facts  # translated，translated
+                        "related_facts": related_facts  # details，details
                     })
             except Exception as e:
-                logger.debug(f"translated {uuid} translated: {e}")
+                logger.debug(f"details {uuid} details: {e}")
                 continue
         
         result.entity_insights = entity_insights
         result.total_entities = len(entity_insights)
         
-        # Step 4: translated（translated）
+        # Step 4: details（details）
         relationship_chains = []
-        for edge_data in all_edges:  # translated，translated
+        for edge_data in all_edges:  # details，details
             if isinstance(edge_data, dict):
                 source_uuid = edge_data.get('source_node_uuid', '')
                 target_uuid = edge_data.get('target_node_uuid', '')
@@ -1086,7 +1086,7 @@ class ZepToolsService:
         result.relationship_chains = relationship_chains
         result.total_relationships = len(relationship_chains)
         
-        logger.info(f"InsightForgetranslated: {result.total_facts}translated, {result.total_entities}translated, {result.total_relationships}translated")
+        logger.info(f"InsightForgeconverted: {result.total_facts}details, {result.total_entities}details, {result.total_relationships}details")
         return result
     
     def _generate_sub_queries(
@@ -1097,27 +1097,27 @@ class ZepToolsService:
         max_queries: int = 5
     ) -> List[str]:
         """
-        translatedLLMtranslated
+        convertedLLMconverted
         
-        translated
+        details
         """
-        system_prompt = """translated。translated。
+        system_prompt = """details。details。
 
-translated：
-1. translated，translatedAgenttranslated
-2. translated（translated：translated、translated、translated、translated、translated、translated）
-3. translated
-4. translatedJSONtranslated：{"sub_queries": ["translated1", "translated2", ...]}"""
+details：
+1. details，convertedAgentconverted
+2. details（details：details、details、details、details、details、details）
+3. details
+4. convertedJSONconverted：{"sub_queries": ["converted1", "converted2", ...]}"""
 
-        user_prompt = f"""translated：
+        user_prompt = f"""details：
 {simulation_requirement}
 
-{f"translated：{report_context[:500]}" if report_context else ""}
+{f"details：{report_context[:500]}" if report_context else ""}
 
-translated{max_queries}translated：
+details{max_queries}details：
 {query}
 
-translatedJSONtranslated。"""
+convertedJSONconverted。"""
 
         try:
             response = self.llm.chat_json(
@@ -1129,17 +1129,17 @@ translatedJSONtranslated。"""
             )
             
             sub_queries = response.get("sub_queries", [])
-            # translated
+            # details
             return [str(sq) for sq in sub_queries[:max_queries]]
             
         except Exception as e:
-            logger.warning(f"translated: {str(e)}，translated")
-            # translated：translated
+            logger.warning(f"details: {str(e)}，details")
+            # details：details
             return [
                 query,
-                f"{query} translated",
-                f"{query} translated",
-                f"{query} translated"
+                f"{query} details",
+                f"{query} details",
+                f"{query} details"
             ][:max_queries]
     
     def panorama_search(
@@ -1150,40 +1150,40 @@ translatedJSONtranslated。"""
         limit: int = 50
     ) -> PanoramaResult:
         """
-        【PanoramaSearch - translated】
+        【PanoramaSearch - details】
         
-        translated，translated/translated：
-        1. translated
-        2. translated（translated/translated）
-        3. translated
+        details，details/details：
+        1. details
+        2. details（details/details）
+        3. details
         
-        translated、translated。
+        details、details。
         
         Args:
-            graph_id: translatedID
-            query: translated（translated）
-            include_expired: translated（translatedTrue）
-            limit: translated
+            graph_id: convertedID
+            query: details（details）
+            include_expired: details（convertedTrue）
+            limit: details
             
         Returns:
-            PanoramaResult: translated
+            PanoramaResult: details
         """
-        logger.info(f"PanoramaSearch translated: {query[:50]}...")
+        logger.info(f"PanoramaSearch details: {query[:50]}...")
         
         result = PanoramaResult(query=query)
         
-        # translated
+        # details
         all_nodes = self.get_all_nodes(graph_id)
         node_map = {n.uuid: n for n in all_nodes}
         result.all_nodes = all_nodes
         result.total_nodes = len(all_nodes)
         
-        # translated（translated）
+        # details（details）
         all_edges = self.get_all_edges(graph_id, include_temporal=True)
         result.all_edges = all_edges
         result.total_edges = len(all_edges)
         
-        # translated
+        # details
         active_facts = []
         historical_facts = []
         
@@ -1191,24 +1191,24 @@ translatedJSONtranslated。"""
             if not edge.fact:
                 continue
             
-            # translated
+            # details
             source_name = node_map.get(edge.source_node_uuid, NodeInfo('', '', [], '', {})).name or edge.source_node_uuid[:8]
             target_name = node_map.get(edge.target_node_uuid, NodeInfo('', '', [], '', {})).name or edge.target_node_uuid[:8]
             
-            # translated/translated
+            # details/details
             is_historical = edge.is_expired or edge.is_invalid
             
             if is_historical:
-                # translated/translated，translated
-                valid_at = edge.valid_at or "translated"
-                invalid_at = edge.invalid_at or edge.expired_at or "translated"
+                # details/details，details
+                valid_at = edge.valid_at or "details"
+                invalid_at = edge.invalid_at or edge.expired_at or "details"
                 fact_with_time = f"[{valid_at} - {invalid_at}] {edge.fact}"
                 historical_facts.append(fact_with_time)
             else:
-                # translated
+                # details
                 active_facts.append(edge.fact)
         
-        # translated
+        # details
         query_lower = query.lower()
         keywords = [w.strip() for w in query_lower.replace(',', ' ').replace('，', ' ').split() if len(w.strip()) > 1]
         
@@ -1222,7 +1222,7 @@ translatedJSONtranslated。"""
                     score += 10
             return score
         
-        # translated
+        # details
         active_facts.sort(key=relevance_score, reverse=True)
         historical_facts.sort(key=relevance_score, reverse=True)
         
@@ -1231,7 +1231,7 @@ translatedJSONtranslated。"""
         result.active_count = len(active_facts)
         result.historical_count = len(historical_facts)
         
-        logger.info(f"PanoramaSearchtranslated: {result.active_count}translated, {result.historical_count}translated")
+        logger.info(f"PanoramaSearchconverted: {result.active_count}details, {result.historical_count}details")
         return result
     
     def quick_search(
@@ -1241,24 +1241,24 @@ translatedJSONtranslated。"""
         limit: int = 10
     ) -> SearchResult:
         """
-        【QuickSearch - translated】
+        【QuickSearch - details】
         
-        translated、translated：
-        1. translatedZeptranslated
-        2. translated
-        3. translated、translated
+        details、details：
+        1. convertedZepconverted
+        2. details
+        3. details、details
         
         Args:
-            graph_id: translatedID
-            query: translated
-            limit: translated
+            graph_id: convertedID
+            query: details
+            limit: details
             
         Returns:
-            SearchResult: translated
+            SearchResult: details
         """
-        logger.info(f"QuickSearch translated: {query[:50]}...")
+        logger.info(f"QuickSearch details: {query[:50]}...")
         
-        # translatedsearch_graphtranslated
+        # convertedsearch_graphconverted
         result = self.search_graph(
             graph_id=graph_id,
             query=query,
@@ -1266,7 +1266,7 @@ translatedJSONtranslated。"""
             scope="edges"
         )
         
-        logger.info(f"QuickSearchtranslated: {result.total_count}translated")
+        logger.info(f"QuickSearchconverted: {result.total_count}details")
         return result
     
     def interview_agents(
@@ -1278,53 +1278,53 @@ translatedJSONtranslated。"""
         custom_questions: List[str] = None
     ) -> InterviewResult:
         """
-        【InterviewAgents - translated】
+        【InterviewAgents - details】
         
-        translatedOASIStranslatedAPI，translatedAgent：
-        1. translated，translatedAgent
-        2. translatedLLMtranslated，translatedAgent
-        3. translatedLLMtranslated
-        4. translated /api/simulation/interview/batch translated（translated）
-        5. translated，translated
+        convertedOASISconvertedAPI，convertedAgent：
+        1. details，convertedAgent
+        2. convertedLLMconverted，convertedAgent
+        3. convertedLLMconverted
+        4. details /api/simulation/interview/batch details（details）
+        5. details，details
         
-        【translated】translated（OASIStranslated）
+        【details】details（OASISconverted）
         
-        【translated】
-        - translated
-        - translated
-        - translatedAgenttranslated（translatedLLMtranslated）
+        【details】
+        - details
+        - details
+        - convertedAgentconverted（convertedLLMconverted）
         
         Args:
-            simulation_id: translatedID（translatedAPI）
-            interview_requirement: translated（translated，translated"translated"）
-            simulation_requirement: translated（translated）
-            max_agents: translatedAgenttranslated
-            custom_questions: translated（translated，translated）
+            simulation_id: convertedID（convertedAPI）
+            interview_requirement: details（details，details"details"）
+            simulation_requirement: details（details）
+            max_agents: convertedAgentconverted
+            custom_questions: details（details，details）
             
         Returns:
-            InterviewResult: translated
+            InterviewResult: details
         """
         from .simulation_runner import SimulationRunner
         
-        logger.info(f"InterviewAgents translated（translatedAPI）: {interview_requirement[:50]}...")
+        logger.info(f"InterviewAgents details（convertedAPI）: {interview_requirement[:50]}...")
         
         result = InterviewResult(
             interview_topic=interview_requirement,
             interview_questions=custom_questions or []
         )
         
-        # Step 1: translated
+        # Step 1: details
         profiles = self._load_agent_profiles(simulation_id)
         
         if not profiles:
-            logger.warning(f"translated {simulation_id} translated")
-            result.summary = "translatedAgenttranslated"
+            logger.warning(f"details {simulation_id} details")
+            result.summary = "convertedAgentconverted"
             return result
         
         result.total_agents = len(profiles)
-        logger.info(f"translated {len(profiles)} translatedAgenttranslated")
+        logger.info(f"details {len(profiles)} convertedAgentconverted")
         
-        # Step 2: translatedLLMtranslatedAgent（translatedagent_idtranslated）
+        # Step 2: convertedLLMconvertedAgent（convertedagent_idconverted）
         selected_agents, selected_indices, selection_reasoning = self._select_agents_for_interview(
             profiles=profiles,
             interview_requirement=interview_requirement,
@@ -1334,114 +1334,114 @@ translatedJSONtranslated。"""
         
         result.selected_agents = selected_agents
         result.selection_reasoning = selection_reasoning
-        logger.info(f"translated {len(selected_agents)} translatedAgenttranslated: {selected_indices}")
+        logger.info(f"details {len(selected_agents)} convertedAgentconverted: {selected_indices}")
         
-        # Step 3: translated（translated）
+        # Step 3: details（details）
         if not result.interview_questions:
             result.interview_questions = self._generate_interview_questions(
                 interview_requirement=interview_requirement,
                 simulation_requirement=simulation_requirement,
                 selected_agents=selected_agents
             )
-            logger.info(f"translated {len(result.interview_questions)} translated")
+            logger.info(f"details {len(result.interview_questions)} details")
         
-        # translatedprompt
+        # convertedprompt
         combined_prompt = "\n".join([f"{i+1}. {q}" for i, q in enumerate(result.interview_questions)])
         
-        # translated，translatedAgenttranslated
+        # details，convertedAgentconverted
         INTERVIEW_PROMPT_PREFIX = (
-            "translated。translated、translated，"
-            "translated。\n"
-            "translated：\n"
-            "1. translated，translated\n"
-            "2. translatedJSONtranslated\n"
-            "3. translatedMarkdowntranslated（translated#、##、###）\n"
-            "4. translated，translated「translatedX：」translated（Xtranslated）\n"
-            "5. translated\n"
-            "6. translated，translated2-3translated\n\n"
+            "details。details、details，"
+            "details。\n"
+            "details：\n"
+            "1. details，details\n"
+            "2. convertedJSONconverted\n"
+            "3. convertedMarkdownconverted（details#、##、###）\n"
+            "4. details，details「convertedX：」details（Xconverted）\n"
+            "5. details\n"
+            "6. details，converted2-3converted\n\n"
         )
         optimized_prompt = f"{INTERVIEW_PROMPT_PREFIX}{combined_prompt}"
         
-        # Step 4: translatedAPI（translatedplatform，translated）
+        # Step 4: convertedAPI（convertedplatform，details）
         try:
-            # translated（translatedplatform，translated）
+            # details（convertedplatform，details）
             interviews_request = []
             for agent_idx in selected_indices:
                 interviews_request.append({
                     "agent_id": agent_idx,
-                    "prompt": optimized_prompt  # translatedprompt
-                    # translatedplatform，APItranslatedtwittertranslatedreddittranslated
+                    "prompt": optimized_prompt  # convertedprompt
+                    # convertedplatform，APIconvertedtwitterconvertedredditconverted
                 })
             
-            logger.info(f"translatedAPI（translated）: {len(interviews_request)} translatedAgent")
+            logger.info(f"convertedAPI（details）: {len(interviews_request)} convertedAgent")
             
-            # translated SimulationRunner translated（translatedplatform，translated）
+            # details SimulationRunner details（convertedplatform，details）
             api_result = SimulationRunner.interview_agents_batch(
                 simulation_id=simulation_id,
                 interviews=interviews_request,
-                platform=None,  # translatedplatform，translated
-                timeout=180.0   # translated
+                platform=None,  # convertedplatform，details
+                timeout=180.0   # details
             )
             
-            logger.info(f"translatedAPItranslated: {api_result.get('interviews_count', 0)} translated, success={api_result.get('success')}")
+            logger.info(f"convertedAPIconverted: {api_result.get('interviews_count', 0)} details, success={api_result.get('success')}")
             
-            # translatedAPItranslated
+            # convertedAPIconverted
             if not api_result.get("success", False):
-                error_msg = api_result.get("error", "translated")
-                logger.warning(f"translatedAPItranslated: {error_msg}")
-                result.summary = f"translatedAPItranslated：{error_msg}。translatedOASIStranslated。"
+                error_msg = api_result.get("error", "details")
+                logger.warning(f"convertedAPIconverted: {error_msg}")
+                result.summary = f"convertedAPIconverted：{error_msg}。convertedOASISconverted。"
                 return result
             
-            # Step 5: translatedAPItranslated，translatedAgentInterviewtranslated
-            # translated: {"twitter_0": {...}, "reddit_0": {...}, "twitter_1": {...}, ...}
+            # Step 5: convertedAPIconverted，convertedAgentInterviewconverted
+            # details: {"twitter_0": {...}, "reddit_0": {...}, "twitter_1": {...}, ...}
             api_data = api_result.get("result", {})
             results_dict = api_data.get("results", {}) if isinstance(api_data, dict) else {}
             
             for i, agent_idx in enumerate(selected_indices):
                 agent = selected_agents[i]
                 agent_name = agent.get("realname", agent.get("username", f"Agent_{agent_idx}"))
-                agent_role = agent.get("profession", "translated")
+                agent_role = agent.get("profession", "details")
                 agent_bio = agent.get("bio", "")
                 
-                # translatedAgenttranslated
+                # convertedAgentconverted
                 twitter_result = results_dict.get(f"twitter_{agent_idx}", {})
                 reddit_result = results_dict.get(f"reddit_{agent_idx}", {})
                 
                 twitter_response = twitter_result.get("response", "")
                 reddit_response = reddit_result.get("response", "")
 
-                # translated JSON translated
+                # details JSON details
                 twitter_response = self._clean_tool_call_response(twitter_response)
                 reddit_response = self._clean_tool_call_response(reddit_response)
 
-                # translated
-                twitter_text = twitter_response if twitter_response else "（translated）"
-                reddit_text = reddit_response if reddit_response else "（translated）"
-                response_text = f"【Twittertranslated】\n{twitter_text}\n\n【Reddittranslated】\n{reddit_text}"
+                # details
+                twitter_text = twitter_response if twitter_response else "（details）"
+                reddit_text = reddit_response if reddit_response else "（details）"
+                response_text = f"【Twitterconverted】\n{twitter_text}\n\n【Redditconverted】\n{reddit_text}"
 
-                # translated（translated）
+                # details（details）
                 import re
                 combined_responses = f"{twitter_response} {reddit_response}"
 
-                # translated：translated、translated、Markdown translated
+                # details：details、details、Markdown details
                 clean_text = re.sub(r'#{1,6}\s+', '', combined_responses)
                 clean_text = re.sub(r'\{[^}]*tool_name[^}]*\}', '', clean_text)
                 clean_text = re.sub(r'[*_`|>~\-]{2,}', '', clean_text)
-                clean_text = re.sub(r'translated\d+[：:]\s*', '', clean_text)
+                clean_text = re.sub(r'details\d+[：:]\s*', '', clean_text)
                 clean_text = re.sub(r'【[^】]+】', '', clean_text)
 
-                # translated1（translated）: translated
+                # converted1（details）: details
                 sentences = re.split(r'[。！？]', clean_text)
                 meaningful = [
                     s.strip() for s in sentences
                     if 20 <= len(s.strip()) <= 150
                     and not re.match(r'^[\s\W，,；;：:、]+', s.strip())
-                    and not s.strip().startswith(('{', 'translated'))
+                    and not s.strip().startswith(('{', 'details'))
                 ]
                 meaningful.sort(key=len, reverse=True)
                 key_quotes = [s + "。" for s in meaningful[:3]]
 
-                # translated2（translated）: translated「」translated
+                # converted2（details）: details「」details
                 if not key_quotes:
                     paired = re.findall(r'\u201c([^\u201c\u201d]{15,100})\u201d', clean_text)
                     paired += re.findall(r'\u300c([^\u300c\u300d]{15,100})\u300d', clean_text)
@@ -1450,7 +1450,7 @@ translatedJSONtranslated。"""
                 interview = AgentInterview(
                     agent_name=agent_name,
                     agent_role=agent_role,
-                    agent_bio=agent_bio[:1000],  # translatedbiotranslated
+                    agent_bio=agent_bio[:1000],  # convertedbioconverted
                     question=combined_prompt,
                     response=response_text,
                     key_quotes=key_quotes[:5]
@@ -1460,30 +1460,30 @@ translatedJSONtranslated。"""
             result.interviewed_count = len(result.interviews)
             
         except ValueError as e:
-            # translated
-            logger.warning(f"translatedAPItranslated（translated？）: {e}")
-            result.summary = f"translated：{str(e)}。translated，translatedOASIStranslated。"
+            # details
+            logger.warning(f"convertedAPIconverted（details？）: {e}")
+            result.summary = f"details：{str(e)}。details，convertedOASISconverted。"
             return result
         except Exception as e:
-            logger.error(f"translatedAPItranslated: {e}")
+            logger.error(f"convertedAPIconverted: {e}")
             import traceback
             logger.error(traceback.format_exc())
-            result.summary = f"translated：{str(e)}"
+            result.summary = f"details：{str(e)}"
             return result
         
-        # Step 6: translated
+        # Step 6: details
         if result.interviews:
             result.summary = self._generate_interview_summary(
                 interviews=result.interviews,
                 interview_requirement=interview_requirement
             )
         
-        logger.info(f"InterviewAgentstranslated: translated {result.interviewed_count} translatedAgent（translated）")
+        logger.info(f"InterviewAgentsconverted: details {result.interviewed_count} convertedAgent（details）")
         return result
     
     @staticmethod
     def _clean_tool_call_response(response: str) -> str:
-        """translated Agent translated JSON translated，translated"""
+        """details Agent details JSON details，details"""
         if not response or not response.strip().startswith('{'):
             return response
         text = response.strip()
@@ -1503,11 +1503,11 @@ translatedJSONtranslated。"""
         return response
 
     def _load_agent_profiles(self, simulation_id: str) -> List[Dict[str, Any]]:
-        """translatedAgenttranslated"""
+        """convertedAgentconverted"""
         import os
         import csv
         
-        # translated
+        # details
         sim_dir = os.path.join(
             os.path.dirname(__file__), 
             f'../../uploads/simulations/{simulation_id}'
@@ -1515,36 +1515,36 @@ translatedJSONtranslated。"""
         
         profiles = []
         
-        # translatedReddit JSONtranslated
+        # convertedReddit JSONconverted
         reddit_profile_path = os.path.join(sim_dir, "reddit_profiles.json")
         if os.path.exists(reddit_profile_path):
             try:
                 with open(reddit_profile_path, 'r', encoding='utf-8') as f:
                     profiles = json.load(f)
-                logger.info(f"translated reddit_profiles.json translated {len(profiles)} translated")
+                logger.info(f"details reddit_profiles.json details {len(profiles)} details")
                 return profiles
             except Exception as e:
-                logger.warning(f"translated reddit_profiles.json translated: {e}")
+                logger.warning(f"details reddit_profiles.json details: {e}")
         
-        # translatedTwitter CSVtranslated
+        # convertedTwitter CSVconverted
         twitter_profile_path = os.path.join(sim_dir, "twitter_profiles.csv")
         if os.path.exists(twitter_profile_path):
             try:
                 with open(twitter_profile_path, 'r', encoding='utf-8') as f:
                     reader = csv.DictReader(f)
                     for row in reader:
-                        # CSVtranslated
+                        # CSVconverted
                         profiles.append({
                             "realname": row.get("name", ""),
                             "username": row.get("username", ""),
                             "bio": row.get("description", ""),
                             "persona": row.get("user_char", ""),
-                            "profession": "translated"
+                            "profession": "details"
                         })
-                logger.info(f"translated twitter_profiles.csv translated {len(profiles)} translated")
+                logger.info(f"details twitter_profiles.csv details {len(profiles)} details")
                 return profiles
             except Exception as e:
-                logger.warning(f"translated twitter_profiles.csv translated: {e}")
+                logger.warning(f"details twitter_profiles.csv details: {e}")
         
         return profiles
     
@@ -1556,51 +1556,51 @@ translatedJSONtranslated。"""
         max_agents: int
     ) -> tuple:
         """
-        translatedLLMtranslatedAgent
+        convertedLLMconvertedAgent
         
         Returns:
             tuple: (selected_agents, selected_indices, reasoning)
-                - selected_agents: translatedAgenttranslated
-                - selected_indices: translatedAgenttranslated（translatedAPItranslated）
-                - reasoning: translated
+                - selected_agents: convertedAgentconverted
+                - selected_indices: convertedAgentconverted（convertedAPIconverted）
+                - reasoning: details
         """
         
-        # translatedAgenttranslated
+        # convertedAgentconverted
         agent_summaries = []
         for i, profile in enumerate(profiles):
             summary = {
                 "index": i,
                 "name": profile.get("realname", profile.get("username", f"Agent_{i}")),
-                "profession": profile.get("profession", "translated"),
+                "profession": profile.get("profession", "details"),
                 "bio": profile.get("bio", "")[:200],
                 "interested_topics": profile.get("interested_topics", [])
             }
             agent_summaries.append(summary)
         
-        system_prompt = """translated。translated，translatedAgenttranslated。
+        system_prompt = """details。details，convertedAgentconverted。
 
-translated：
-1. Agenttranslated/translated
-2. Agenttranslated
-3. translated（translated：translated、translated、translated、translated）
-4. translated
+details：
+1. Agentconverted/details
+2. Agentconverted
+3. details（details：details、details、details、details）
+4. details
 
-translatedJSONtranslated：
+convertedJSONconverted：
 {
-    "selected_indices": [translatedAgenttranslated],
-    "reasoning": "translated"
+    "selected_indices": [convertedAgentconverted],
+    "reasoning": "details"
 }"""
 
-        user_prompt = f"""translated：
+        user_prompt = f"""details：
 {interview_requirement}
 
-translated：
-{simulation_requirement if simulation_requirement else "translated"}
+details：
+{simulation_requirement if simulation_requirement else "details"}
 
-translatedAgenttranslated（translated{len(agent_summaries)}translated）：
+convertedAgentconverted（details{len(agent_summaries)}details）：
 {json.dumps(agent_summaries, ensure_ascii=False, indent=2)}
 
-translated{max_agents}translatedAgent，translated。"""
+details{max_agents}convertedAgent，details。"""
 
         try:
             response = self.llm.chat_json(
@@ -1612,9 +1612,9 @@ translated{max_agents}translatedAgent，translated。"""
             )
             
             selected_indices = response.get("selected_indices", [])[:max_agents]
-            reasoning = response.get("reasoning", "translated")
+            reasoning = response.get("reasoning", "details")
             
-            # translatedAgenttranslated
+            # convertedAgentconverted
             selected_agents = []
             valid_indices = []
             for idx in selected_indices:
@@ -1625,11 +1625,11 @@ translated{max_agents}translatedAgent，translated。"""
             return selected_agents, valid_indices, reasoning
             
         except Exception as e:
-            logger.warning(f"LLMtranslatedAgenttranslated，translated: {e}")
-            # translated：translatedNtranslated
+            logger.warning(f"LLMconvertedAgentconverted，details: {e}")
+            # details：convertedNconverted
             selected = profiles[:max_agents]
             indices = list(range(min(max_agents, len(profiles))))
-            return selected, indices, "translated"
+            return selected, indices, "details"
     
     def _generate_interview_questions(
         self,
@@ -1637,29 +1637,29 @@ translated{max_agents}translatedAgent，translated。"""
         simulation_requirement: str,
         selected_agents: List[Dict[str, Any]]
     ) -> List[str]:
-        """translatedLLMtranslated"""
+        """convertedLLMconverted"""
         
-        agent_roles = [a.get("profession", "translated") for a in selected_agents]
+        agent_roles = [a.get("profession", "details") for a in selected_agents]
         
-        system_prompt = """translated/translated。translated，translated3-5translated。
+        system_prompt = """details/details。details，converted3-5converted。
 
-translated：
-1. translated，translated
-2. translated
-3. translated、translated、translated
-4. translated，translated
-5. translated50translated，translated
-6. translated，translated
+details：
+1. details，details
+2. details
+3. details、details、details
+4. details，details
+5. converted50converted，details
+6. details，details
 
-translatedJSONtranslated：{"questions": ["translated1", "translated2", ...]}"""
+convertedJSONconverted：{"questions": ["converted1", "converted2", ...]}"""
 
-        user_prompt = f"""translated：{interview_requirement}
+        user_prompt = f"""details：{interview_requirement}
 
-translated：{simulation_requirement if simulation_requirement else "translated"}
+details：{simulation_requirement if simulation_requirement else "details"}
 
-translated：{', '.join(agent_roles)}
+details：{', '.join(agent_roles)}
 
-translated3-5translated。"""
+converted3-5converted。"""
 
         try:
             response = self.llm.chat_json(
@@ -1670,14 +1670,14 @@ translated3-5translated。"""
                 temperature=0.5
             )
             
-            return response.get("questions", [f"translated{interview_requirement}，translated？"])
+            return response.get("questions", [f"details{interview_requirement}，details？"])
             
         except Exception as e:
-            logger.warning(f"translated: {e}")
+            logger.warning(f"details: {e}")
             return [
-                f"translated{interview_requirement}，translated？",
-                "translated？",
-                "translated？"
+                f"details{interview_requirement}，details？",
+                "details？",
+                "details？"
             ]
     
     def _generate_interview_summary(
@@ -1685,38 +1685,38 @@ translated3-5translated。"""
         interviews: List[AgentInterview],
         interview_requirement: str
     ) -> str:
-        """translated"""
+        """details"""
         
         if not interviews:
-            return "translated"
+            return "details"
         
-        # translated
+        # details
         interview_texts = []
         for interview in interviews:
             interview_texts.append(f"【{interview.agent_name}（{interview.agent_role}）】\n{interview.response[:500]}")
         
-        system_prompt = """translated。translated，translated。
+        system_prompt = """details。details，details。
 
-translated：
-1. translated
-2. translated
-3. translated
-4. translated，translated
-5. translated1000translated
+details：
+1. details
+2. details
+3. details
+4. details，details
+5. converted1000converted
 
-translated（translated）：
-- translated，translated
-- translatedMarkdowntranslated（translated#、##、###）
-- translated（translated---、***）
-- translated「」
-- translated**translated**translated，translatedMarkdowntranslated"""
+details（details）：
+- details，details
+- convertedMarkdownconverted（details#、##、###）
+- details（details---、***）
+- details「」
+- details**details**details，convertedMarkdownconverted"""
 
-        user_prompt = f"""translated：{interview_requirement}
+        user_prompt = f"""details：{interview_requirement}
 
-translated：
+details：
 {"".join(interview_texts)}
 
-translated。"""
+details。"""
 
         try:
             summary = self.llm.chat(
@@ -1730,6 +1730,6 @@ translated。"""
             return summary
             
         except Exception as e:
-            logger.warning(f"translated: {e}")
-            # translated：translated
-            return f"translated{len(interviews)}translated，translated：" + "、".join([i.agent_name for i in interviews])
+            logger.warning(f"details: {e}")
+            # details：details
+            return f"details{len(interviews)}details，details：" + "、".join([i.agent_name for i in interviews])

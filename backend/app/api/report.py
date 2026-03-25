@@ -1,6 +1,6 @@
 """
-Report APItranslated
-translated、translated、translated
+Report APIconverted
+details、details、details
 """
 
 import os
@@ -19,30 +19,30 @@ from ..utils.logger import get_logger
 logger = get_logger('mirofish.api.report')
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @report_bp.route('/generate', methods=['POST'])
 def generate_report():
     """
-    translated（translated）
+    details（details）
     
-    translated，translatedtask_id，
-    translated GET /api/report/generate/status translated
+    details，convertedtask_id，
+    details GET /api/report/generate/status details
     
-    translated（JSON）：
+    details（JSON）：
         {
-            "simulation_id": "sim_xxxx",    // translated，translatedID
-            "force_regenerate": false        // translated，translated
+            "simulation_id": "sim_xxxx",    // details，convertedID
+            "force_regenerate": false        // details，details
         }
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
                 "simulation_id": "sim_xxxx",
                 "task_id": "task_xxxx",
                 "status": "generating",
-                "message": "translated"
+                "message": "details"
             }
         }
     """
@@ -53,22 +53,22 @@ def generate_report():
         if not simulation_id:
             return jsonify({
                 "success": False,
-                "error": "translated simulation_id"
+                "error": "details simulation_id"
             }), 400
         
         force_regenerate = data.get('force_regenerate', False)
         
-        # translated
+        # details
         manager = SimulationManager()
         state = manager.get_simulation(simulation_id)
         
         if not state:
             return jsonify({
                 "success": False,
-                "error": f"translated: {simulation_id}"
+                "error": f"details: {simulation_id}"
             }), 404
         
-        # translated
+        # details
         if not force_regenerate:
             existing_report = ReportManager.get_report_by_simulation(simulation_id)
             if existing_report and existing_report.status == ReportStatus.COMPLETED:
@@ -78,38 +78,38 @@ def generate_report():
                         "simulation_id": simulation_id,
                         "report_id": existing_report.report_id,
                         "status": "completed",
-                        "message": "translated",
+                        "message": "details",
                         "already_generated": True
                     }
                 })
         
-        # translated
+        # details
         project = ProjectManager.get_project(state.project_id)
         if not project:
             return jsonify({
                 "success": False,
-                "error": f"translated: {state.project_id}"
+                "error": f"details: {state.project_id}"
             }), 404
         
         graph_id = state.graph_id or project.graph_id
         if not graph_id:
             return jsonify({
                 "success": False,
-                "error": "translatedID，translated"
+                "error": "convertedID，details"
             }), 400
         
         simulation_requirement = project.simulation_requirement
         if not simulation_requirement:
             return jsonify({
                 "success": False,
-                "error": "translated"
+                "error": "details"
             }), 400
         
-        # translated report_id，translated
+        # details report_id，details
         import uuid
         report_id = f"report_{uuid.uuid4().hex[:12]}"
         
-        # translated
+        # details
         task_manager = TaskManager()
         task_id = task_manager.create_task(
             task_type="report_generate",
@@ -120,24 +120,24 @@ def generate_report():
             }
         )
         
-        # translated
+        # details
         def run_generate():
             try:
                 task_manager.update_task(
                     task_id,
                     status=TaskStatus.PROCESSING,
                     progress=0,
-                    message="translatedReport Agent..."
+                    message="convertedReport Agent..."
                 )
                 
-                # translatedReport Agent
+                # convertedReport Agent
                 agent = ReportAgent(
                     graph_id=graph_id,
                     simulation_id=simulation_id,
                     simulation_requirement=simulation_requirement
                 )
                 
-                # translated
+                # details
                 def progress_callback(stage, progress, message):
                     task_manager.update_task(
                         task_id,
@@ -145,13 +145,13 @@ def generate_report():
                         message=f"[{stage}] {message}"
                     )
                 
-                # translated（translated report_id）
+                # details（details report_id）
                 report = agent.generate_report(
                     progress_callback=progress_callback,
                     report_id=report_id
                 )
                 
-                # translated
+                # details
                 ReportManager.save_report(report)
                 
                 if report.status == ReportStatus.COMPLETED:
@@ -164,13 +164,13 @@ def generate_report():
                         }
                     )
                 else:
-                    task_manager.fail_task(task_id, report.error or "translated")
+                    task_manager.fail_task(task_id, report.error or "details")
                 
             except Exception as e:
-                logger.error(f"translated: {str(e)}")
+                logger.error(f"details: {str(e)}")
                 task_manager.fail_task(task_id, str(e))
         
-        # translated
+        # details
         thread = threading.Thread(target=run_generate, daemon=True)
         thread.start()
         
@@ -181,13 +181,13 @@ def generate_report():
                 "report_id": report_id,
                 "task_id": task_id,
                 "status": "generating",
-                "message": "translated，translated /api/report/generate/status translated",
+                "message": "details，details /api/report/generate/status details",
                 "already_generated": False
             }
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -198,15 +198,15 @@ def generate_report():
 @report_bp.route('/generate/status', methods=['POST'])
 def get_generate_status():
     """
-    translated
+    details
     
-    translated（JSON）：
+    details（JSON）：
         {
-            "task_id": "task_xxxx",         // translated，generatetranslatedtask_id
-            "simulation_id": "sim_xxxx"     // translated，translatedID
+            "task_id": "task_xxxx",         // details，generateconvertedtask_id
+            "simulation_id": "sim_xxxx"     // details，convertedID
         }
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -223,7 +223,7 @@ def get_generate_status():
         task_id = data.get('task_id')
         simulation_id = data.get('simulation_id')
         
-        # translatedsimulation_id，translated
+        # convertedsimulation_id，details
         if simulation_id:
             existing_report = ReportManager.get_report_by_simulation(simulation_id)
             if existing_report and existing_report.status == ReportStatus.COMPLETED:
@@ -234,7 +234,7 @@ def get_generate_status():
                         "report_id": existing_report.report_id,
                         "status": "completed",
                         "progress": 100,
-                        "message": "translated",
+                        "message": "details",
                         "already_completed": True
                     }
                 })
@@ -242,7 +242,7 @@ def get_generate_status():
         if not task_id:
             return jsonify({
                 "success": False,
-                "error": "translated task_id translated simulation_id"
+                "error": "details task_id details simulation_id"
             }), 400
         
         task_manager = TaskManager()
@@ -251,7 +251,7 @@ def get_generate_status():
         if not task:
             return jsonify({
                 "success": False,
-                "error": f"translated: {task_id}"
+                "error": f"details: {task_id}"
             }), 404
         
         return jsonify({
@@ -260,21 +260,21 @@ def get_generate_status():
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e)
         }), 500
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @report_bp.route('/<report_id>', methods=['GET'])
 def get_report(report_id: str):
     """
-    translated
+    details
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -294,7 +294,7 @@ def get_report(report_id: str):
         if not report:
             return jsonify({
                 "success": False,
-                "error": f"translated: {report_id}"
+                "error": f"details: {report_id}"
             }), 404
         
         return jsonify({
@@ -303,7 +303,7 @@ def get_report(report_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -314,9 +314,9 @@ def get_report(report_id: str):
 @report_bp.route('/by-simulation/<simulation_id>', methods=['GET'])
 def get_report_by_simulation(simulation_id: str):
     """
-    translatedIDtranslated
+    convertedIDconverted
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -331,7 +331,7 @@ def get_report_by_simulation(simulation_id: str):
         if not report:
             return jsonify({
                 "success": False,
-                "error": f"translated: {simulation_id}",
+                "error": f"details: {simulation_id}",
                 "has_report": False
             }), 404
         
@@ -342,7 +342,7 @@ def get_report_by_simulation(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -353,13 +353,13 @@ def get_report_by_simulation(simulation_id: str):
 @report_bp.route('/list', methods=['GET'])
 def list_reports():
     """
-    translated
+    details
     
-    Querytranslated：
-        simulation_id: translatedIDtranslated（translated）
-        limit: translated（translated50）
+    Queryconverted：
+        simulation_id: convertedIDconverted（details）
+        limit: details（converted50）
     
-    translated：
+    details：
         {
             "success": true,
             "data": [...],
@@ -382,7 +382,7 @@ def list_reports():
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -393,9 +393,9 @@ def list_reports():
 @report_bp.route('/<report_id>/download', methods=['GET'])
 def download_report(report_id: str):
     """
-    translated（Markdowntranslated）
+    details（Markdownconverted）
     
-    translatedMarkdowntranslated
+    convertedMarkdownconverted
     """
     try:
         report = ReportManager.get_report(report_id)
@@ -403,13 +403,13 @@ def download_report(report_id: str):
         if not report:
             return jsonify({
                 "success": False,
-                "error": f"translated: {report_id}"
+                "error": f"details: {report_id}"
             }), 404
         
         md_path = ReportManager._get_report_markdown_path(report_id)
         
         if not os.path.exists(md_path):
-            # translatedMDtranslated，translated
+            # convertedMDconverted，details
             import tempfile
             with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
                 f.write(report.markdown_content)
@@ -428,7 +428,7 @@ def download_report(report_id: str):
         )
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -438,23 +438,23 @@ def download_report(report_id: str):
 
 @report_bp.route('/<report_id>', methods=['DELETE'])
 def delete_report(report_id: str):
-    """translated"""
+    """details"""
     try:
         success = ReportManager.delete_report(report_id)
         
         if not success:
             return jsonify({
                 "success": False,
-                "error": f"translated: {report_id}"
+                "error": f"details: {report_id}"
             }), 404
         
         return jsonify({
             "success": True,
-            "message": f"translated: {report_id}"
+            "message": f"details: {report_id}"
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -462,32 +462,32 @@ def delete_report(report_id: str):
         }), 500
 
 
-# ============== Report Agenttranslated ==============
+# ============== Report Agentconverted ==============
 
 @report_bp.route('/chat', methods=['POST'])
 def chat_with_report_agent():
     """
-    translatedReport Agenttranslated
+    convertedReport Agentconverted
     
-    Report Agenttranslated
+    Report Agentconverted
     
-    translated（JSON）：
+    details（JSON）：
         {
-            "simulation_id": "sim_xxxx",        // translated，translatedID
-            "message": "translated",    // translated，translated
-            "chat_history": [                   // translated，translated
+            "simulation_id": "sim_xxxx",        // details，convertedID
+            "message": "details",    // details，details
+            "chat_history": [                   // details，details
                 {"role": "user", "content": "..."},
                 {"role": "assistant", "content": "..."}
             ]
         }
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
-                "response": "Agenttranslated...",
-                "tool_calls": [translated],
-                "sources": [translated]
+                "response": "Agentconverted...",
+                "tool_calls": [details],
+                "sources": [details]
             }
         }
     """
@@ -501,42 +501,42 @@ def chat_with_report_agent():
         if not simulation_id:
             return jsonify({
                 "success": False,
-                "error": "translated simulation_id"
+                "error": "details simulation_id"
             }), 400
         
         if not message:
             return jsonify({
                 "success": False,
-                "error": "translated message"
+                "error": "details message"
             }), 400
         
-        # translated
+        # details
         manager = SimulationManager()
         state = manager.get_simulation(simulation_id)
         
         if not state:
             return jsonify({
                 "success": False,
-                "error": f"translated: {simulation_id}"
+                "error": f"details: {simulation_id}"
             }), 404
         
         project = ProjectManager.get_project(state.project_id)
         if not project:
             return jsonify({
                 "success": False,
-                "error": f"translated: {state.project_id}"
+                "error": f"details: {state.project_id}"
             }), 404
         
         graph_id = state.graph_id or project.graph_id
         if not graph_id:
             return jsonify({
                 "success": False,
-                "error": "translatedID"
+                "error": "convertedID"
             }), 400
         
         simulation_requirement = project.simulation_requirement or ""
         
-        # translatedAgenttranslated
+        # convertedAgentconverted
         agent = ReportAgent(
             graph_id=graph_id,
             simulation_id=simulation_id,
@@ -551,7 +551,7 @@ def chat_with_report_agent():
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -559,22 +559,22 @@ def chat_with_report_agent():
         }), 500
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @report_bp.route('/<report_id>/progress', methods=['GET'])
 def get_report_progress(report_id: str):
     """
-    translated（translated）
+    details（details）
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
                 "status": "generating",
                 "progress": 45,
-                "message": "translated: translated",
-                "current_section": "translated",
-                "completed_sections": ["translated", "translated"],
+                "message": "details: details",
+                "current_section": "details",
+                "completed_sections": ["details", "details"],
                 "updated_at": "2025-12-09T..."
             }
         }
@@ -585,7 +585,7 @@ def get_report_progress(report_id: str):
         if not progress:
             return jsonify({
                 "success": False,
-                "error": f"translated: {report_id}"
+                "error": f"details: {report_id}"
             }), 404
         
         return jsonify({
@@ -594,7 +594,7 @@ def get_report_progress(report_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -605,11 +605,11 @@ def get_report_progress(report_id: str):
 @report_bp.route('/<report_id>/sections', methods=['GET'])
 def get_report_sections(report_id: str):
     """
-    translated（translated）
+    details（details）
     
-    translated，translated
+    details，details
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -618,7 +618,7 @@ def get_report_sections(report_id: str):
                     {
                         "filename": "section_01.md",
                         "section_index": 1,
-                        "content": "## translated\\n\\n..."
+                        "content": "## details\\n\\n..."
                     },
                     ...
                 ],
@@ -630,7 +630,7 @@ def get_report_sections(report_id: str):
     try:
         sections = ReportManager.get_generated_sections(report_id)
         
-        # translated
+        # details
         report = ReportManager.get_report(report_id)
         is_complete = report is not None and report.status == ReportStatus.COMPLETED
         
@@ -645,7 +645,7 @@ def get_report_sections(report_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -656,14 +656,14 @@ def get_report_sections(report_id: str):
 @report_bp.route('/<report_id>/section/<int:section_index>', methods=['GET'])
 def get_single_section(report_id: str, section_index: int):
     """
-    translated
+    details
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
                 "filename": "section_01.md",
-                "content": "## translated\\n\\n..."
+                "content": "## details\\n\\n..."
             }
         }
     """
@@ -673,7 +673,7 @@ def get_single_section(report_id: str, section_index: int):
         if not os.path.exists(section_path):
             return jsonify({
                 "success": False,
-                "error": f"translated: section_{section_index:02d}.md"
+                "error": f"details: section_{section_index:02d}.md"
             }), 404
         
         with open(section_path, 'r', encoding='utf-8') as f:
@@ -689,7 +689,7 @@ def get_single_section(report_id: str, section_index: int):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -697,16 +697,16 @@ def get_single_section(report_id: str, section_index: int):
         }), 500
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @report_bp.route('/check/<simulation_id>', methods=['GET'])
 def check_report_status(simulation_id: str):
     """
-    translated，translated
+    details，details
     
-    translatedInterviewtranslated
+    convertedInterviewconverted
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -725,7 +725,7 @@ def check_report_status(simulation_id: str):
         report_status = report.status.value if report else None
         report_id = report.report_id if report else None
         
-        # translatedinterview
+        # convertedinterview
         interview_unlocked = has_report and report.status == ReportStatus.COMPLETED
         
         return jsonify({
@@ -740,7 +740,7 @@ def check_report_status(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -748,22 +748,22 @@ def check_report_status(simulation_id: str):
         }), 500
 
 
-# ============== Agent translated ==============
+# ============== Agent details ==============
 
 @report_bp.route('/<report_id>/agent-log', methods=['GET'])
 def get_agent_log(report_id: str):
     """
-    translated Report Agent translated
+    details Report Agent details
     
-    translated，translated：
-    - translated、translated/translated
-    - translated、translated、LLMtranslated、translated
-    - translated
+    details，details：
+    - details、details/details
+    - details、details、LLMconverted、details
+    - details
     
-    Querytranslated：
-        from_line: translated（translated，translated0，translated）
+    Queryconverted：
+        from_line: details（details，converted0，details）
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -774,7 +774,7 @@ def get_agent_log(report_id: str):
                         "report_id": "report_xxxx",
                         "action": "tool_call",
                         "stage": "generating",
-                        "section_title": "translated",
+                        "section_title": "details",
                         "section_index": 1,
                         "details": {
                             "tool_name": "insight_forge",
@@ -801,7 +801,7 @@ def get_agent_log(report_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translatedAgenttranslated: {str(e)}")
+        logger.error(f"convertedAgentconverted: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -812,9 +812,9 @@ def get_agent_log(report_id: str):
 @report_bp.route('/<report_id>/agent-log/stream', methods=['GET'])
 def stream_agent_log(report_id: str):
     """
-    translated Agent translated（translated）
+    details Agent details（details）
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -835,7 +835,7 @@ def stream_agent_log(report_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translatedAgenttranslated: {str(e)}")
+        logger.error(f"convertedAgentconverted: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -843,27 +843,27 @@ def stream_agent_log(report_id: str):
         }), 500
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @report_bp.route('/<report_id>/console-log', methods=['GET'])
 def get_console_log(report_id: str):
     """
-    translated Report Agent translated
+    details Report Agent details
     
-    translated（INFO、WARNINGtranslated），
-    translated agent-log translated JSON translated，
-    translated。
+    details（INFO、WARNINGconverted），
+    details agent-log details JSON details，
+    details。
     
-    Querytranslated：
-        from_line: translated（translated，translated0，translated）
+    Queryconverted：
+        from_line: details（details，converted0，details）
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
                 "logs": [
-                    "[19:46:14] INFO: translated: translated 15 translated",
-                    "[19:46:14] INFO: translated: graph_id=xxx, query=...",
+                    "[19:46:14] INFO: details: details 15 details",
+                    "[19:46:14] INFO: details: graph_id=xxx, query=...",
                     ...
                 ],
                 "total_lines": 100,
@@ -883,7 +883,7 @@ def get_console_log(report_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -894,9 +894,9 @@ def get_console_log(report_id: str):
 @report_bp.route('/<report_id>/console-log/stream', methods=['GET'])
 def stream_console_log(report_id: str):
     """
-    translated（translated）
+    details（details）
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -917,7 +917,7 @@ def stream_console_log(report_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -925,17 +925,17 @@ def stream_console_log(report_id: str):
         }), 500
 
 
-# ============== translated（translated）==============
+# ============== details（details）==============
 
 @report_bp.route('/tools/search', methods=['POST'])
 def search_graph_tool():
     """
-    translated（translated）
+    details（details）
     
-    translated（JSON）：
+    details（JSON）：
         {
             "graph_id": "mirofish_xxxx",
-            "query": "translated",
+            "query": "details",
             "limit": 10
         }
     """
@@ -949,7 +949,7 @@ def search_graph_tool():
         if not graph_id or not query:
             return jsonify({
                 "success": False,
-                "error": "translated graph_id translated query"
+                "error": "details graph_id details query"
             }), 400
         
         from ..services.zep_tools import ZepToolsService
@@ -967,7 +967,7 @@ def search_graph_tool():
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -978,9 +978,9 @@ def search_graph_tool():
 @report_bp.route('/tools/statistics', methods=['POST'])
 def get_graph_statistics_tool():
     """
-    translated（translated）
+    details（details）
     
-    translated（JSON）：
+    details（JSON）：
         {
             "graph_id": "mirofish_xxxx"
         }
@@ -993,7 +993,7 @@ def get_graph_statistics_tool():
         if not graph_id:
             return jsonify({
                 "success": False,
-                "error": "translated graph_id"
+                "error": "details graph_id"
             }), 400
         
         from ..services.zep_tools import ZepToolsService
@@ -1007,7 +1007,7 @@ def get_graph_statistics_tool():
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),

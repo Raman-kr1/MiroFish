@@ -52,7 +52,7 @@ def retry_with_backoff(
                     last_exception = e
                     
                     if attempt == max_retries:
-                        logger.error(f"translated {func.__name__} translated {max_retries} translated: {str(e)}")
+                        logger.error(f"details {func.__name__} details {max_retries} details: {str(e)}")
                         raise
                     
         # Calculate delay
@@ -61,8 +61,8 @@ def retry_with_backoff(
                         current_delay = current_delay * (0.5 + random.random())
                     
                     logger.warning(
-                        f"translated {func.__name__} translated {attempt + 1} translated: {str(e)}, "
-                        f"{current_delay:.1f}translated..."
+                        f"details {func.__name__} details {attempt + 1} details: {str(e)}, "
+                        f"{current_delay:.1f}details..."
                     )
                     
                     if on_retry:
@@ -105,7 +105,7 @@ def retry_with_backoff_async(
                     last_exception = e
                     
                     if attempt == max_retries:
-                        logger.error(f"translated {func.__name__} translated {max_retries} translated: {str(e)}")
+                        logger.error(f"details {func.__name__} details {max_retries} details: {str(e)}")
                         raise
                     
                     current_delay = min(delay, max_delay)
@@ -113,8 +113,8 @@ def retry_with_backoff_async(
                         current_delay = current_delay * (0.5 + random.random())
                     
                     logger.warning(
-                        f"translated {func.__name__} translated {attempt + 1} translated: {str(e)}, "
-                        f"{current_delay:.1f}translated..."
+                        f"details {func.__name__} details {attempt + 1} details: {str(e)}, "
+                        f"{current_delay:.1f}details..."
                     )
                     
                     if on_retry:
@@ -176,15 +176,15 @@ class RetryableAPIClient:
                 last_exception = e
                 
                 if attempt == self.max_retries:
-                    logger.error(f"APItranslated {self.max_retries} translated: {str(e)}")
+                    logger.error(f"APIconverted {self.max_retries} details: {str(e)}")
                     raise
                 
                 current_delay = min(delay, self.max_delay)
                 current_delay = current_delay * (0.5 + random.random())
                 
                 logger.warning(
-                    f"APItranslated {attempt + 1} translated: {str(e)}, "
-                    f"{current_delay:.1f}translated..."
+                    f"APIconverted {attempt + 1} details: {str(e)}, "
+                    f"{current_delay:.1f}details..."
                 )
                 
                 time.sleep(current_delay)
@@ -224,7 +224,7 @@ class RetryableAPIClient:
                 results.append(result)
                 
             except Exception as e:
-                logger.error(f"translated {idx + 1} translated: {str(e)}")
+                logger.error(f"details {idx + 1} details: {str(e)}")
                 failures.append({
                     "index": idx,
                     "item": item,

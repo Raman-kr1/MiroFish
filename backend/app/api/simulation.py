@@ -1,6 +1,6 @@
 """
-translatedAPItranslated
-Step2: Zeptranslated、OASIStranslated（translated）
+convertedAPIconverted
+Step2: Zepconverted、OASISconverted（details）
 """
 
 import os
@@ -19,54 +19,54 @@ from ..models.project import ProjectManager
 logger = get_logger('mirofish.api.simulation')
 
 
-# Interview prompt translated
-# translatedAgenttranslated，translated
-INTERVIEW_PROMPT_PREFIX = "translated、translated，translated："
+# Interview prompt details
+# convertedAgentconverted，details
+INTERVIEW_PROMPT_PREFIX = "details、details，details："
 
 
 def optimize_interview_prompt(prompt: str) -> str:
     """
-    translatedInterviewtranslated，translatedAgenttranslated
+    convertedInterviewconverted，convertedAgentconverted
     
     Args:
-        prompt: translated
+        prompt: details
         
     Returns:
-        translated
+        details
     """
     if not prompt:
         return prompt
-    # translated
+    # details
     if prompt.startswith(INTERVIEW_PROMPT_PREFIX):
         return prompt
     return f"{INTERVIEW_PROMPT_PREFIX}{prompt}"
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @simulation_bp.route('/entities/<graph_id>', methods=['GET'])
 def get_graph_entities(graph_id: str):
     """
-    translated（translated）
+    details（details）
     
-    translated（LabelstranslatedEntitytranslated）
+    details（LabelsconvertedEntityconverted）
     
-    Querytranslated：
-        entity_types: translated（translated，translated）
-        enrich: translated（translatedtrue）
+    Queryconverted：
+        entity_types: details（details，details）
+        enrich: details（convertedtrue）
     """
     try:
         if not Config.ZEP_API_KEY:
             return jsonify({
                 "success": False,
-                "error": "ZEP_API_KEYtranslated"
+                "error": "ZEP_API_KEYconverted"
             }), 500
         
         entity_types_str = request.args.get('entity_types', '')
         entity_types = [t.strip() for t in entity_types_str.split(',') if t.strip()] if entity_types_str else None
         enrich = request.args.get('enrich', 'true').lower() == 'true'
         
-        logger.info(f"translated: graph_id={graph_id}, entity_types={entity_types}, enrich={enrich}")
+        logger.info(f"details: graph_id={graph_id}, entity_types={entity_types}, enrich={enrich}")
         
         reader = ZepEntityReader()
         result = reader.filter_defined_entities(
@@ -81,7 +81,7 @@ def get_graph_entities(graph_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -91,12 +91,12 @@ def get_graph_entities(graph_id: str):
 
 @simulation_bp.route('/entities/<graph_id>/<entity_uuid>', methods=['GET'])
 def get_entity_detail(graph_id: str, entity_uuid: str):
-    """translated"""
+    """details"""
     try:
         if not Config.ZEP_API_KEY:
             return jsonify({
                 "success": False,
-                "error": "ZEP_API_KEYtranslated"
+                "error": "ZEP_API_KEYconverted"
             }), 500
         
         reader = ZepEntityReader()
@@ -105,7 +105,7 @@ def get_entity_detail(graph_id: str, entity_uuid: str):
         if not entity:
             return jsonify({
                 "success": False,
-                "error": f"translated: {entity_uuid}"
+                "error": f"details: {entity_uuid}"
             }), 404
         
         return jsonify({
@@ -114,7 +114,7 @@ def get_entity_detail(graph_id: str, entity_uuid: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -124,12 +124,12 @@ def get_entity_detail(graph_id: str, entity_uuid: str):
 
 @simulation_bp.route('/entities/<graph_id>/by-type/<entity_type>', methods=['GET'])
 def get_entities_by_type(graph_id: str, entity_type: str):
-    """translated"""
+    """details"""
     try:
         if not Config.ZEP_API_KEY:
             return jsonify({
                 "success": False,
-                "error": "ZEP_API_KEYtranslated"
+                "error": "ZEP_API_KEYconverted"
             }), 500
         
         enrich = request.args.get('enrich', 'true').lower() == 'true'
@@ -151,7 +151,7 @@ def get_entities_by_type(graph_id: str, entity_type: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -159,24 +159,24 @@ def get_entities_by_type(graph_id: str, entity_type: str):
         }), 500
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @simulation_bp.route('/create', methods=['POST'])
 def create_simulation():
     """
-    translated
+    details
     
-    translated：max_roundstranslatedLLMtranslated，translated
+    details：max_roundsconvertedLLMconverted，details
     
-    translated（JSON）：
+    details（JSON）：
         {
-            "project_id": "proj_xxxx",      // translated
-            "graph_id": "mirofish_xxxx",    // translated，translatedprojecttranslated
-            "enable_twitter": true,          // translated，translatedtrue
-            "enable_reddit": true            // translated，translatedtrue
+            "project_id": "proj_xxxx",      // details
+            "graph_id": "mirofish_xxxx",    // details，convertedprojectconverted
+            "enable_twitter": true,          // details，convertedtrue
+            "enable_reddit": true            // details，convertedtrue
         }
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -197,21 +197,21 @@ def create_simulation():
         if not project_id:
             return jsonify({
                 "success": False,
-                "error": "translated project_id"
+                "error": "details project_id"
             }), 400
         
         project = ProjectManager.get_project(project_id)
         if not project:
             return jsonify({
                 "success": False,
-                "error": f"translated: {project_id}"
+                "error": f"details: {project_id}"
             }), 404
         
         graph_id = data.get('graph_id') or project.graph_id
         if not graph_id:
             return jsonify({
                 "success": False,
-                "error": "translated，translated /api/graph/build"
+                "error": "details，details /api/graph/build"
             }), 400
         
         manager = SimulationManager()
@@ -228,7 +228,7 @@ def create_simulation():
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -238,16 +238,16 @@ def create_simulation():
 
 def _check_simulation_prepared(simulation_id: str) -> tuple:
     """
-    translated
+    details
     
-    translated：
-    1. state.json translated status translated "ready"
-    2. translated：reddit_profiles.json, twitter_profiles.csv, simulation_config.json
+    details：
+    1. state.json details status details "ready"
+    2. details：reddit_profiles.json, twitter_profiles.csv, simulation_config.json
     
-    translated：translated(run_*.py)translated backend/scripts/ translated，translated
+    details：details(run_*.py)details backend/scripts/ details，details
     
     Args:
-        simulation_id: translatedID
+        simulation_id: convertedID
         
     Returns:
         (is_prepared: bool, info: dict)
@@ -257,11 +257,11 @@ def _check_simulation_prepared(simulation_id: str) -> tuple:
     
     simulation_dir = os.path.join(Config.OASIS_SIMULATION_DATA_DIR, simulation_id)
     
-    # translated
+    # details
     if not os.path.exists(simulation_dir):
-        return False, {"reason": "translated"}
+        return False, {"reason": "details"}
     
-    # translated（translated，translated backend/scripts/）
+    # details（details，details backend/scripts/）
     required_files = [
         "state.json",
         "simulation_config.json",
@@ -269,7 +269,7 @@ def _check_simulation_prepared(simulation_id: str) -> tuple:
         "twitter_profiles.csv"
     ]
     
-    # translated
+    # details
     existing_files = []
     missing_files = []
     for f in required_files:
@@ -281,12 +281,12 @@ def _check_simulation_prepared(simulation_id: str) -> tuple:
     
     if missing_files:
         return False, {
-            "reason": "translated",
+            "reason": "details",
             "missing_files": missing_files,
             "existing_files": existing_files
         }
     
-    # translatedstate.jsontranslated
+    # convertedstate.jsonconverted
     state_file = os.path.join(simulation_dir, "state.json")
     try:
         import json
@@ -296,20 +296,20 @@ def _check_simulation_prepared(simulation_id: str) -> tuple:
         status = state_data.get("status", "")
         config_generated = state_data.get("config_generated", False)
         
-        # translated
-        logger.debug(f"translated: {simulation_id}, status={status}, config_generated={config_generated}")
+        # details
+        logger.debug(f"details: {simulation_id}, status={status}, config_generated={config_generated}")
         
-        # translated config_generated=True translated，translated
-        # translated：
-        # - ready: translated，translated
-        # - preparing: translated config_generated=True translated
-        # - running: translated，translated
-        # - completed: translated，translated
-        # - stopped: translated，translated
-        # - failed: translated（translated）
+        # details config_generated=True details，details
+        # details：
+        # - ready: details，details
+        # - preparing: details config_generated=True details
+        # - running: details，details
+        # - completed: details，details
+        # - stopped: details，details
+        # - failed: details（details）
         prepared_statuses = ["ready", "preparing", "running", "completed", "stopped", "failed"]
         if status in prepared_statuses and config_generated:
-            # translated
+            # details
             profiles_file = os.path.join(simulation_dir, "reddit_profiles.json")
             config_file = os.path.join(simulation_dir, "simulation_config.json")
             
@@ -319,7 +319,7 @@ def _check_simulation_prepared(simulation_id: str) -> tuple:
                     profiles_data = json.load(f)
                     profiles_count = len(profiles_data) if isinstance(profiles_data, list) else 0
             
-            # translatedpreparingtranslated，translatedready
+            # convertedpreparingconverted，convertedready
             if status == "preparing":
                 try:
                     state_data["status"] = "ready"
@@ -327,12 +327,12 @@ def _check_simulation_prepared(simulation_id: str) -> tuple:
                     state_data["updated_at"] = datetime.now().isoformat()
                     with open(state_file, 'w', encoding='utf-8') as f:
                         json.dump(state_data, f, ensure_ascii=False, indent=2)
-                    logger.info(f"translated: {simulation_id} preparing -> ready")
+                    logger.info(f"details: {simulation_id} preparing -> ready")
                     status = "ready"
                 except Exception as e:
-                    logger.warning(f"translated: {e}")
+                    logger.warning(f"details: {e}")
             
-            logger.info(f"translated {simulation_id} translated: translated (status={status}, config_generated={config_generated})")
+            logger.info(f"details {simulation_id} details: details (status={status}, config_generated={config_generated})")
             return True, {
                 "status": status,
                 "entities_count": state_data.get("entities_count", 0),
@@ -344,55 +344,55 @@ def _check_simulation_prepared(simulation_id: str) -> tuple:
                 "existing_files": existing_files
             }
         else:
-            logger.warning(f"translated {simulation_id} translated: translated (status={status}, config_generated={config_generated})")
+            logger.warning(f"details {simulation_id} details: details (status={status}, config_generated={config_generated})")
             return False, {
-                "reason": f"translatedconfig_generatedtranslatedfalse: status={status}, config_generated={config_generated}",
+                "reason": f"convertedconfig_generatedconvertedfalse: status={status}, config_generated={config_generated}",
                 "status": status,
                 "config_generated": config_generated
             }
             
     except Exception as e:
-        return False, {"reason": f"translated: {str(e)}"}
+        return False, {"reason": f"details: {str(e)}"}
 
 
 @simulation_bp.route('/prepare', methods=['POST'])
 def prepare_simulation():
     """
-    translated（translated，LLMtranslated）
+    details（details，LLMconverted）
     
-    translated，translatedtask_id，
-    translated GET /api/simulation/prepare/status translated
+    details，convertedtask_id，
+    details GET /api/simulation/prepare/status details
     
-    translated：
-    - translated，translated
-    - translated，translated
-    - translated（force_regenerate=true）
+    details：
+    - details，details
+    - details，details
+    - details（force_regenerate=true）
     
-    translated：
-    1. translated
-    2. translatedZeptranslated
-    3. translatedOASIS Agent Profile（translated）
-    4. LLMtranslated（translated）
-    5. translated
+    details：
+    1. details
+    2. convertedZepconverted
+    3. convertedOASIS Agent Profile（details）
+    4. LLMconverted（details）
+    5. details
     
-    translated（JSON）：
+    details（JSON）：
         {
-            "simulation_id": "sim_xxxx",                   // translated，translatedID
-            "entity_types": ["Student", "PublicFigure"],  // translated，translated
-            "use_llm_for_profiles": true,                 // translated，translatedLLMtranslated
-            "parallel_profile_count": 5,                  // translated，translated，translated5
-            "force_regenerate": false                     // translated，translated，translatedfalse
+            "simulation_id": "sim_xxxx",                   // details，convertedID
+            "entity_types": ["Student", "PublicFigure"],  // details，details
+            "use_llm_for_profiles": true,                 // details，convertedLLMconverted
+            "parallel_profile_count": 5,                  // details，details，converted5
+            "force_regenerate": false                     // details，details，convertedfalse
         }
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
                 "simulation_id": "sim_xxxx",
-                "task_id": "task_xxxx",           // translated
+                "task_id": "task_xxxx",           // details
                 "status": "preparing|ready",
-                "message": "translated|translated",
-                "already_prepared": true|false    // translated
+                "message": "details|details",
+                "already_prepared": true|false    // details
             }
         }
     """
@@ -408,7 +408,7 @@ def prepare_simulation():
         if not simulation_id:
             return jsonify({
                 "success": False,
-                "error": "translated simulation_id"
+                "error": "details simulation_id"
             }), 400
         
         manager = SimulationManager()
@@ -417,76 +417,76 @@ def prepare_simulation():
         if not state:
             return jsonify({
                 "success": False,
-                "error": f"translated: {simulation_id}"
+                "error": f"details: {simulation_id}"
             }), 404
         
-        # translated
+        # details
         force_regenerate = data.get('force_regenerate', False)
-        logger.info(f"translated /prepare translated: simulation_id={simulation_id}, force_regenerate={force_regenerate}")
+        logger.info(f"details /prepare details: simulation_id={simulation_id}, force_regenerate={force_regenerate}")
         
-        # translated（translated）
+        # details（details）
         if not force_regenerate:
-            logger.debug(f"translated {simulation_id} translated...")
+            logger.debug(f"details {simulation_id} details...")
             is_prepared, prepare_info = _check_simulation_prepared(simulation_id)
-            logger.debug(f"translated: is_prepared={is_prepared}, prepare_info={prepare_info}")
+            logger.debug(f"details: is_prepared={is_prepared}, prepare_info={prepare_info}")
             if is_prepared:
-                logger.info(f"translated {simulation_id} translated，translated")
+                logger.info(f"details {simulation_id} details，details")
                 return jsonify({
                     "success": True,
                     "data": {
                         "simulation_id": simulation_id,
                         "status": "ready",
-                        "message": "translated，translated",
+                        "message": "details，details",
                         "already_prepared": True,
                         "prepare_info": prepare_info
                     }
                 })
             else:
-                logger.info(f"translated {simulation_id} translated，translated")
+                logger.info(f"details {simulation_id} details，details")
         
-        # translated
+        # details
         project = ProjectManager.get_project(state.project_id)
         if not project:
             return jsonify({
                 "success": False,
-                "error": f"translated: {state.project_id}"
+                "error": f"details: {state.project_id}"
             }), 404
         
-        # translated
+        # details
         simulation_requirement = project.simulation_requirement or ""
         if not simulation_requirement:
             return jsonify({
                 "success": False,
-                "error": "translated (simulation_requirement)"
+                "error": "details (simulation_requirement)"
             }), 400
         
-        # translated
+        # details
         document_text = ProjectManager.get_extracted_text(state.project_id) or ""
         
         entity_types_list = data.get('entity_types')
         use_llm_for_profiles = data.get('use_llm_for_profiles', True)
         parallel_profile_count = data.get('parallel_profile_count', 5)
         
-        # ========== translated（translated） ==========
-        # translatedpreparetranslatedAgenttranslated
+        # ========== details（details） ==========
+        # convertedprepareconvertedAgentconverted
         try:
-            logger.info(f"translated: graph_id={state.graph_id}")
+            logger.info(f"details: graph_id={state.graph_id}")
             reader = ZepEntityReader()
-            # translated（translated，translated）
+            # details（details，details）
             filtered_preview = reader.filter_defined_entities(
                 graph_id=state.graph_id,
                 defined_entity_types=entity_types_list,
-                enrich_with_edges=False  # translated，translated
+                enrich_with_edges=False  # details，details
             )
-            # translated（translated）
+            # details（details）
             state.entities_count = filtered_preview.filtered_count
             state.entity_types = list(filtered_preview.entity_types)
-            logger.info(f"translated: {filtered_preview.filtered_count}, translated: {filtered_preview.entity_types}")
+            logger.info(f"details: {filtered_preview.filtered_count}, details: {filtered_preview.entity_types}")
         except Exception as e:
-            logger.warning(f"translated（translated）: {e}")
-            # translated，translated
+            logger.warning(f"details（details）: {e}")
+            # details，details
         
-        # translated
+        # details
         task_manager = TaskManager()
         task_id = task_manager.create_task(
             task_type="simulation_prepare",
@@ -496,26 +496,26 @@ def prepare_simulation():
             }
         )
         
-        # translated（translated）
+        # details（details）
         state.status = SimulationStatus.PREPARING
         manager._save_simulation_state(state)
         
-        # translated
+        # details
         def run_prepare():
             try:
                 task_manager.update_task(
                     task_id,
                     status=TaskStatus.PROCESSING,
                     progress=0,
-                    message="translated..."
+                    message="details..."
                 )
                 
-                # translated（translated）
-                # translated
+                # details（details）
+                # details
                 stage_details = {}
                 
                 def progress_callback(stage, progress, message, **kwargs):
-                    # translated
+                    # details
                     stage_weights = {
                         "reading": (0, 20),           # 0-20%
                         "generating_profiles": (20, 70),  # 20-70%
@@ -526,18 +526,18 @@ def prepare_simulation():
                     start, end = stage_weights.get(stage, (0, 100))
                     current_progress = int(start + (end - start) * progress / 100)
                     
-                    # translated
+                    # details
                     stage_names = {
-                        "reading": "translated",
-                        "generating_profiles": "translatedAgenttranslated",
-                        "generating_config": "translated",
-                        "copying_scripts": "translated"
+                        "reading": "details",
+                        "generating_profiles": "convertedAgentconverted",
+                        "generating_config": "details",
+                        "copying_scripts": "details"
                     }
                     
                     stage_index = list(stage_weights.keys()).index(stage) + 1 if stage in stage_weights else 1
                     total_stages = len(stage_weights)
                     
-                    # translated
+                    # details
                     stage_details[stage] = {
                         "stage_name": stage_names.get(stage, stage),
                         "stage_progress": progress,
@@ -546,7 +546,7 @@ def prepare_simulation():
                         "item_name": kwargs.get("item_name", "")
                     }
                     
-                    # translated
+                    # details
                     detail = stage_details[stage]
                     progress_detail_data = {
                         "current_stage": stage,
@@ -559,7 +559,7 @@ def prepare_simulation():
                         "item_description": message
                     }
                     
-                    # translated
+                    # details
                     if detail["total"] > 0:
                         detailed_message = (
                             f"[{stage_index}/{total_stages}] {stage_names.get(stage, stage)}: "
@@ -585,24 +585,24 @@ def prepare_simulation():
                     parallel_profile_count=parallel_profile_count
                 )
                 
-                # translated
+                # details
                 task_manager.complete_task(
                     task_id,
                     result=result_state.to_simple_dict()
                 )
                 
             except Exception as e:
-                logger.error(f"translated: {str(e)}")
+                logger.error(f"details: {str(e)}")
                 task_manager.fail_task(task_id, str(e))
                 
-                # translated
+                # details
                 state = manager.get_simulation(simulation_id)
                 if state:
                     state.status = SimulationStatus.FAILED
                     state.error = str(e)
                     manager._save_simulation_state(state)
         
-        # translated
+        # details
         thread = threading.Thread(target=run_prepare, daemon=True)
         thread.start()
         
@@ -612,10 +612,10 @@ def prepare_simulation():
                 "simulation_id": simulation_id,
                 "task_id": task_id,
                 "status": "preparing",
-                "message": "translated，translated /api/simulation/prepare/status translated",
+                "message": "details，details /api/simulation/prepare/status details",
                 "already_prepared": False,
-                "expected_entities_count": state.entities_count,  # translatedAgenttranslated
-                "entity_types": state.entity_types  # translated
+                "expected_entities_count": state.entities_count,  # convertedAgentconverted
+                "entity_types": state.entity_types  # details
             }
         })
         
@@ -626,7 +626,7 @@ def prepare_simulation():
         }), 404
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -637,19 +637,19 @@ def prepare_simulation():
 @simulation_bp.route('/prepare/status', methods=['POST'])
 def get_prepare_status():
     """
-    translated
+    details
     
-    translated：
-    1. translatedtask_idtranslated
-    2. translatedsimulation_idtranslated
+    details：
+    1. convertedtask_idconverted
+    2. convertedsimulation_idconverted
     
-    translated（JSON）：
+    details（JSON）：
         {
-            "task_id": "task_xxxx",          // translated，preparetranslatedtask_id
-            "simulation_id": "sim_xxxx"      // translated，translatedID（translated）
+            "task_id": "task_xxxx",          // details，prepareconvertedtask_id
+            "simulation_id": "sim_xxxx"      // details，convertedID（details）
         }
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -657,8 +657,8 @@ def get_prepare_status():
                 "status": "processing|completed|ready",
                 "progress": 45,
                 "message": "...",
-                "already_prepared": true|false,  // translated
-                "prepare_info": {...}            // translated
+                "already_prepared": true|false,  // details
+                "prepare_info": {...}            // details
             }
         }
     """
@@ -670,7 +670,7 @@ def get_prepare_status():
         task_id = data.get('task_id')
         simulation_id = data.get('simulation_id')
         
-        # translatedsimulation_id，translated
+        # convertedsimulation_id，details
         if simulation_id:
             is_prepared, prepare_info = _check_simulation_prepared(simulation_id)
             if is_prepared:
@@ -680,36 +680,36 @@ def get_prepare_status():
                         "simulation_id": simulation_id,
                         "status": "ready",
                         "progress": 100,
-                        "message": "translated",
+                        "message": "details",
                         "already_prepared": True,
                         "prepare_info": prepare_info
                     }
                 })
         
-        # translatedtask_id，translated
+        # convertedtask_id，details
         if not task_id:
             if simulation_id:
-                # translatedsimulation_idtranslated
+                # convertedsimulation_idconverted
                 return jsonify({
                     "success": True,
                     "data": {
                         "simulation_id": simulation_id,
                         "status": "not_started",
                         "progress": 0,
-                        "message": "translated，translated /api/simulation/prepare translated",
+                        "message": "details，details /api/simulation/prepare details",
                         "already_prepared": False
                     }
                 })
             return jsonify({
                 "success": False,
-                "error": "translated task_id translated simulation_id"
+                "error": "details task_id details simulation_id"
             }), 400
         
         task_manager = TaskManager()
         task = task_manager.get_task(task_id)
         
         if not task:
-            # translated，translatedsimulation_id，translated
+            # details，convertedsimulation_id，details
             if simulation_id:
                 is_prepared, prepare_info = _check_simulation_prepared(simulation_id)
                 if is_prepared:
@@ -720,7 +720,7 @@ def get_prepare_status():
                             "task_id": task_id,
                             "status": "ready",
                             "progress": 100,
-                            "message": "translated（translated）",
+                            "message": "details（details）",
                             "already_prepared": True,
                             "prepare_info": prepare_info
                         }
@@ -728,7 +728,7 @@ def get_prepare_status():
             
             return jsonify({
                 "success": False,
-                "error": f"translated: {task_id}"
+                "error": f"details: {task_id}"
             }), 404
         
         task_dict = task.to_dict()
@@ -740,7 +740,7 @@ def get_prepare_status():
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e)
@@ -749,7 +749,7 @@ def get_prepare_status():
 
 @simulation_bp.route('/<simulation_id>', methods=['GET'])
 def get_simulation(simulation_id: str):
-    """translated"""
+    """details"""
     try:
         manager = SimulationManager()
         state = manager.get_simulation(simulation_id)
@@ -757,12 +757,12 @@ def get_simulation(simulation_id: str):
         if not state:
             return jsonify({
                 "success": False,
-                "error": f"translated: {simulation_id}"
+                "error": f"details: {simulation_id}"
             }), 404
         
         result = state.to_dict()
         
-        # translated，translated
+        # details，details
         if state.status == SimulationStatus.READY:
             result["run_instructions"] = manager.get_run_instructions(simulation_id)
         
@@ -772,7 +772,7 @@ def get_simulation(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -783,10 +783,10 @@ def get_simulation(simulation_id: str):
 @simulation_bp.route('/list', methods=['GET'])
 def list_simulations():
     """
-    translated
+    details
     
-    Querytranslated：
-        project_id: translatedIDtranslated（translated）
+    Queryconverted：
+        project_id: convertedIDconverted（details）
     """
     try:
         project_id = request.args.get('project_id')
@@ -801,7 +801,7 @@ def list_simulations():
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -811,22 +811,22 @@ def list_simulations():
 
 def _get_report_id_for_simulation(simulation_id: str) -> str:
     """
-    translated simulation translated report_id
+    details simulation details report_id
     
-    translated reports translated，translated simulation_id translated report，
-    translated（translated created_at translated）
+    details reports details，details simulation_id details report，
+    details（details created_at details）
     
     Args:
-        simulation_id: translatedID
+        simulation_id: convertedID
         
     Returns:
-        report_id translated None
+        report_id details None
     """
     import json
     from datetime import datetime
     
-    # reports translated：backend/uploads/reports
-    # __file__ translated app/api/simulation.py，translated backend/
+    # reports details：backend/uploads/reports
+    # __file__ details app/api/simulation.py，details backend/
     reports_dir = os.path.join(os.path.dirname(__file__), '../../uploads/reports')
     if not os.path.exists(reports_dir):
         return None
@@ -859,34 +859,34 @@ def _get_report_id_for_simulation(simulation_id: str) -> str:
         if not matching_reports:
             return None
         
-        # translated，translated
+        # details，details
         matching_reports.sort(key=lambda x: x.get("created_at", ""), reverse=True)
         return matching_reports[0].get("report_id")
         
     except Exception as e:
-        logger.warning(f"translated simulation {simulation_id} translated report translated: {e}")
+        logger.warning(f"details simulation {simulation_id} details report details: {e}")
         return None
 
 
 @simulation_bp.route('/history', methods=['GET'])
 def get_simulation_history():
     """
-    translated（translated）
+    details（details）
     
-    translated，translated、translated
+    details，details、details
     
-    Querytranslated：
-        limit: translated（translated20）
+    Queryconverted：
+        limit: details（converted20）
     
-    translated：
+    details：
         {
             "success": true,
             "data": [
                 {
                     "simulation_id": "sim_xxxx",
                     "project_id": "proj_xxxx",
-                    "project_name": "translated",
-                    "simulation_requirement": "translated...",
+                    "project_name": "details",
+                    "simulation_requirement": "details...",
                     "status": "completed",
                     "entities_count": 68,
                     "profiles_count": 68,
@@ -909,18 +909,18 @@ def get_simulation_history():
         manager = SimulationManager()
         simulations = manager.list_simulations()[:limit]
         
-        # translated，translated Simulation translated
+        # details，details Simulation details
         enriched_simulations = []
         for sim in simulations:
             sim_dict = sim.to_dict()
             
-            # translated（translated simulation_config.json translated simulation_requirement）
+            # details（details simulation_config.json details simulation_requirement）
             config = manager.get_simulation_config(sim.simulation_id)
             if config:
                 sim_dict["simulation_requirement"] = config.get("simulation_requirement", "")
                 time_config = config.get("time_config", {})
                 sim_dict["total_simulation_hours"] = time_config.get("total_simulation_hours", 0)
-                # translated（translated）
+                # details（details）
                 recommended_rounds = int(
                     time_config.get("total_simulation_hours", 0) * 60 / 
                     max(time_config.get("minutes_per_round", 60), 1)
@@ -930,35 +930,35 @@ def get_simulation_history():
                 sim_dict["total_simulation_hours"] = 0
                 recommended_rounds = 0
             
-            # translated（translated run_state.json translated）
+            # details（details run_state.json details）
             run_state = SimulationRunner.get_run_state(sim.simulation_id)
             if run_state:
                 sim_dict["current_round"] = run_state.current_round
                 sim_dict["runner_status"] = run_state.runner_status.value
-                # translated total_rounds，translated
+                # details total_rounds，details
                 sim_dict["total_rounds"] = run_state.total_rounds if run_state.total_rounds > 0 else recommended_rounds
             else:
                 sim_dict["current_round"] = 0
                 sim_dict["runner_status"] = "idle"
                 sim_dict["total_rounds"] = recommended_rounds
             
-            # translated（translated3translated）
+            # details（converted3converted）
             project = ProjectManager.get_project(sim.project_id)
             if project and hasattr(project, 'files') and project.files:
                 sim_dict["files"] = [
-                    {"filename": f.get("filename", "translated")} 
+                    {"filename": f.get("filename", "details")} 
                     for f in project.files[:3]
                 ]
             else:
                 sim_dict["files"] = []
             
-            # translated report_id（translated simulation translated report）
+            # details report_id（details simulation details report）
             sim_dict["report_id"] = _get_report_id_for_simulation(sim.simulation_id)
             
-            # translated
+            # details
             sim_dict["version"] = "v1.0.2"
             
-            # translated
+            # details
             try:
                 created_date = sim_dict.get("created_at", "")[:10]
                 sim_dict["created_date"] = created_date
@@ -974,7 +974,7 @@ def get_simulation_history():
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -985,10 +985,10 @@ def get_simulation_history():
 @simulation_bp.route('/<simulation_id>/profiles', methods=['GET'])
 def get_simulation_profiles(simulation_id: str):
     """
-    translatedAgent Profile
+    convertedAgent Profile
     
-    Querytranslated：
-        platform: translated（reddit/twitter，translatedreddit）
+    Queryconverted：
+        platform: details（reddit/twitter，convertedreddit）
     """
     try:
         platform = request.args.get('platform', 'reddit')
@@ -1012,7 +1012,7 @@ def get_simulation_profiles(simulation_id: str):
         }), 404
         
     except Exception as e:
-        logger.error(f"translatedProfiletranslated: {str(e)}")
+        logger.error(f"convertedProfileconverted: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1023,25 +1023,25 @@ def get_simulation_profiles(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/profiles/realtime', methods=['GET'])
 def get_simulation_profiles_realtime(simulation_id: str):
     """
-    translatedAgent Profile（translated）
+    convertedAgent Profile（details）
     
-    translated /profiles translated：
-    - translated，translated SimulationManager
-    - translated
-    - translated（translated、translated）
+    details /profiles details：
+    - details，details SimulationManager
+    - details
+    - details（details、details）
     
-    Querytranslated：
-        platform: translated（reddit/twitter，translatedreddit）
+    Queryconverted：
+        platform: details（reddit/twitter，convertedreddit）
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
                 "simulation_id": "sim_xxxx",
                 "platform": "reddit",
                 "count": 15,
-                "total_expected": 93,  // translated（translated）
-                "is_generating": true,  // translated
+                "total_expected": 93,  // details（details）
+                "is_generating": true,  // details
                 "file_exists": true,
                 "file_modified_at": "2025-12-04T18:20:00",
                 "profiles": [...]
@@ -1055,28 +1055,28 @@ def get_simulation_profiles_realtime(simulation_id: str):
     try:
         platform = request.args.get('platform', 'reddit')
         
-        # translated
+        # details
         sim_dir = os.path.join(Config.OASIS_SIMULATION_DATA_DIR, simulation_id)
         
         if not os.path.exists(sim_dir):
             return jsonify({
                 "success": False,
-                "error": f"translated: {simulation_id}"
+                "error": f"details: {simulation_id}"
             }), 404
         
-        # translated
+        # details
         if platform == "reddit":
             profiles_file = os.path.join(sim_dir, "reddit_profiles.json")
         else:
             profiles_file = os.path.join(sim_dir, "twitter_profiles.csv")
         
-        # translated
+        # details
         file_exists = os.path.exists(profiles_file)
         profiles = []
         file_modified_at = None
         
         if file_exists:
-            # translated
+            # details
             file_stat = os.stat(profiles_file)
             file_modified_at = datetime.fromtimestamp(file_stat.st_mtime).isoformat()
             
@@ -1089,10 +1089,10 @@ def get_simulation_profiles_realtime(simulation_id: str):
                         reader = csv.DictReader(f)
                         profiles = list(reader)
             except (json.JSONDecodeError, Exception) as e:
-                logger.warning(f"translated profiles translated（translated）: {e}")
+                logger.warning(f"details profiles details（details）: {e}")
                 profiles = []
         
-        # translated（translated state.json translated）
+        # details（details state.json details）
         is_generating = False
         total_expected = None
         
@@ -1122,7 +1122,7 @@ def get_simulation_profiles_realtime(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translatedProfiletranslated: {str(e)}")
+        logger.error(f"convertedProfileconverted: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1133,24 +1133,24 @@ def get_simulation_profiles_realtime(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/config/realtime', methods=['GET'])
 def get_simulation_config_realtime(simulation_id: str):
     """
-    translated（translated）
+    details（details）
     
-    translated /config translated：
-    - translated，translated SimulationManager
-    - translated
-    - translated（translated、translated）
-    - translated
+    details /config details：
+    - details，details SimulationManager
+    - details
+    - details（details、details）
+    - details
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
                 "simulation_id": "sim_xxxx",
                 "file_exists": true,
                 "file_modified_at": "2025-12-04T18:20:00",
-                "is_generating": true,  // translated
-                "generation_stage": "generating_config",  // translated
-                "config": {...}  // translated（translated）
+                "is_generating": true,  // details
+                "generation_stage": "generating_config",  // details
+                "config": {...}  // details（details）
             }
         }
     """
@@ -1158,25 +1158,25 @@ def get_simulation_config_realtime(simulation_id: str):
     from datetime import datetime
     
     try:
-        # translated
+        # details
         sim_dir = os.path.join(Config.OASIS_SIMULATION_DATA_DIR, simulation_id)
         
         if not os.path.exists(sim_dir):
             return jsonify({
                 "success": False,
-                "error": f"translated: {simulation_id}"
+                "error": f"details: {simulation_id}"
             }), 404
         
-        # translated
+        # details
         config_file = os.path.join(sim_dir, "simulation_config.json")
         
-        # translated
+        # details
         file_exists = os.path.exists(config_file)
         config = None
         file_modified_at = None
         
         if file_exists:
-            # translated
+            # details
             file_stat = os.stat(config_file)
             file_modified_at = datetime.fromtimestamp(file_stat.st_mtime).isoformat()
             
@@ -1184,10 +1184,10 @@ def get_simulation_config_realtime(simulation_id: str):
                 with open(config_file, 'r', encoding='utf-8') as f:
                     config = json.load(f)
             except (json.JSONDecodeError, Exception) as e:
-                logger.warning(f"translated config translated（translated）: {e}")
+                logger.warning(f"details config details（details）: {e}")
                 config = None
         
-        # translated（translated state.json translated）
+        # details（details state.json details）
         is_generating = False
         generation_stage = None
         config_generated = False
@@ -1201,7 +1201,7 @@ def get_simulation_config_realtime(simulation_id: str):
                     is_generating = status == "preparing"
                     config_generated = state_data.get("config_generated", False)
                     
-                    # translated
+                    # details
                     if is_generating:
                         if state_data.get("profiles_generated", False):
                             generation_stage = "generating_config"
@@ -1212,7 +1212,7 @@ def get_simulation_config_realtime(simulation_id: str):
             except Exception:
                 pass
         
-        # translated
+        # details
         response_data = {
             "simulation_id": simulation_id,
             "file_exists": file_exists,
@@ -1223,7 +1223,7 @@ def get_simulation_config_realtime(simulation_id: str):
             "config": config
         }
         
-        # translated，translated
+        # details，details
         if config:
             response_data["summary"] = {
                 "total_agents": len(config.get("agent_configs", [])),
@@ -1242,7 +1242,7 @@ def get_simulation_config_realtime(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translatedConfigtranslated: {str(e)}")
+        logger.error(f"convertedConfigconverted: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1253,14 +1253,14 @@ def get_simulation_config_realtime(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/config', methods=['GET'])
 def get_simulation_config(simulation_id: str):
     """
-    translated（LLMtranslated）
+    details（LLMconverted）
     
-    translated：
-        - time_config: translated（translated、translated、translated/translated）
-        - agent_configs: translatedAgenttranslated（translated、translated、translated）
-        - event_config: translated（translated、translated）
-        - platform_configs: translated
-        - generation_reasoning: LLMtranslated
+    details：
+        - time_config: details（details、details、details/details）
+        - agent_configs: convertedAgentconverted（details、details、details）
+        - event_config: details（details、details）
+        - platform_configs: details
+        - generation_reasoning: LLMconverted
     """
     try:
         manager = SimulationManager()
@@ -1269,7 +1269,7 @@ def get_simulation_config(simulation_id: str):
         if not config:
             return jsonify({
                 "success": False,
-                "error": f"translated，translated /prepare translated"
+                "error": f"details，details /prepare details"
             }), 404
         
         return jsonify({
@@ -1278,7 +1278,7 @@ def get_simulation_config(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1288,7 +1288,7 @@ def get_simulation_config(simulation_id: str):
 
 @simulation_bp.route('/<simulation_id>/config/download', methods=['GET'])
 def download_simulation_config(simulation_id: str):
-    """translated"""
+    """details"""
     try:
         manager = SimulationManager()
         sim_dir = manager._get_simulation_dir(simulation_id)
@@ -1297,7 +1297,7 @@ def download_simulation_config(simulation_id: str):
         if not os.path.exists(config_path):
             return jsonify({
                 "success": False,
-                "error": "translated，translated /prepare translated"
+                "error": "details，details /prepare details"
             }), 404
         
         return send_file(
@@ -1307,7 +1307,7 @@ def download_simulation_config(simulation_id: str):
         )
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1318,19 +1318,19 @@ def download_simulation_config(simulation_id: str):
 @simulation_bp.route('/script/<script_name>/download', methods=['GET'])
 def download_simulation_script(script_name: str):
     """
-    translated（translated，translated backend/scripts/）
+    details（details，details backend/scripts/）
     
-    script_nametranslated：
+    script_nameconverted：
         - run_twitter_simulation.py
         - run_reddit_simulation.py
         - run_parallel_simulation.py
         - action_logger.py
     """
     try:
-        # translated backend/scripts/ translated
+        # details backend/scripts/ details
         scripts_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../scripts'))
         
-        # translated
+        # details
         allowed_scripts = [
             "run_twitter_simulation.py",
             "run_reddit_simulation.py", 
@@ -1341,7 +1341,7 @@ def download_simulation_script(script_name: str):
         if script_name not in allowed_scripts:
             return jsonify({
                 "success": False,
-                "error": f"translated: {script_name}，translated: {allowed_scripts}"
+                "error": f"details: {script_name}，details: {allowed_scripts}"
             }), 400
         
         script_path = os.path.join(scripts_dir, script_name)
@@ -1349,7 +1349,7 @@ def download_simulation_script(script_name: str):
         if not os.path.exists(script_path):
             return jsonify({
                 "success": False,
-                "error": f"translated: {script_name}"
+                "error": f"details: {script_name}"
             }), 404
         
         return send_file(
@@ -1359,7 +1359,7 @@ def download_simulation_script(script_name: str):
         )
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1367,19 +1367,19 @@ def download_simulation_script(script_name: str):
         }), 500
 
 
-# ============== Profiletranslated（translated） ==============
+# ============== Profileconverted（details） ==============
 
 @simulation_bp.route('/generate-profiles', methods=['POST'])
 def generate_profiles():
     """
-    translatedOASIS Agent Profile（translated）
+    convertedOASIS Agent Profile（details）
     
-    translated（JSON）：
+    details（JSON）：
         {
-            "graph_id": "mirofish_xxxx",     // translated
-            "entity_types": ["Student"],      // translated
-            "use_llm": true,                  // translated
-            "platform": "reddit"              // translated
+            "graph_id": "mirofish_xxxx",     // details
+            "entity_types": ["Student"],      // details
+            "use_llm": true,                  // details
+            "platform": "reddit"              // details
         }
     """
     try:
@@ -1389,7 +1389,7 @@ def generate_profiles():
         if not graph_id:
             return jsonify({
                 "success": False,
-                "error": "translated graph_id"
+                "error": "details graph_id"
             }), 400
         
         entity_types = data.get('entity_types')
@@ -1406,7 +1406,7 @@ def generate_profiles():
         if filtered.filtered_count == 0:
             return jsonify({
                 "success": False,
-                "error": "translated"
+                "error": "details"
             }), 400
         
         generator = OasisProfileGenerator()
@@ -1433,7 +1433,7 @@ def generate_profiles():
         })
         
     except Exception as e:
-        logger.error(f"translatedProfiletranslated: {str(e)}")
+        logger.error(f"convertedProfileconverted: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1441,35 +1441,35 @@ def generate_profiles():
         }), 500
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @simulation_bp.route('/start', methods=['POST'])
 def start_simulation():
     """
-    translated
+    details
 
-    translated（JSON）：
+    details（JSON）：
         {
-            "simulation_id": "sim_xxxx",          // translated，translatedID
-            "platform": "parallel",                // translated: twitter / reddit / parallel (translated)
-            "max_rounds": 100,                     // translated: translated，translated
-            "enable_graph_memory_update": false,   // translated: translatedAgenttranslatedZeptranslated
-            "force": false                         // translated: translated（translated）
+            "simulation_id": "sim_xxxx",          // details，convertedID
+            "platform": "parallel",                // details: twitter / reddit / parallel (details)
+            "max_rounds": 100,                     // details: details，details
+            "enable_graph_memory_update": false,   // details: convertedAgentconvertedZepconverted
+            "force": false                         // details: details（details）
         }
 
-    translated force translated：
-        - translated，translated，translated
-        - translated：run_state.json, actions.jsonl, simulation.log translated
-        - translated（simulation_config.json）translated profile translated
-        - translated
+    details force details：
+        - details，details，details
+        - details：run_state.json, actions.jsonl, simulation.log details
+        - details（simulation_config.json）details profile details
+        - details
 
-    translated enable_graph_memory_update：
-        - translated，translatedAgenttranslated（translated、translated、translated）translatedZeptranslated
-        - translated"translated"translated，translatedAItranslated
-        - translated graph_id
-        - translated，translatedAPItranslated
+    details enable_graph_memory_update：
+        - details，convertedAgentconverted（details、details、details）convertedZepconverted
+        - details"details"details，convertedAIconverted
+        - details graph_id
+        - details，convertedAPIconverted
 
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -1479,8 +1479,8 @@ def start_simulation():
                 "twitter_running": true,
                 "reddit_running": true,
                 "started_at": "2025-12-01T10:00:00",
-                "graph_memory_update_enabled": true,  // translated
-                "force_restarted": true               // translated
+                "graph_memory_update_enabled": true,  // details
+                "force_restarted": true               // details
             }
         }
     """
@@ -1491,98 +1491,98 @@ def start_simulation():
         if not simulation_id:
             return jsonify({
                 "success": False,
-                "error": "translated simulation_id"
+                "error": "details simulation_id"
             }), 400
 
         platform = data.get('platform', 'parallel')
-        max_rounds = data.get('max_rounds')  # translated：translated
-        enable_graph_memory_update = data.get('enable_graph_memory_update', False)  # translated：translated
-        force = data.get('force', False)  # translated：translated
+        max_rounds = data.get('max_rounds')  # details：details
+        enable_graph_memory_update = data.get('enable_graph_memory_update', False)  # details：details
+        force = data.get('force', False)  # details：details
 
-        # translated max_rounds translated
+        # details max_rounds details
         if max_rounds is not None:
             try:
                 max_rounds = int(max_rounds)
                 if max_rounds <= 0:
                     return jsonify({
                         "success": False,
-                        "error": "max_rounds translated"
+                        "error": "max_rounds details"
                     }), 400
             except (ValueError, TypeError):
                 return jsonify({
                     "success": False,
-                    "error": "max_rounds translated"
+                    "error": "max_rounds details"
                 }), 400
 
         if platform not in ['twitter', 'reddit', 'parallel']:
             return jsonify({
                 "success": False,
-                "error": f"translated: {platform}，translated: twitter/reddit/parallel"
+                "error": f"details: {platform}，details: twitter/reddit/parallel"
             }), 400
 
-        # translated
+        # details
         manager = SimulationManager()
         state = manager.get_simulation(simulation_id)
 
         if not state:
             return jsonify({
                 "success": False,
-                "error": f"translated: {simulation_id}"
+                "error": f"details: {simulation_id}"
             }), 404
 
         force_restarted = False
         
-        # translated：translated，translated
+        # details：details，details
         if state.status != SimulationStatus.READY:
-            # translated
+            # details
             is_prepared, prepare_info = _check_simulation_prepared(simulation_id)
 
             if is_prepared:
-                # translated，translated
+                # details，details
                 if state.status == SimulationStatus.RUNNING:
-                    # translated
+                    # details
                     run_state = SimulationRunner.get_run_state(simulation_id)
                     if run_state and run_state.runner_status.value == "running":
-                        # translated
+                        # details
                         if force:
-                            # translated：translated
-                            logger.info(f"translated：translated {simulation_id}")
+                            # details：details
+                            logger.info(f"details：details {simulation_id}")
                             try:
                                 SimulationRunner.stop_simulation(simulation_id)
                             except Exception as e:
-                                logger.warning(f"translated: {str(e)}")
+                                logger.warning(f"details: {str(e)}")
                         else:
                             return jsonify({
                                 "success": False,
-                                "error": f"translated，translated /stop translated，translated force=true translated"
+                                "error": f"details，details /stop details，details force=true details"
                             }), 400
 
-                # translated，translated
+                # details，details
                 if force:
-                    logger.info(f"translated：translated {simulation_id}")
+                    logger.info(f"details：details {simulation_id}")
                     cleanup_result = SimulationRunner.cleanup_simulation_logs(simulation_id)
                     if not cleanup_result.get("success"):
-                        logger.warning(f"translated: {cleanup_result.get('errors')}")
+                        logger.warning(f"details: {cleanup_result.get('errors')}")
                     force_restarted = True
 
-                # translated，translated ready
-                logger.info(f"translated {simulation_id} translated，translated ready（translated: {state.status.value}）")
+                # details，details ready
+                logger.info(f"details {simulation_id} details，details ready（details: {state.status.value}）")
                 state.status = SimulationStatus.READY
                 manager._save_simulation_state(state)
             else:
-                # translated
+                # details
                 return jsonify({
                     "success": False,
-                    "error": f"translated，translated: {state.status.value}，translated /prepare translated"
+                    "error": f"details，details: {state.status.value}，details /prepare details"
                 }), 400
         
-        # translatedID（translated）
+        # convertedID（details）
         graph_id = None
         if enable_graph_memory_update:
-            # translated graph_id
+            # details graph_id
             graph_id = state.graph_id
             if not graph_id:
-                # translated
+                # details
                 project = ProjectManager.get_project(state.project_id)
                 if project:
                     graph_id = project.graph_id
@@ -1590,12 +1590,12 @@ def start_simulation():
             if not graph_id:
                 return jsonify({
                     "success": False,
-                    "error": "translated graph_id，translated"
+                    "error": "details graph_id，details"
                 }), 400
             
-            logger.info(f"translated: simulation_id={simulation_id}, graph_id={graph_id}")
+            logger.info(f"details: simulation_id={simulation_id}, graph_id={graph_id}")
         
-        # translated
+        # details
         run_state = SimulationRunner.start_simulation(
             simulation_id=simulation_id,
             platform=platform,
@@ -1604,7 +1604,7 @@ def start_simulation():
             graph_id=graph_id
         )
         
-        # translated
+        # details
         state.status = SimulationStatus.RUNNING
         manager._save_simulation_state(state)
         
@@ -1628,7 +1628,7 @@ def start_simulation():
         }), 400
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1639,14 +1639,14 @@ def start_simulation():
 @simulation_bp.route('/stop', methods=['POST'])
 def stop_simulation():
     """
-    translated
+    details
     
-    translated（JSON）：
+    details（JSON）：
         {
-            "simulation_id": "sim_xxxx"  // translated，translatedID
+            "simulation_id": "sim_xxxx"  // details，convertedID
         }
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -1663,12 +1663,12 @@ def stop_simulation():
         if not simulation_id:
             return jsonify({
                 "success": False,
-                "error": "translated simulation_id"
+                "error": "details simulation_id"
             }), 400
         
         run_state = SimulationRunner.stop_simulation(simulation_id)
         
-        # translated
+        # details
         manager = SimulationManager()
         state = manager.get_simulation(simulation_id)
         if state:
@@ -1687,7 +1687,7 @@ def stop_simulation():
         }), 400
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1695,14 +1695,14 @@ def stop_simulation():
         }), 500
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @simulation_bp.route('/<simulation_id>/run-status', methods=['GET'])
 def get_run_status(simulation_id: str):
     """
-    translated（translated）
+    details（details）
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -1747,7 +1747,7 @@ def get_run_status(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1758,14 +1758,14 @@ def get_run_status(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/run-status/detail', methods=['GET'])
 def get_run_status_detail(simulation_id: str):
     """
-    translated（translated）
+    details（details）
     
-    translated
+    details
     
-    Querytranslated：
-        platform: translated（twitter/reddit，translated）
+    Queryconverted：
+        platform: details（twitter/reddit，details）
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -1787,8 +1787,8 @@ def get_run_status_detail(simulation_id: str):
                     },
                     ...
                 ],
-                "twitter_actions": [...],  # Twitter translated
-                "reddit_actions": [...]    # Reddit translated
+                "twitter_actions": [...],  # Twitter details
+                "reddit_actions": [...]    # Reddit details
             }
         }
     """
@@ -1808,13 +1808,13 @@ def get_run_status_detail(simulation_id: str):
                 }
             })
         
-        # translated
+        # details
         all_actions = SimulationRunner.get_all_actions(
             simulation_id=simulation_id,
             platform=platform_filter
         )
         
-        # translated
+        # details
         twitter_actions = SimulationRunner.get_all_actions(
             simulation_id=simulation_id,
             platform="twitter"
@@ -1825,7 +1825,7 @@ def get_run_status_detail(simulation_id: str):
             platform="reddit"
         ) if not platform_filter or platform_filter == "reddit" else []
         
-        # translated（recent_actions translated）
+        # details（recent_actions details）
         current_round = run_state.current_round
         recent_actions = SimulationRunner.get_all_actions(
             simulation_id=simulation_id,
@@ -1833,13 +1833,13 @@ def get_run_status_detail(simulation_id: str):
             round_num=current_round
         ) if current_round > 0 else []
         
-        # translated
+        # details
         result = run_state.to_dict()
         result["all_actions"] = [a.to_dict() for a in all_actions]
         result["twitter_actions"] = [a.to_dict() for a in twitter_actions]
         result["reddit_actions"] = [a.to_dict() for a in reddit_actions]
         result["rounds_count"] = len(run_state.rounds)
-        # recent_actions translated
+        # recent_actions details
         result["recent_actions"] = [a.to_dict() for a in recent_actions]
         
         return jsonify({
@@ -1848,7 +1848,7 @@ def get_run_status_detail(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1859,16 +1859,16 @@ def get_run_status_detail(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/actions', methods=['GET'])
 def get_simulation_actions(simulation_id: str):
     """
-    translatedAgenttranslated
+    convertedAgentconverted
     
-    Querytranslated：
-        limit: translated（translated100）
-        offset: translated（translated0）
-        platform: translated（twitter/reddit）
-        agent_id: translatedAgent ID
-        round_num: translated
+    Queryconverted：
+        limit: details（converted100）
+        offset: details（converted0）
+        platform: details（twitter/reddit）
+        agent_id: convertedAgent ID
+        round_num: details
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -1902,7 +1902,7 @@ def get_simulation_actions(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1913,15 +1913,15 @@ def get_simulation_actions(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/timeline', methods=['GET'])
 def get_simulation_timeline(simulation_id: str):
     """
-    translated（translated）
+    details（details）
     
-    translated
+    details
     
-    Querytranslated：
-        start_round: translated（translated0）
-        end_round: translated（translated）
+    Queryconverted：
+        start_round: details（converted0）
+        end_round: details（details）
     
-    translated
+    details
     """
     try:
         start_round = request.args.get('start_round', 0, type=int)
@@ -1942,7 +1942,7 @@ def get_simulation_timeline(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1953,9 +1953,9 @@ def get_simulation_timeline(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/agent-stats', methods=['GET'])
 def get_agent_stats(simulation_id: str):
     """
-    translatedAgenttranslated
+    convertedAgentconverted
     
-    translatedAgenttranslated、translated
+    convertedAgentconverted、details
     """
     try:
         stats = SimulationRunner.get_agent_stats(simulation_id)
@@ -1969,7 +1969,7 @@ def get_agent_stats(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translatedAgenttranslated: {str(e)}")
+        logger.error(f"convertedAgentconverted: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1977,19 +1977,19 @@ def get_agent_stats(simulation_id: str):
         }), 500
 
 
-# ============== translated ==============
+# ============== details ==============
 
 @simulation_bp.route('/<simulation_id>/posts', methods=['GET'])
 def get_simulation_posts(simulation_id: str):
     """
-    translated
+    details
     
-    Querytranslated：
-        platform: translated（twitter/reddit）
-        limit: translated（translated50）
-        offset: translated
+    Queryconverted：
+        platform: details（twitter/reddit）
+        limit: details（converted50）
+        offset: details
     
-    translated（translatedSQLitetranslated）
+    details（convertedSQLiteconverted）
     """
     try:
         platform = request.args.get('platform', 'reddit')
@@ -2011,7 +2011,7 @@ def get_simulation_posts(simulation_id: str):
                     "platform": platform,
                     "count": 0,
                     "posts": [],
-                    "message": "translated，translated"
+                    "message": "details，details"
                 }
             })
         
@@ -2049,7 +2049,7 @@ def get_simulation_posts(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -2060,12 +2060,12 @@ def get_simulation_posts(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/comments', methods=['GET'])
 def get_simulation_comments(simulation_id: str):
     """
-    translated（translatedReddit）
+    details（convertedReddit）
     
-    Querytranslated：
-        post_id: translatedID（translated）
-        limit: translated
-        offset: translated
+    Queryconverted：
+        post_id: convertedID（details）
+        limit: details
+        offset: details
     """
     try:
         post_id = request.args.get('post_id')
@@ -2124,7 +2124,7 @@ def get_simulation_comments(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -2132,31 +2132,31 @@ def get_simulation_comments(simulation_id: str):
         }), 500
 
 
-# ============== Interview translated ==============
+# ============== Interview details ==============
 
 @simulation_bp.route('/interview', methods=['POST'])
 def interview_agent():
     """
-    translatedAgent
+    convertedAgent
 
-    translated：translated（translated）
+    details：details（details）
 
-    translated（JSON）：
+    details（JSON）：
         {
-            "simulation_id": "sim_xxxx",       // translated，translatedID
-            "agent_id": 0,                     // translated，Agent ID
-            "prompt": "translated？",  // translated，translated
-            "platform": "twitter",             // translated，translated（twitter/reddit）
-                                               // translated：translated
-            "timeout": 60                      // translated，translated（translated），translated60
+            "simulation_id": "sim_xxxx",       // details，convertedID
+            "agent_id": 0,                     // details，Agent ID
+            "prompt": "details？",  // details，details
+            "platform": "twitter",             // details，details（twitter/reddit）
+                                               // details：details
+            "timeout": 60                      // details，details（details），converted60
         }
 
-    translated（translatedplatform，translated）：
+    details（convertedplatform，details）：
         {
             "success": true,
             "data": {
                 "agent_id": 0,
-                "prompt": "translated？",
+                "prompt": "details？",
                 "result": {
                     "agent_id": 0,
                     "prompt": "...",
@@ -2169,15 +2169,15 @@ def interview_agent():
             }
         }
 
-    translated（translatedplatform）：
+    details（convertedplatform）：
         {
             "success": true,
             "data": {
                 "agent_id": 0,
-                "prompt": "translated？",
+                "prompt": "details？",
                 "result": {
                     "agent_id": 0,
-                    "response": "translated...",
+                    "response": "details...",
                     "platform": "twitter",
                     "timestamp": "2025-12-08T10:00:00"
                 },
@@ -2191,42 +2191,42 @@ def interview_agent():
         simulation_id = data.get('simulation_id')
         agent_id = data.get('agent_id')
         prompt = data.get('prompt')
-        platform = data.get('platform')  # translated：twitter/reddit/None
+        platform = data.get('platform')  # details：twitter/reddit/None
         timeout = data.get('timeout', 60)
         
         if not simulation_id:
             return jsonify({
                 "success": False,
-                "error": "translated simulation_id"
+                "error": "details simulation_id"
             }), 400
         
         if agent_id is None:
             return jsonify({
                 "success": False,
-                "error": "translated agent_id"
+                "error": "details agent_id"
             }), 400
         
         if not prompt:
             return jsonify({
                 "success": False,
-                "error": "translated prompt（translated）"
+                "error": "details prompt（details）"
             }), 400
         
-        # translatedplatformtranslated
+        # convertedplatformconverted
         if platform and platform not in ("twitter", "reddit"):
             return jsonify({
                 "success": False,
-                "error": "platform translated 'twitter' translated 'reddit'"
+                "error": "platform details 'twitter' details 'reddit'"
             }), 400
         
-        # translated
+        # details
         if not SimulationRunner.check_env_alive(simulation_id):
             return jsonify({
                 "success": False,
-                "error": "translated。translated。"
+                "error": "details。details。"
             }), 400
         
-        # translatedprompt，translatedAgenttranslated
+        # convertedprompt，convertedAgentconverted
         optimized_prompt = optimize_interview_prompt(prompt)
         
         result = SimulationRunner.interview_agent(
@@ -2251,11 +2251,11 @@ def interview_agent():
     except TimeoutError as e:
         return jsonify({
             "success": False,
-            "error": f"translatedInterviewtranslated: {str(e)}"
+            "error": f"convertedInterviewconverted: {str(e)}"
         }), 504
         
     except Exception as e:
-        logger.error(f"Interviewtranslated: {str(e)}")
+        logger.error(f"Interviewconverted: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -2266,30 +2266,30 @@ def interview_agent():
 @simulation_bp.route('/interview/batch', methods=['POST'])
 def interview_agents_batch():
     """
-    translatedAgent
+    convertedAgent
 
-    translated：translated
+    details：details
 
-    translated（JSON）：
+    details（JSON）：
         {
-            "simulation_id": "sim_xxxx",       // translated，translatedID
-            "interviews": [                    // translated，translated
+            "simulation_id": "sim_xxxx",       // details，convertedID
+            "interviews": [                    // details，details
                 {
                     "agent_id": 0,
-                    "prompt": "translatedAtranslated？",
-                    "platform": "twitter"      // translated，translatedAgenttranslated
+                    "prompt": "convertedAconverted？",
+                    "platform": "twitter"      // details，convertedAgentconverted
                 },
                 {
                     "agent_id": 1,
-                    "prompt": "translatedBtranslated？"  // translatedplatformtranslated
+                    "prompt": "convertedBconverted？"  // convertedplatformconverted
                 }
             ],
-            "platform": "reddit",              // translated，translated（translatedplatformtranslated）
-                                               // translated：translatedAgenttranslated
-            "timeout": 120                     // translated，translated（translated），translated120
+            "platform": "reddit",              // details，details（convertedplatformconverted）
+                                               // details：convertedAgentconverted
+            "timeout": 120                     // details，details（details），converted120
         }
 
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -2312,56 +2312,56 @@ def interview_agents_batch():
 
         simulation_id = data.get('simulation_id')
         interviews = data.get('interviews')
-        platform = data.get('platform')  # translated：twitter/reddit/None
+        platform = data.get('platform')  # details：twitter/reddit/None
         timeout = data.get('timeout', 120)
 
         if not simulation_id:
             return jsonify({
                 "success": False,
-                "error": "translated simulation_id"
+                "error": "details simulation_id"
             }), 400
 
         if not interviews or not isinstance(interviews, list):
             return jsonify({
                 "success": False,
-                "error": "translated interviews（translated）"
+                "error": "details interviews（details）"
             }), 400
 
-        # translatedplatformtranslated
+        # convertedplatformconverted
         if platform and platform not in ("twitter", "reddit"):
             return jsonify({
                 "success": False,
-                "error": "platform translated 'twitter' translated 'reddit'"
+                "error": "platform details 'twitter' details 'reddit'"
             }), 400
 
-        # translated
+        # details
         for i, interview in enumerate(interviews):
             if 'agent_id' not in interview:
                 return jsonify({
                     "success": False,
-                    "error": f"translated{i+1}translated agent_id"
+                    "error": f"details{i+1}details agent_id"
                 }), 400
             if 'prompt' not in interview:
                 return jsonify({
                     "success": False,
-                    "error": f"translated{i+1}translated prompt"
+                    "error": f"details{i+1}details prompt"
                 }), 400
-            # translatedplatform（translated）
+            # convertedplatform（details）
             item_platform = interview.get('platform')
             if item_platform and item_platform not in ("twitter", "reddit"):
                 return jsonify({
                     "success": False,
-                    "error": f"translated{i+1}translatedplatformtranslated 'twitter' translated 'reddit'"
+                    "error": f"details{i+1}convertedplatformconverted 'twitter' details 'reddit'"
                 }), 400
 
-        # translated
+        # details
         if not SimulationRunner.check_env_alive(simulation_id):
             return jsonify({
                 "success": False,
-                "error": "translated。translated。"
+                "error": "details。details。"
             }), 400
 
-        # translatedprompt，translatedAgenttranslated
+        # convertedprompt，convertedAgentconverted
         optimized_interviews = []
         for interview in interviews:
             optimized_interview = interview.copy()
@@ -2389,11 +2389,11 @@ def interview_agents_batch():
     except TimeoutError as e:
         return jsonify({
             "success": False,
-            "error": f"translatedInterviewtranslated: {str(e)}"
+            "error": f"convertedInterviewconverted: {str(e)}"
         }), 504
 
     except Exception as e:
-        logger.error(f"translatedInterviewtranslated: {str(e)}")
+        logger.error(f"convertedInterviewconverted: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -2404,20 +2404,20 @@ def interview_agents_batch():
 @simulation_bp.route('/interview/all', methods=['POST'])
 def interview_all_agents():
     """
-    translated - translatedAgent
+    details - convertedAgent
 
-    translated：translated
+    details：details
 
-    translated（JSON）：
+    details（JSON）：
         {
-            "simulation_id": "sim_xxxx",            // translated，translatedID
-            "prompt": "translated？",  // translated，translated（translatedAgenttranslated）
-            "platform": "reddit",                   // translated，translated（twitter/reddit）
-                                                    // translated：translatedAgenttranslated
-            "timeout": 180                          // translated，translated（translated），translated180
+            "simulation_id": "sim_xxxx",            // details，convertedID
+            "prompt": "details？",  // details，details（convertedAgentconverted）
+            "platform": "reddit",                   // details，details（twitter/reddit）
+                                                    // details：convertedAgentconverted
+            "timeout": 180                          // details，details（details），converted180
         }
 
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -2439,36 +2439,36 @@ def interview_all_agents():
 
         simulation_id = data.get('simulation_id')
         prompt = data.get('prompt')
-        platform = data.get('platform')  # translated：twitter/reddit/None
+        platform = data.get('platform')  # details：twitter/reddit/None
         timeout = data.get('timeout', 180)
 
         if not simulation_id:
             return jsonify({
                 "success": False,
-                "error": "translated simulation_id"
+                "error": "details simulation_id"
             }), 400
 
         if not prompt:
             return jsonify({
                 "success": False,
-                "error": "translated prompt（translated）"
+                "error": "details prompt（details）"
             }), 400
 
-        # translatedplatformtranslated
+        # convertedplatformconverted
         if platform and platform not in ("twitter", "reddit"):
             return jsonify({
                 "success": False,
-                "error": "platform translated 'twitter' translated 'reddit'"
+                "error": "platform details 'twitter' details 'reddit'"
             }), 400
 
-        # translated
+        # details
         if not SimulationRunner.check_env_alive(simulation_id):
             return jsonify({
                 "success": False,
-                "error": "translated。translated。"
+                "error": "details。details。"
             }), 400
 
-        # translatedprompt，translatedAgenttranslated
+        # convertedprompt，convertedAgentconverted
         optimized_prompt = optimize_interview_prompt(prompt)
 
         result = SimulationRunner.interview_all_agents(
@@ -2492,11 +2492,11 @@ def interview_all_agents():
     except TimeoutError as e:
         return jsonify({
             "success": False,
-            "error": f"translatedInterviewtranslated: {str(e)}"
+            "error": f"convertedInterviewconverted: {str(e)}"
         }), 504
 
     except Exception as e:
-        logger.error(f"translatedInterviewtranslated: {str(e)}")
+        logger.error(f"convertedInterviewconverted: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -2507,20 +2507,20 @@ def interview_all_agents():
 @simulation_bp.route('/interview/history', methods=['POST'])
 def get_interview_history():
     """
-    translatedInterviewtranslated
+    convertedInterviewconverted
 
-    translatedInterviewtranslated
+    convertedInterviewconverted
 
-    translated（JSON）：
+    details（JSON）：
         {
-            "simulation_id": "sim_xxxx",  // translated，translatedID
-            "platform": "reddit",          // translated，translated（reddit/twitter）
-                                           // translated
-            "agent_id": 0,                 // translated，translatedAgenttranslated
-            "limit": 100                   // translated，translated，translated100
+            "simulation_id": "sim_xxxx",  // details，convertedID
+            "platform": "reddit",          // details，details（reddit/twitter）
+                                           // details
+            "agent_id": 0,                 // details，convertedAgentconverted
+            "limit": 100                   // details，details，converted100
         }
 
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -2528,8 +2528,8 @@ def get_interview_history():
                 "history": [
                     {
                         "agent_id": 0,
-                        "response": "translated...",
-                        "prompt": "translated？",
+                        "response": "details...",
+                        "prompt": "details？",
                         "timestamp": "2025-12-08T10:00:00",
                         "platform": "reddit"
                     },
@@ -2542,14 +2542,14 @@ def get_interview_history():
         data = request.get_json() or {}
         
         simulation_id = data.get('simulation_id')
-        platform = data.get('platform')  # translated
+        platform = data.get('platform')  # details
         agent_id = data.get('agent_id')
         limit = data.get('limit', 100)
         
         if not simulation_id:
             return jsonify({
                 "success": False,
-                "error": "translated simulation_id"
+                "error": "details simulation_id"
             }), 400
 
         history = SimulationRunner.get_interview_history(
@@ -2568,7 +2568,7 @@ def get_interview_history():
         })
 
     except Exception as e:
-        logger.error(f"translatedInterviewtranslated: {str(e)}")
+        logger.error(f"convertedInterviewconverted: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -2579,16 +2579,16 @@ def get_interview_history():
 @simulation_bp.route('/env-status', methods=['POST'])
 def get_env_status():
     """
-    translated
+    details
 
-    translated（translatedInterviewtranslated）
+    details（convertedInterviewconverted）
 
-    translated（JSON）：
+    details（JSON）：
         {
-            "simulation_id": "sim_xxxx"  // translated，translatedID
+            "simulation_id": "sim_xxxx"  // details，convertedID
         }
 
-    translated：
+    details：
         {
             "success": true,
             "data": {
@@ -2596,7 +2596,7 @@ def get_env_status():
                 "env_alive": true,
                 "twitter_available": true,
                 "reddit_available": true,
-                "message": "translated，translatedInterviewtranslated"
+                "message": "details，convertedInterviewconverted"
             }
         }
     """
@@ -2608,18 +2608,18 @@ def get_env_status():
         if not simulation_id:
             return jsonify({
                 "success": False,
-                "error": "translated simulation_id"
+                "error": "details simulation_id"
             }), 400
 
         env_alive = SimulationRunner.check_env_alive(simulation_id)
         
-        # translated
+        # details
         env_status = SimulationRunner.get_env_status_detail(simulation_id)
 
         if env_alive:
-            message = "translated，translatedInterviewtranslated"
+            message = "details，convertedInterviewconverted"
         else:
-            message = "translated"
+            message = "details"
 
         return jsonify({
             "success": True,
@@ -2633,7 +2633,7 @@ def get_env_status():
         })
 
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -2644,24 +2644,24 @@ def get_env_status():
 @simulation_bp.route('/close-env', methods=['POST'])
 def close_simulation_env():
     """
-    translated
+    details
     
-    translated，translated。
+    details，details。
     
-    translated：translated /stop translated，/stop translated，
-    translated。
+    details：details /stop details，/stop details，
+    details。
     
-    translated（JSON）：
+    details（JSON）：
         {
-            "simulation_id": "sim_xxxx",  // translated，translatedID
-            "timeout": 30                  // translated，translated（translated），translated30
+            "simulation_id": "sim_xxxx",  // details，convertedID
+            "timeout": 30                  // details，details（details），converted30
         }
     
-    translated：
+    details：
         {
             "success": true,
             "data": {
-                "message": "translated",
+                "message": "details",
                 "result": {...},
                 "timestamp": "2025-12-08T10:00:01"
             }
@@ -2676,7 +2676,7 @@ def close_simulation_env():
         if not simulation_id:
             return jsonify({
                 "success": False,
-                "error": "translated simulation_id"
+                "error": "details simulation_id"
             }), 400
         
         result = SimulationRunner.close_simulation_env(
@@ -2684,7 +2684,7 @@ def close_simulation_env():
             timeout=timeout
         )
         
-        # translated
+        # details
         manager = SimulationManager()
         state = manager.get_simulation(simulation_id)
         if state:
@@ -2703,7 +2703,7 @@ def close_simulation_env():
         }), 400
         
     except Exception as e:
-        logger.error(f"translated: {str(e)}")
+        logger.error(f"details: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),

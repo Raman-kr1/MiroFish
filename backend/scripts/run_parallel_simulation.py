@@ -94,13 +94,13 @@ from dotenv import load_dotenv
 _env_file = os.path.join(_project_root, '.env')
 if os.path.exists(_env_file):
     load_dotenv(_env_file)
-    print(f"translated: {_env_file}")
+    print(f"details: {_env_file}")
 else:
     # Fall back to backend/.env
     _backend_env = os.path.join(_backend_dir, '.env')
     if os.path.exists(_backend_env):
         load_dotenv(_backend_env)
-        print(f"translated: {_backend_env}")
+        print(f"details: {_backend_env}")
 
 
 class MaxTokensWarningFilter(logging.Filter):
@@ -169,8 +169,8 @@ try:
         generate_reddit_agent_graph
     )
 except ImportError as e:
-    print(f"translated: translated {e}")
-    print("translated: pip install oasis-ai camel-ai")
+    print(f"details: details {e}")
+    print("details: pip install oasis-ai camel-ai")
     sys.exit(1)
 
 
@@ -324,7 +324,7 @@ class ParallelIPCHandler:
         env, agent_graph, actual_platform = self._get_env_and_graph(platform)
         
         if not env or not agent_graph:
-            return {"platform": platform, "error": f"{platform}translated"}
+            return {"platform": platform, "error": f"{platform}details"}
         
         try:
             agent = agent_graph.get_agent(agent_id)
@@ -364,16 +364,16 @@ class ParallelIPCHandler:
             
             if "error" in result:
                 self.send_response(command_id, "failed", error=result["error"])
-                print(f"  Interviewtranslated: agent_id={agent_id}, platform={platform}, error={result['error']}")
+                print(f"  Interviewconverted: agent_id={agent_id}, platform={platform}, error={result['error']}")
                 return False
             else:
                 self.send_response(command_id, "completed", result=result)
-                print(f"  Interviewtranslated: agent_id={agent_id}, platform={platform}")
+                print(f"  Interviewconverted: agent_id={agent_id}, platform={platform}")
                 return True
         
         # No platform specified: interview both platforms simultaneously
         if not self.twitter_env and not self.reddit_env:
-            self.send_response(command_id, "failed", error="translated")
+            self.send_response(command_id, "failed", error="details")
             return False
         
         results = {
@@ -405,12 +405,12 @@ class ParallelIPCHandler:
         
         if success_count > 0:
             self.send_response(command_id, "completed", result=results)
-            print(f"  Interviewtranslated: agent_id={agent_id}, translated={success_count}/{len(platforms_to_interview)}")
+            print(f"  Interviewconverted: agent_id={agent_id}, details={success_count}/{len(platforms_to_interview)}")
             return True
         else:
-            errors = [f"{p}: {r.get('error', 'translated')}" for p, r in results["platforms"].items()]
+            errors = [f"{p}: {r.get('error', 'details')}" for p, r in results["platforms"].items()]
             self.send_response(command_id, "failed", error="; ".join(errors))
-            print(f"  Interviewtranslated: agent_id={agent_id}, translated")
+            print(f"  Interviewconverted: agent_id={agent_id}, details")
             return False
     
     async def handle_batch_interview(self, command_id: str, interviews: List[Dict], platform: str = None) -> bool:
@@ -428,7 +428,7 @@ class ParallelIPCHandler:
         # Group by platform
         twitter_interviews = []
         reddit_interviews = []
-        both_platforms_interviews = []  # translated
+        both_platforms_interviews = []  # details
         
         for interview in interviews:
             item_platform = interview.get("platform", platform)
@@ -463,7 +463,7 @@ class ParallelIPCHandler:
                             action_args={"prompt": prompt}
                         )
                     except Exception as e:
-                        print(f"  translated: translatedTwitter Agent {agent_id}: {e}")
+                        print(f"  details: convertedTwitter Agent {agent_id}: {e}")
                 
                 if twitter_actions:
                     await self.twitter_env.step(twitter_actions)
@@ -474,7 +474,7 @@ class ParallelIPCHandler:
                         result["platform"] = "twitter"
                         results[f"twitter_{agent_id}"] = result
             except Exception as e:
-                print(f"  TwittertranslatedInterviewtranslated: {e}")
+                print(f"  TwitterconvertedInterviewconverted: {e}")
         
         # Handle Reddit platform interviews
         if reddit_interviews and self.reddit_env:
@@ -490,7 +490,7 @@ class ParallelIPCHandler:
                             action_args={"prompt": prompt}
                         )
                     except Exception as e:
-                        print(f"  translated: translatedReddit Agent {agent_id}: {e}")
+                        print(f"  details: convertedReddit Agent {agent_id}: {e}")
                 
                 if reddit_actions:
                     await self.reddit_env.step(reddit_actions)
@@ -501,17 +501,17 @@ class ParallelIPCHandler:
                         result["platform"] = "reddit"
                         results[f"reddit_{agent_id}"] = result
             except Exception as e:
-                print(f"  ReddittranslatedInterviewtranslated: {e}")
+                print(f"  RedditconvertedInterviewconverted: {e}")
         
         if results:
             self.send_response(command_id, "completed", result={
                 "interviews_count": len(results),
                 "results": results
             })
-            print(f"  translatedInterviewtranslated: {len(results)} translatedAgent")
+            print(f"  convertedInterviewconverted: {len(results)} convertedAgent")
             return True
         else:
-            self.send_response(command_id, "failed", error="translated")
+            self.send_response(command_id, "failed", error="details")
             return False
     
     def _get_interview_result(self, agent_id: int, platform: str) -> Dict[str, Any]:
@@ -553,7 +553,7 @@ class ParallelIPCHandler:
             conn.close()
             
         except Exception as e:
-            print(f"  translatedInterviewtranslated: {e}")
+            print(f"  convertedInterviewconverted: {e}")
         
         return result
     
@@ -572,7 +572,7 @@ class ParallelIPCHandler:
         command_type = command.get("command_type")
         args = command.get("args", {})
         
-        print(f"\ntranslatedIPCtranslated: {command_type}, id={command_id}")
+        print(f"\nconvertedIPCconverted: {command_type}, id={command_id}")
         
         if command_type == CommandType.INTERVIEW:
             await self.handle_interview(
@@ -592,12 +592,12 @@ class ParallelIPCHandler:
             return True
             
         elif command_type == CommandType.CLOSE_ENV:
-            print("translated")
-            self.send_response(command_id, "completed", result={"message": "translated"})
+            print("details")
+            self.send_response(command_id, "completed", result={"message": "details"})
             return False
         
         else:
-            self.send_response(command_id, "failed", error=f"translated: {command_type}")
+            self.send_response(command_id, "failed", error=f"details: {command_type}")
             return True
 
 
@@ -743,7 +743,7 @@ def fetch_new_actions_from_db(
         
         conn.close()
     except Exception as e:
-        print(f"translated: {e}")
+        print(f"details: {e}")
     
     return actions, new_last_rowid
 
@@ -813,7 +813,7 @@ def _enrich_action_context(
         elif action_type == 'FOLLOW':
             follow_id = action_args.get('follow_id')
             if follow_id:
-                # translated follow translated followee_id
+                # details follow details followee_id
                 cursor.execute("""
                     SELECT followee_id FROM follow WHERE follow_id = ?
                 """, (follow_id,))
@@ -826,7 +826,7 @@ def _enrich_action_context(
         
         # Mute user: add the muted user's name
         elif action_type == 'MUTE':
-            # translated action_args translated user_id translated target_id
+            # details action_args details user_id details target_id
             target_id = action_args.get('user_id') or action_args.get('target_id')
             if target_id:
                 target_name = _get_user_name(cursor, target_id, agent_names)
@@ -853,7 +853,7 @@ def _enrich_action_context(
     
     except Exception as e:
         # Failure to enrich context does not affect the main flow
-        print(f"translated: {e}")
+        print(f"details: {e}")
 
 
 def _get_post_info(
@@ -862,15 +862,15 @@ def _get_post_info(
     agent_names: Dict[int, str]
 ) -> Optional[Dict[str, str]]:
     """
-    translated
+    details
     
     Args:
-        cursor: translated
-        post_id: translatedID
-        agent_names: agent_id -> agent_name translated
+        cursor: details
+        post_id: convertedID
+        agent_names: agent_id -> agent_name details
         
     Returns:
-        translated content translated author_name translated，translated None
+        details content details author_name details，details None
     """
     try:
         cursor.execute("""
@@ -885,12 +885,12 @@ def _get_post_info(
             user_id = row[1]
             agent_id = row[2]
             
-            # translated agent_names translated
+            # details agent_names details
             author_name = ''
             if agent_id is not None and agent_id in agent_names:
                 author_name = agent_names[agent_id]
             elif user_id:
-                # translated user translated
+                # details user details
                 cursor.execute("SELECT name, user_name FROM user WHERE user_id = ?", (user_id,))
                 user_row = cursor.fetchone()
                 if user_row:
@@ -908,15 +908,15 @@ def _get_user_name(
     agent_names: Dict[int, str]
 ) -> Optional[str]:
     """
-    translated
+    details
     
     Args:
-        cursor: translated
-        user_id: translatedID
-        agent_names: agent_id -> agent_name translated
+        cursor: details
+        user_id: convertedID
+        agent_names: agent_id -> agent_name details
         
     Returns:
-        translated，translated None
+        details，details None
     """
     try:
         cursor.execute("""
@@ -928,7 +928,7 @@ def _get_user_name(
             name = row[1]
             user_name = row[2]
             
-            # translated agent_names translated
+            # details agent_names details
             if agent_id is not None and agent_id in agent_names:
                 return agent_names[agent_id]
             return name or user_name or ''
@@ -943,15 +943,15 @@ def _get_comment_info(
     agent_names: Dict[int, str]
 ) -> Optional[Dict[str, str]]:
     """
-    translated
+    details
     
     Args:
-        cursor: translated
-        comment_id: translatedID
-        agent_names: agent_id -> agent_name translated
+        cursor: details
+        comment_id: convertedID
+        agent_names: agent_id -> agent_name details
         
     Returns:
-        translated content translated author_name translated，translated None
+        details content details author_name details，details None
     """
     try:
         cursor.execute("""
@@ -966,12 +966,12 @@ def _get_comment_info(
             user_id = row[1]
             agent_id = row[2]
             
-            # translated agent_names translated
+            # details agent_names details
             author_name = ''
             if agent_id is not None and agent_id in agent_names:
                 author_name = agent_names[agent_id]
             elif user_id:
-                # translated user translated
+                # details user details
                 cursor.execute("SELECT name, user_name FROM user WHERE user_id = ?", (user_id,))
                 user_row = cursor.fetchone()
                 if user_row:
@@ -985,53 +985,53 @@ def _get_comment_info(
 
 def create_model(config: Dict[str, Any], use_boost: bool = False):
     """
-    translatedLLMtranslated
+    convertedLLMconverted
     
-    translated LLM translated，translated：
-    - translated：LLM_API_KEY, LLM_BASE_URL, LLM_MODEL_NAME
-    - translated（translated）：LLM_BOOST_API_KEY, LLM_BOOST_BASE_URL, LLM_BOOST_MODEL_NAME
+    details LLM details，details：
+    - details：LLM_API_KEY, LLM_BASE_URL, LLM_MODEL_NAME
+    - details（details）：LLM_BOOST_API_KEY, LLM_BOOST_BASE_URL, LLM_BOOST_MODEL_NAME
     
-    translated LLM，translated API translated，translated。
+    details LLM，details API details，details。
     
     Args:
-        config: translated
-        use_boost: translated LLM translated（translated）
+        config: details
+        use_boost: details LLM details（details）
     """
-    # translated
+    # details
     boost_api_key = os.environ.get("LLM_BOOST_API_KEY", "")
     boost_base_url = os.environ.get("LLM_BOOST_BASE_URL", "")
     boost_model = os.environ.get("LLM_BOOST_MODEL_NAME", "")
     has_boost_config = bool(boost_api_key)
     
-    # translated LLM
+    # details LLM
     if use_boost and has_boost_config:
-        # translated
+        # details
         llm_api_key = boost_api_key
         llm_base_url = boost_base_url
         llm_model = boost_model or os.environ.get("LLM_MODEL_NAME", "")
-        config_label = "[translatedLLM]"
+        config_label = "[convertedLLM]"
     else:
-        # translated
+        # details
         llm_api_key = os.environ.get("LLM_API_KEY", "")
         llm_base_url = os.environ.get("LLM_BASE_URL", "")
         llm_model = os.environ.get("LLM_MODEL_NAME", "")
-        config_label = "[translatedLLM]"
+        config_label = "[convertedLLM]"
     
-    # translated .env translated，translated config translated
+    # details .env details，details config details
     if not llm_model:
         llm_model = config.get("llm_model", "gpt-4o-mini")
     
-    # translated camel-ai translated
+    # details camel-ai details
     if llm_api_key:
         os.environ["OPENAI_API_KEY"] = llm_api_key
     
     if not os.environ.get("OPENAI_API_KEY"):
-        raise ValueError("translated API Key translated，translated .env translated LLM_API_KEY")
+        raise ValueError("details API Key details，details .env details LLM_API_KEY")
     
     if llm_base_url:
         os.environ["OPENAI_API_BASE_URL"] = llm_base_url
     
-    print(f"{config_label} model={llm_model}, base_url={llm_base_url[:40] if llm_base_url else 'translated'}...")
+    print(f"{config_label} model={llm_model}, base_url={llm_base_url[:40] if llm_base_url else 'details'}...")
     
     return ModelFactory.create(
         model_platform=ModelPlatformType.OPENAI,
@@ -1045,7 +1045,7 @@ def get_active_agents_for_round(
     current_hour: int,
     round_num: int
 ) -> List:
-    """translatedAgent"""
+    """convertedAgent"""
     time_config = config.get("time_config", {})
     agent_configs = config.get("agent_configs", [])
     
@@ -1093,7 +1093,7 @@ def get_active_agents_for_round(
 
 
 class PlatformSimulation:
-    """translated"""
+    """details"""
     def __init__(self):
         self.env = None
         self.agent_graph = None
@@ -1107,17 +1107,17 @@ async def run_twitter_simulation(
     main_logger: Optional[SimulationLogManager] = None,
     max_rounds: Optional[int] = None
 ) -> PlatformSimulation:
-    """translatedTwittertranslated
+    """convertedTwitterconverted
     
     Args:
-        config: translated
-        simulation_dir: translated
-        action_logger: translated
-        main_logger: translated
-        max_rounds: translated（translated，translated）
+        config: details
+        simulation_dir: details
+        action_logger: details
+        main_logger: details
+        max_rounds: details（details，details）
         
     Returns:
-        PlatformSimulation: translatedenvtranslatedagent_graphtranslated
+        PlatformSimulation: convertedenvconvertedagent_graphconverted
     """
     result = PlatformSimulation()
     
@@ -1126,15 +1126,15 @@ async def run_twitter_simulation(
             main_logger.info(f"[Twitter] {msg}")
         print(f"[Twitter] {msg}")
     
-    log_info("translated...")
+    log_info("details...")
     
-    # Twitter translated LLM translated
+    # Twitter details LLM details
     model = create_model(config, use_boost=False)
     
-    # OASIS TwittertranslatedCSVtranslated
+    # OASIS TwitterconvertedCSVconverted
     profile_path = os.path.join(simulation_dir, "twitter_profiles.csv")
     if not os.path.exists(profile_path):
-        log_info(f"translated: Profiletranslated: {profile_path}")
+        log_info(f"details: Profileconverted: {profile_path}")
         return result
     
     result.agent_graph = await generate_twitter_agent_graph(
@@ -1143,9 +1143,9 @@ async def run_twitter_simulation(
         available_actions=TWITTER_ACTIONS,
     )
     
-    # translated Agent translated（translated entity_name translated Agent_X）
+    # details Agent details（details entity_name details Agent_X）
     agent_names = get_agent_names_from_config(config)
-    # translated agent，translated OASIS translated
+    # details agent，details OASIS details
     for agent_id, agent in result.agent_graph.get_agents():
         if agent_id not in agent_names:
             agent_names[agent_id] = getattr(agent, 'name', f'Agent_{agent_id}')
@@ -1158,23 +1158,23 @@ async def run_twitter_simulation(
         agent_graph=result.agent_graph,
         platform=oasis.DefaultPlatformType.TWITTER,
         database_path=db_path,
-        semaphore=30,  # translated LLM translated，translated API translated
+        semaphore=30,  # details LLM details，details API details
     )
     
     await result.env.reset()
-    log_info("translated")
+    log_info("details")
     
     if action_logger:
         action_logger.log_simulation_start(config)
     
     total_actions = 0
-    last_rowid = 0  # translated（translated rowid translated created_at translated）
+    last_rowid = 0  # details（details rowid details created_at details）
     
-    # translated
+    # details
     event_config = config.get("event_config", {})
     initial_posts = event_config.get("initial_posts", [])
     
-    # translated round 0 translated（translated）
+    # details round 0 details（details）
     if action_logger:
         action_logger.log_round_start(0, 0)  # round 0, simulated_hour 0
     
@@ -1206,32 +1206,32 @@ async def run_twitter_simulation(
         
         if initial_actions:
             await result.env.step(initial_actions)
-            log_info(f"translated {len(initial_actions)} translated")
+            log_info(f"details {len(initial_actions)} details")
     
-    # translated round 0 translated
+    # details round 0 details
     if action_logger:
         action_logger.log_round_end(0, initial_action_count)
     
-    # translated
+    # details
     time_config = config.get("time_config", {})
     total_hours = time_config.get("total_simulation_hours", 72)
     minutes_per_round = time_config.get("minutes_per_round", 30)
     total_rounds = (total_hours * 60) // minutes_per_round
     
-    # translated，translated
+    # details，details
     if max_rounds is not None and max_rounds > 0:
         original_rounds = total_rounds
         total_rounds = min(total_rounds, max_rounds)
         if total_rounds < original_rounds:
-            log_info(f"translated: {original_rounds} -> {total_rounds} (max_rounds={max_rounds})")
+            log_info(f"details: {original_rounds} -> {total_rounds} (max_rounds={max_rounds})")
     
     start_time = datetime.now()
     
     for round_num in range(total_rounds):
-        # translated
+        # details
         if _shutdown_event and _shutdown_event.is_set():
             if main_logger:
-                main_logger.info(f"translated，translated {round_num + 1} translated")
+                main_logger.info(f"details，details {round_num + 1} details")
             break
         
         simulated_minutes = round_num * minutes_per_round
@@ -1242,12 +1242,12 @@ async def run_twitter_simulation(
             result.env, config, simulated_hour, round_num
         )
         
-        # translatedagent，translatedroundtranslated
+        # convertedagent，convertedroundconverted
         if action_logger:
             action_logger.log_round_start(round_num + 1, simulated_hour)
         
         if not active_agents:
-            # translatedagenttranslatedroundtranslated（actions_count=0）
+            # convertedagentconvertedroundconverted（actions_count=0）
             if action_logger:
                 action_logger.log_round_end(round_num + 1, 0)
             continue
@@ -1255,7 +1255,7 @@ async def run_twitter_simulation(
         actions = {agent: LLMAction() for _, agent in active_agents}
         await result.env.step(actions)
         
-        # translated
+        # details
         actual_actions, last_rowid = fetch_new_actions_from_db(
             db_path, last_rowid, agent_names
         )
@@ -1280,14 +1280,14 @@ async def run_twitter_simulation(
             progress = (round_num + 1) / total_rounds * 100
             log_info(f"Day {simulated_day}, {simulated_hour:02d}:00 - Round {round_num + 1}/{total_rounds} ({progress:.1f}%)")
     
-    # translated：translated，translatedInterviewtranslated
+    # details：details，convertedInterviewconverted
     
     if action_logger:
         action_logger.log_simulation_end(total_rounds, total_actions)
     
     result.total_actions = total_actions
     elapsed = (datetime.now() - start_time).total_seconds()
-    log_info(f"translated! translated: {elapsed:.1f}translated, translated: {total_actions}")
+    log_info(f"details! details: {elapsed:.1f}details, details: {total_actions}")
     
     return result
 
@@ -1299,17 +1299,17 @@ async def run_reddit_simulation(
     main_logger: Optional[SimulationLogManager] = None,
     max_rounds: Optional[int] = None
 ) -> PlatformSimulation:
-    """translatedReddittranslated
+    """convertedRedditconverted
     
     Args:
-        config: translated
-        simulation_dir: translated
-        action_logger: translated
-        main_logger: translated
-        max_rounds: translated（translated，translated）
+        config: details
+        simulation_dir: details
+        action_logger: details
+        main_logger: details
+        max_rounds: details（details，details）
         
     Returns:
-        PlatformSimulation: translatedenvtranslatedagent_graphtranslated
+        PlatformSimulation: convertedenvconvertedagent_graphconverted
     """
     result = PlatformSimulation()
     
@@ -1318,14 +1318,14 @@ async def run_reddit_simulation(
             main_logger.info(f"[Reddit] {msg}")
         print(f"[Reddit] {msg}")
     
-    log_info("translated...")
+    log_info("details...")
     
-    # Reddit translated LLM translated（translated，translated）
+    # Reddit details LLM details（details，details）
     model = create_model(config, use_boost=True)
     
     profile_path = os.path.join(simulation_dir, "reddit_profiles.json")
     if not os.path.exists(profile_path):
-        log_info(f"translated: Profiletranslated: {profile_path}")
+        log_info(f"details: Profileconverted: {profile_path}")
         return result
     
     result.agent_graph = await generate_reddit_agent_graph(
@@ -1334,9 +1334,9 @@ async def run_reddit_simulation(
         available_actions=REDDIT_ACTIONS,
     )
     
-    # translated Agent translated（translated entity_name translated Agent_X）
+    # details Agent details（details entity_name details Agent_X）
     agent_names = get_agent_names_from_config(config)
-    # translated agent，translated OASIS translated
+    # details agent，details OASIS details
     for agent_id, agent in result.agent_graph.get_agents():
         if agent_id not in agent_names:
             agent_names[agent_id] = getattr(agent, 'name', f'Agent_{agent_id}')
@@ -1349,23 +1349,23 @@ async def run_reddit_simulation(
         agent_graph=result.agent_graph,
         platform=oasis.DefaultPlatformType.REDDIT,
         database_path=db_path,
-        semaphore=30,  # translated LLM translated，translated API translated
+        semaphore=30,  # details LLM details，details API details
     )
     
     await result.env.reset()
-    log_info("translated")
+    log_info("details")
     
     if action_logger:
         action_logger.log_simulation_start(config)
     
     total_actions = 0
-    last_rowid = 0  # translated（translated rowid translated created_at translated）
+    last_rowid = 0  # details（details rowid details created_at details）
     
-    # translated
+    # details
     event_config = config.get("event_config", {})
     initial_posts = event_config.get("initial_posts", [])
     
-    # translated round 0 translated（translated）
+    # details round 0 details（details）
     if action_logger:
         action_logger.log_round_start(0, 0)  # round 0, simulated_hour 0
     
@@ -1405,32 +1405,32 @@ async def run_reddit_simulation(
         
         if initial_actions:
             await result.env.step(initial_actions)
-            log_info(f"translated {len(initial_actions)} translated")
+            log_info(f"details {len(initial_actions)} details")
     
-    # translated round 0 translated
+    # details round 0 details
     if action_logger:
         action_logger.log_round_end(0, initial_action_count)
     
-    # translated
+    # details
     time_config = config.get("time_config", {})
     total_hours = time_config.get("total_simulation_hours", 72)
     minutes_per_round = time_config.get("minutes_per_round", 30)
     total_rounds = (total_hours * 60) // minutes_per_round
     
-    # translated，translated
+    # details，details
     if max_rounds is not None and max_rounds > 0:
         original_rounds = total_rounds
         total_rounds = min(total_rounds, max_rounds)
         if total_rounds < original_rounds:
-            log_info(f"translated: {original_rounds} -> {total_rounds} (max_rounds={max_rounds})")
+            log_info(f"details: {original_rounds} -> {total_rounds} (max_rounds={max_rounds})")
     
     start_time = datetime.now()
     
     for round_num in range(total_rounds):
-        # translated
+        # details
         if _shutdown_event and _shutdown_event.is_set():
             if main_logger:
-                main_logger.info(f"translated，translated {round_num + 1} translated")
+                main_logger.info(f"details，details {round_num + 1} details")
             break
         
         simulated_minutes = round_num * minutes_per_round
@@ -1441,12 +1441,12 @@ async def run_reddit_simulation(
             result.env, config, simulated_hour, round_num
         )
         
-        # translatedagent，translatedroundtranslated
+        # convertedagent，convertedroundconverted
         if action_logger:
             action_logger.log_round_start(round_num + 1, simulated_hour)
         
         if not active_agents:
-            # translatedagenttranslatedroundtranslated（actions_count=0）
+            # convertedagentconvertedroundconverted（actions_count=0）
             if action_logger:
                 action_logger.log_round_end(round_num + 1, 0)
             continue
@@ -1454,7 +1454,7 @@ async def run_reddit_simulation(
         actions = {agent: LLMAction() for _, agent in active_agents}
         await result.env.step(actions)
         
-        # translated
+        # details
         actual_actions, last_rowid = fetch_new_actions_from_db(
             db_path, last_rowid, agent_names
         )
@@ -1479,76 +1479,76 @@ async def run_reddit_simulation(
             progress = (round_num + 1) / total_rounds * 100
             log_info(f"Day {simulated_day}, {simulated_hour:02d}:00 - Round {round_num + 1}/{total_rounds} ({progress:.1f}%)")
     
-    # translated：translated，translatedInterviewtranslated
+    # details：details，convertedInterviewconverted
     
     if action_logger:
         action_logger.log_simulation_end(total_rounds, total_actions)
     
     result.total_actions = total_actions
     elapsed = (datetime.now() - start_time).total_seconds()
-    log_info(f"translated! translated: {elapsed:.1f}translated, translated: {total_actions}")
+    log_info(f"details! details: {elapsed:.1f}details, details: {total_actions}")
     
     return result
 
 
 async def main():
-    parser = argparse.ArgumentParser(description='OASIStranslated')
+    parser = argparse.ArgumentParser(description='OASISconverted')
     parser.add_argument(
         '--config', 
         type=str, 
         required=True,
-        help='translated (simulation_config.json)'
+        help='details (simulation_config.json)'
     )
     parser.add_argument(
         '--twitter-only',
         action='store_true',
-        help='translatedTwittertranslated'
+        help='convertedTwitterconverted'
     )
     parser.add_argument(
         '--reddit-only',
         action='store_true',
-        help='translatedReddittranslated'
+        help='convertedRedditconverted'
     )
     parser.add_argument(
         '--max-rounds',
         type=int,
         default=None,
-        help='translated（translated，translated）'
+        help='details（details，details）'
     )
     parser.add_argument(
         '--no-wait',
         action='store_true',
         default=False,
-        help='translated，translated'
+        help='details，details'
     )
     
     args = parser.parse_args()
     
-    # translated main translated shutdown translated，translated
+    # details main details shutdown details，details
     global _shutdown_event
     _shutdown_event = asyncio.Event()
     
     if not os.path.exists(args.config):
-        print(f"translated: translated: {args.config}")
+        print(f"details: details: {args.config}")
         sys.exit(1)
     
     config = load_config(args.config)
     simulation_dir = os.path.dirname(args.config) or "."
     wait_for_commands = not args.no_wait
     
-    # translated（translated OASIS translated，translated）
+    # details（details OASIS details，details）
     init_logging_for_simulation(simulation_dir)
     
-    # translated
+    # details
     log_manager = SimulationLogManager(simulation_dir)
     twitter_logger = log_manager.get_twitter_logger()
     reddit_logger = log_manager.get_reddit_logger()
     
     log_manager.info("=" * 60)
-    log_manager.info("OASIS translated")
-    log_manager.info(f"translated: {args.config}")
-    log_manager.info(f"translatedID: {config.get('simulation_id', 'unknown')}")
-    log_manager.info(f"translated: {'translated' if wait_for_commands else 'translated'}")
+    log_manager.info("OASIS details")
+    log_manager.info(f"details: {args.config}")
+    log_manager.info(f"convertedID: {config.get('simulation_id', 'unknown')}")
+    log_manager.info(f"details: {'details' if wait_for_commands else 'details'}")
     log_manager.info("=" * 60)
     
     time_config = config.get("time_config", {})
@@ -1556,25 +1556,25 @@ async def main():
     minutes_per_round = time_config.get('minutes_per_round', 30)
     config_total_rounds = (total_hours * 60) // minutes_per_round
     
-    log_manager.info(f"translated:")
-    log_manager.info(f"  - translated: {total_hours}translated")
-    log_manager.info(f"  - translated: {minutes_per_round}translated")
-    log_manager.info(f"  - translated: {config_total_rounds}")
+    log_manager.info(f"details:")
+    log_manager.info(f"  - details: {total_hours}details")
+    log_manager.info(f"  - details: {minutes_per_round}details")
+    log_manager.info(f"  - details: {config_total_rounds}")
     if args.max_rounds:
-        log_manager.info(f"  - translated: {args.max_rounds}")
+        log_manager.info(f"  - details: {args.max_rounds}")
         if args.max_rounds < config_total_rounds:
-            log_manager.info(f"  - translated: {args.max_rounds} (translated)")
-    log_manager.info(f"  - Agenttranslated: {len(config.get('agent_configs', []))}")
+            log_manager.info(f"  - details: {args.max_rounds} (details)")
+    log_manager.info(f"  - Agentconverted: {len(config.get('agent_configs', []))}")
     
-    log_manager.info("translated:")
-    log_manager.info(f"  - translated: simulation.log")
-    log_manager.info(f"  - Twittertranslated: twitter/actions.jsonl")
-    log_manager.info(f"  - Reddittranslated: reddit/actions.jsonl")
+    log_manager.info("details:")
+    log_manager.info(f"  - details: simulation.log")
+    log_manager.info(f"  - Twitterconverted: twitter/actions.jsonl")
+    log_manager.info(f"  - Redditconverted: reddit/actions.jsonl")
     log_manager.info("=" * 60)
     
     start_time = datetime.now()
     
-    # translated
+    # details
     twitter_result: Optional[PlatformSimulation] = None
     reddit_result: Optional[PlatformSimulation] = None
     
@@ -1583,7 +1583,7 @@ async def main():
     elif args.reddit_only:
         reddit_result = await run_reddit_simulation(config, simulation_dir, reddit_logger, log_manager, args.max_rounds)
     else:
-        # translated（translated）
+        # details（details）
         results = await asyncio.gather(
             run_twitter_simulation(config, simulation_dir, twitter_logger, log_manager, args.max_rounds),
             run_reddit_simulation(config, simulation_dir, reddit_logger, log_manager, args.max_rounds),
@@ -1592,17 +1592,17 @@ async def main():
     
     total_elapsed = (datetime.now() - start_time).total_seconds()
     log_manager.info("=" * 60)
-    log_manager.info(f"translated! translated: {total_elapsed:.1f}translated")
+    log_manager.info(f"details! details: {total_elapsed:.1f}details")
     
-    # translated
+    # details
     if wait_for_commands:
         log_manager.info("")
         log_manager.info("=" * 60)
-        log_manager.info("translated - translated")
-        log_manager.info("translated: interview, batch_interview, close_env")
+        log_manager.info("details - details")
+        log_manager.info("details: interview, batch_interview, close_env")
         log_manager.info("=" * 60)
         
-        # translatedIPCtranslated
+        # convertedIPCconverted
         ipc_handler = ParallelIPCHandler(
             simulation_dir=simulation_dir,
             twitter_env=twitter_result.env if twitter_result else None,
@@ -1612,40 +1612,40 @@ async def main():
         )
         ipc_handler.update_status("alive")
         
-        # translated（translated _shutdown_event）
+        # details（details _shutdown_event）
         try:
             while not _shutdown_event.is_set():
                 should_continue = await ipc_handler.process_commands()
                 if not should_continue:
                     break
-                # translated wait_for translated sleep，translated shutdown_event
+                # details wait_for details sleep，details shutdown_event
                 try:
                     await asyncio.wait_for(_shutdown_event.wait(), timeout=0.5)
-                    break  # translated
+                    break  # details
                 except asyncio.TimeoutError:
-                    pass  # translated
+                    pass  # details
         except KeyboardInterrupt:
-            print("\ntranslated")
+            print("\nconverted")
         except asyncio.CancelledError:
-            print("\ntranslated")
+            print("\nconverted")
         except Exception as e:
-            print(f"\ntranslated: {e}")
+            print(f"\nconverted: {e}")
         
-        log_manager.info("\ntranslated...")
+        log_manager.info("\nconverted...")
         ipc_handler.update_status("stopped")
     
-    # translated
+    # details
     if twitter_result and twitter_result.env:
         await twitter_result.env.close()
-        log_manager.info("[Twitter] translated")
+        log_manager.info("[Twitter] details")
     
     if reddit_result and reddit_result.env:
         await reddit_result.env.close()
-        log_manager.info("[Reddit] translated")
+        log_manager.info("[Reddit] details")
     
     log_manager.info("=" * 60)
-    log_manager.info(f"translated!")
-    log_manager.info(f"translated:")
+    log_manager.info(f"details!")
+    log_manager.info(f"details:")
     log_manager.info(f"  - {os.path.join(simulation_dir, 'simulation.log')}")
     log_manager.info(f"  - {os.path.join(simulation_dir, 'twitter', 'actions.jsonl')}")
     log_manager.info(f"  - {os.path.join(simulation_dir, 'reddit', 'actions.jsonl')}")
@@ -1654,29 +1654,29 @@ async def main():
 
 def setup_signal_handlers(loop=None):
     """
-    translated，translated SIGTERM/SIGINT translated
+    details，details SIGTERM/SIGINT details
     
-    translated：translated，translated interview translated
-    translated，translated：
-    1. translated asyncio translated
-    2. translated（translated、translated）
-    3. translated
+    details：details，details interview details
+    details，details：
+    1. details asyncio details
+    2. details（details、details）
+    3. details
     """
     def signal_handler(signum, frame):
         global _cleanup_done
         sig_name = "SIGTERM" if signum == signal.SIGTERM else "SIGINT"
-        print(f"\ntranslated {sig_name} translated，translated...")
+        print(f"\nconverted {sig_name} details，details...")
         
         if not _cleanup_done:
             _cleanup_done = True
-            # translated asyncio translated（translated）
+            # details asyncio details（details）
             if _shutdown_event:
                 _shutdown_event.set()
         
-        # translated sys.exit()，translated asyncio translated
-        # translated，translated
+        # details sys.exit()，details asyncio details
+        # details，details
         else:
-            print("translated...")
+            print("details...")
             sys.exit(1)
     
     signal.signal(signal.SIGTERM, signal_handler)
@@ -1688,14 +1688,14 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\ntranslated")
+        print("\nconverted")
     except SystemExit:
         pass
     finally:
-        # translated multiprocessing translated（translated）
+        # details multiprocessing details（details）
         try:
             from multiprocessing import resource_tracker
             resource_tracker._resource_tracker._stop()
         except Exception:
             pass
-        print("translated")
+        print("details")

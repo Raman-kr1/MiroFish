@@ -5,31 +5,31 @@
 # Install: pip install -r requirements.txt
 # ===========================================
 
-# ============= translated =============
+# ============= details =============
 flask>=3.0.0
 flask-cors>=6.0.0
 
-# ============= LLM translated =============
-# OpenAI SDK（translated OpenAI translated LLM）
+# ============= LLM details =============
+# OpenAI SDK（details OpenAI details LLM）
 openai>=1.0.0
 
 # ============= Zep Cloud =============
 zep-cloud==3.13.0
 
-# ============= OASIS translated =============
-# OASIS translated
+# ============= OASIS details =============
+# OASIS details
 camel-oasis==0.2.5
 camel-ai==0.2.78
 
-# ============= translated =============
+# ============= details =============
 PyMuPDF>=1.24.0
-# translated（translatedUTF-8translated）
+# details（convertedUTF-8converted）
 charset-normalizer>=3.0.0
 chardet>=5.0.0
 
-# ============= translated =============
-# translated
+# ============= details =============
+# details
 python-dotenv>=1.0.0
 
-# translated
+# details
 pydantic>=2.0.0

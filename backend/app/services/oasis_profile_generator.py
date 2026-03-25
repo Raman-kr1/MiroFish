@@ -1,11 +1,11 @@
 """
-OASIS Agent Profiletranslated
-translatedZeptranslatedOASIStranslatedAgent Profiletranslated
+OASIS Agent Profileconverted
+convertedZepconvertedOASISconvertedAgent Profileconverted
 
-translated：
-1. translatedZeptranslated
-2. translated
-3. translated
+details：
+1. convertedZepconverted
+2. details
+3. details
 """
 
 import json
@@ -27,23 +27,23 @@ logger = get_logger('mirofish.oasis_profile')
 
 @dataclass
 class OasisAgentProfile:
-    """OASIS Agent Profiletranslated"""
-    # translated
+    """OASIS Agent Profileconverted"""
+    # details
     user_id: int
     user_name: str
     name: str
     bio: str
     persona: str
     
-    # translated - Reddittranslated
+    # details - Redditconverted
     karma: int = 1000
     
-    # translated - Twittertranslated
+    # details - Twitterconverted
     friend_count: int = 100
     follower_count: int = 150
     statuses_count: int = 500
     
-    # translated
+    # details
     age: Optional[int] = None
     gender: Optional[str] = None
     mbti: Optional[str] = None
@@ -51,17 +51,17 @@ class OasisAgentProfile:
     profession: Optional[str] = None
     interested_topics: List[str] = field(default_factory=list)
     
-    # translated
+    # details
     source_entity_uuid: Optional[str] = None
     source_entity_type: Optional[str] = None
     
     created_at: str = field(default_factory=lambda: datetime.now().strftime("%Y-%m-%d"))
     
     def to_reddit_format(self) -> Dict[str, Any]:
-        """translatedReddittranslated"""
+        """convertedRedditconverted"""
         profile = {
             "user_id": self.user_id,
-            "username": self.user_name,  # OASIS translated username（translated）
+            "username": self.user_name,  # OASIS details username（details）
             "name": self.name,
             "bio": self.bio,
             "persona": self.persona,
@@ -69,7 +69,7 @@ class OasisAgentProfile:
             "created_at": self.created_at,
         }
         
-        # translated（translated）
+        # details（details）
         if self.age:
             profile["age"] = self.age
         if self.gender:
@@ -86,10 +86,10 @@ class OasisAgentProfile:
         return profile
     
     def to_twitter_format(self) -> Dict[str, Any]:
-        """translatedTwittertranslated"""
+        """convertedTwitterconverted"""
         profile = {
             "user_id": self.user_id,
-            "username": self.user_name,  # OASIS translated username（translated）
+            "username": self.user_name,  # OASIS details username（details）
             "name": self.name,
             "bio": self.bio,
             "persona": self.persona,
@@ -99,7 +99,7 @@ class OasisAgentProfile:
             "created_at": self.created_at,
         }
         
-        # translated
+        # details
         if self.age:
             profile["age"] = self.age
         if self.gender:
@@ -116,7 +116,7 @@ class OasisAgentProfile:
         return profile
     
     def to_dict(self) -> Dict[str, Any]:
-        """translated"""
+        """details"""
         return {
             "user_id": self.user_id,
             "user_name": self.user_name,
@@ -141,17 +141,17 @@ class OasisAgentProfile:
 
 class OasisProfileGenerator:
     """
-    OASIS Profiletranslated
+    OASIS Profileconverted
     
-    translatedZeptranslatedOASIStranslatedAgent Profile
+    convertedZepconvertedOASISconvertedAgent Profile
     
-    translated：
-    1. translatedZeptranslated
-    2. translated（translated、translated、translated、translated）
-    3. translated
+    details：
+    1. convertedZepconverted
+    2. details（details、details、details、details）
+    3. details
     """
     
-    # MBTItranslated
+    # MBTIconverted
     MBTI_TYPES = [
         "INTJ", "INTP", "ENTJ", "ENTP",
         "INFJ", "INFP", "ENFJ", "ENFP",
@@ -159,19 +159,19 @@ class OasisProfileGenerator:
         "ISTP", "ISFP", "ESTP", "ESFP"
     ]
     
-    # translated
+    # details
     COUNTRIES = [
         "China", "US", "UK", "Japan", "Germany", "France", 
         "Canada", "Australia", "Brazil", "India", "South Korea"
     ]
     
-    # translated（translated）
+    # details（details）
     INDIVIDUAL_ENTITY_TYPES = [
         "student", "alumni", "professor", "person", "publicfigure", 
         "expert", "faculty", "official", "journalist", "activist"
     ]
     
-    # translated/translated（translated）
+    # details/details（details）
     GROUP_ENTITY_TYPES = [
         "university", "governmentagency", "organization", "ngo", 
         "mediaoutlet", "company", "institution", "group", "community"
@@ -190,14 +190,14 @@ class OasisProfileGenerator:
         self.model_name = model_name or Config.LLM_MODEL_NAME
         
         if not self.api_key:
-            raise ValueError("LLM_API_KEY translated")
+            raise ValueError("LLM_API_KEY details")
         
         self.client = OpenAI(
             api_key=self.api_key,
             base_url=self.base_url
         )
         
-        # Zeptranslated
+        # Zepconverted
         self.zep_api_key = zep_api_key or Config.ZEP_API_KEY
         self.zep_client = None
         self.graph_id = graph_id
@@ -206,7 +206,7 @@ class OasisProfileGenerator:
             try:
                 self.zep_client = Zep(api_key=self.zep_api_key)
             except Exception as e:
-                logger.warning(f"Zeptranslated: {e}")
+                logger.warning(f"Zepconverted: {e}")
     
     def generate_profile_from_entity(
         self, 
@@ -215,27 +215,27 @@ class OasisProfileGenerator:
         use_llm: bool = True
     ) -> OasisAgentProfile:
         """
-        translatedZeptranslatedOASIS Agent Profile
+        convertedZepconvertedOASIS Agent Profile
         
         Args:
-            entity: Zeptranslated
-            user_id: translatedID（translatedOASIS）
-            use_llm: translatedLLMtranslated
+            entity: Zepconverted
+            user_id: convertedID（convertedOASIS）
+            use_llm: convertedLLMconverted
             
         Returns:
             OasisAgentProfile
         """
         entity_type = entity.get_entity_type() or "Entity"
         
-        # translated
+        # details
         name = entity.name
         user_name = self._generate_username(name)
         
-        # translated
+        # details
         context = self._build_entity_context(entity)
         
         if use_llm:
-            # translatedLLMtranslated
+            # convertedLLMconverted
             profile_data = self._generate_profile_with_llm(
                 entity_name=name,
                 entity_type=entity_type,
@@ -244,7 +244,7 @@ class OasisProfileGenerator:
                 context=context
             )
         else:
-            # translated
+            # details
             profile_data = self._generate_profile_rule_based(
                 entity_name=name,
                 entity_type=entity_type,
@@ -273,27 +273,27 @@ class OasisProfileGenerator:
         )
     
     def _generate_username(self, name: str) -> str:
-        """translated"""
-        # translated，translated
+        """details"""
+        # details，details
         username = name.lower().replace(" ", "_")
         username = ''.join(c for c in username if c.isalnum() or c == '_')
         
-        # translated
+        # details
         suffix = random.randint(100, 999)
         return f"{username}_{suffix}"
     
     def _search_zep_for_entity(self, entity: EntityNode) -> Dict[str, Any]:
         """
-        translatedZeptranslated
+        convertedZepconverted
         
-        Zeptranslated，translatededgestranslatednodestranslated。
-        translated，translated。
+        Zepconverted，convertededgesconvertednodesconverted。
+        details，details。
         
         Args:
-            entity: translated
+            entity: details
             
         Returns:
-            translatedfacts, node_summaries, contexttranslated
+            convertedfacts, node_summaries, contextconverted
         """
         import concurrent.futures
         
@@ -308,15 +308,15 @@ class OasisProfileGenerator:
             "context": ""
         }
         
-        # translatedgraph_idtranslated
+        # convertedgraph_idconverted
         if not self.graph_id:
-            logger.debug(f"translatedZeptranslated：translatedgraph_id")
+            logger.debug(f"convertedZepconverted：convertedgraph_id")
             return results
         
-        comprehensive_query = f"translated{entity_name}translated、translated、translated、translated"
+        comprehensive_query = f"details{entity_name}details、details、details、details"
         
         def search_edges():
-            """translated（translated/translated）- translated"""
+            """details（details/details）- details"""
             max_retries = 3
             last_exception = None
             delay = 2.0
@@ -333,15 +333,15 @@ class OasisProfileGenerator:
                 except Exception as e:
                     last_exception = e
                     if attempt < max_retries - 1:
-                        logger.debug(f"Zeptranslated {attempt + 1} translated: {str(e)[:80]}, translated...")
+                        logger.debug(f"Zepconverted {attempt + 1} details: {str(e)[:80]}, details...")
                         time.sleep(delay)
                         delay *= 2
                     else:
-                        logger.debug(f"Zeptranslated {max_retries} translated: {e}")
+                        logger.debug(f"Zepconverted {max_retries} details: {e}")
             return None
         
         def search_nodes():
-            """translated（translated）- translated"""
+            """details（details）- details"""
             max_retries = 3
             last_exception = None
             delay = 2.0
@@ -358,24 +358,24 @@ class OasisProfileGenerator:
                 except Exception as e:
                     last_exception = e
                     if attempt < max_retries - 1:
-                        logger.debug(f"Zeptranslated {attempt + 1} translated: {str(e)[:80]}, translated...")
+                        logger.debug(f"Zepconverted {attempt + 1} details: {str(e)[:80]}, details...")
                         time.sleep(delay)
                         delay *= 2
                     else:
-                        logger.debug(f"Zeptranslated {max_retries} translated: {e}")
+                        logger.debug(f"Zepconverted {max_retries} details: {e}")
             return None
         
         try:
-            # translatededgestranslatednodestranslated
+            # convertededgesconvertednodesconverted
             with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
                 edge_future = executor.submit(search_edges)
                 node_future = executor.submit(search_nodes)
                 
-                # translated
+                # details
                 edge_result = edge_future.result(timeout=30)
                 node_result = node_future.result(timeout=30)
             
-            # translated
+            # details
             all_facts = set()
             if edge_result and hasattr(edge_result, 'edges') and edge_result.edges:
                 for edge in edge_result.edges:
@@ -383,58 +383,58 @@ class OasisProfileGenerator:
                         all_facts.add(edge.fact)
             results["facts"] = list(all_facts)
             
-            # translated
+            # details
             all_summaries = set()
             if node_result and hasattr(node_result, 'nodes') and node_result.nodes:
                 for node in node_result.nodes:
                     if hasattr(node, 'summary') and node.summary:
                         all_summaries.add(node.summary)
                     if hasattr(node, 'name') and node.name and node.name != entity_name:
-                        all_summaries.add(f"translated: {node.name}")
+                        all_summaries.add(f"details: {node.name}")
             results["node_summaries"] = list(all_summaries)
             
-            # translated
+            # details
             context_parts = []
             if results["facts"]:
-                context_parts.append("translated:\n" + "\n".join(f"- {f}" for f in results["facts"][:20]))
+                context_parts.append("details:\n" + "\n".join(f"- {f}" for f in results["facts"][:20]))
             if results["node_summaries"]:
-                context_parts.append("translated:\n" + "\n".join(f"- {s}" for s in results["node_summaries"][:10]))
+                context_parts.append("details:\n" + "\n".join(f"- {s}" for s in results["node_summaries"][:10]))
             results["context"] = "\n\n".join(context_parts)
             
-            logger.info(f"Zeptranslated: {entity_name}, translated {len(results['facts'])} translated, {len(results['node_summaries'])} translated")
+            logger.info(f"Zepconverted: {entity_name}, details {len(results['facts'])} details, {len(results['node_summaries'])} details")
             
         except concurrent.futures.TimeoutError:
-            logger.warning(f"Zeptranslated ({entity_name})")
+            logger.warning(f"Zepconverted ({entity_name})")
         except Exception as e:
-            logger.warning(f"Zeptranslated ({entity_name}): {e}")
+            logger.warning(f"Zepconverted ({entity_name}): {e}")
         
         return results
     
     def _build_entity_context(self, entity: EntityNode) -> str:
         """
-        translated
+        details
         
-        translated：
-        1. translated（translated）
-        2. translated
-        3. Zeptranslated
+        details：
+        1. details（details）
+        2. details
+        3. Zepconverted
         """
         context_parts = []
         
-        # 1. translated
+        # 1. details
         if entity.attributes:
             attrs = []
             for key, value in entity.attributes.items():
                 if value and str(value).strip():
                     attrs.append(f"- {key}: {value}")
             if attrs:
-                context_parts.append("### translated\n" + "\n".join(attrs))
+                context_parts.append("### details\n" + "\n".join(attrs))
         
-        # 2. translated（translated/translated）
+        # 2. details（details/details）
         existing_facts = set()
         if entity.related_edges:
             relationships = []
-            for edge in entity.related_edges:  # translated
+            for edge in entity.related_edges:  # details
                 fact = edge.get("fact", "")
                 edge_name = edge.get("edge_name", "")
                 direction = edge.get("direction", "")
@@ -444,22 +444,22 @@ class OasisProfileGenerator:
                     existing_facts.add(fact)
                 elif edge_name:
                     if direction == "outgoing":
-                        relationships.append(f"- {entity.name} --[{edge_name}]--> (translated)")
+                        relationships.append(f"- {entity.name} --[{edge_name}]--> (details)")
                     else:
-                        relationships.append(f"- (translated) --[{edge_name}]--> {entity.name}")
+                        relationships.append(f"- (details) --[{edge_name}]--> {entity.name}")
             
             if relationships:
-                context_parts.append("### translated\n" + "\n".join(relationships))
+                context_parts.append("### details\n" + "\n".join(relationships))
         
-        # 3. translated
+        # 3. details
         if entity.related_nodes:
             related_info = []
-            for node in entity.related_nodes:  # translated
+            for node in entity.related_nodes:  # details
                 node_name = node.get("name", "")
                 node_labels = node.get("labels", [])
                 node_summary = node.get("summary", "")
                 
-                # translated
+                # details
                 custom_labels = [l for l in node_labels if l not in ["Entity", "Node"]]
                 label_str = f" ({', '.join(custom_labels)})" if custom_labels else ""
                 
@@ -469,28 +469,28 @@ class OasisProfileGenerator:
                     related_info.append(f"- **{node_name}**{label_str}")
             
             if related_info:
-                context_parts.append("### translated\n" + "\n".join(related_info))
+                context_parts.append("### details\n" + "\n".join(related_info))
         
-        # 4. translatedZeptranslated
+        # 4. convertedZepconverted
         zep_results = self._search_zep_for_entity(entity)
         
         if zep_results.get("facts"):
-            # translated：translated
+            # details：details
             new_facts = [f for f in zep_results["facts"] if f not in existing_facts]
             if new_facts:
-                context_parts.append("### Zeptranslated\n" + "\n".join(f"- {f}" for f in new_facts[:15]))
+                context_parts.append("### Zepconverted\n" + "\n".join(f"- {f}" for f in new_facts[:15]))
         
         if zep_results.get("node_summaries"):
-            context_parts.append("### Zeptranslated\n" + "\n".join(f"- {s}" for s in zep_results["node_summaries"][:10]))
+            context_parts.append("### Zepconverted\n" + "\n".join(f"- {s}" for s in zep_results["node_summaries"][:10]))
         
         return "\n\n".join(context_parts)
     
     def _is_individual_entity(self, entity_type: str) -> bool:
-        """translated"""
+        """details"""
         return entity_type.lower() in self.INDIVIDUAL_ENTITY_TYPES
     
     def _is_group_entity(self, entity_type: str) -> bool:
-        """translated/translated"""
+        """details/details"""
         return entity_type.lower() in self.GROUP_ENTITY_TYPES
     
     def _generate_profile_with_llm(
@@ -502,11 +502,11 @@ class OasisProfileGenerator:
         context: str
     ) -> Dict[str, Any]:
         """
-        translatedLLMtranslated
+        convertedLLMconverted
         
-        translated：
-        - translated：translated
-        - translated/translated：translated
+        details：
+        - details：details
+        - details/details：details
         """
         
         is_individual = self._is_individual_entity(entity_type)
@@ -520,7 +520,7 @@ class OasisProfileGenerator:
                 entity_name, entity_type, entity_summary, entity_attributes, context
             )
 
-        # translated，translated
+        # details，details
         max_attempts = 3
         last_error = None
         
@@ -533,34 +533,34 @@ class OasisProfileGenerator:
                         {"role": "user", "content": prompt}
                     ],
                     response_format={"type": "json_object"},
-                    temperature=0.7 - (attempt * 0.1)  # translated
-                    # translatedmax_tokens，translatedLLMtranslated
+                    temperature=0.7 - (attempt * 0.1)  # details
+                    # convertedmax_tokens，convertedLLMconverted
                 )
                 
                 content = response.choices[0].message.content
                 
-                # translated（finish_reasontranslated'stop'）
+                # details（finish_reasonconverted'stop'）
                 finish_reason = response.choices[0].finish_reason
                 if finish_reason == 'length':
-                    logger.warning(f"LLMtranslated (attempt {attempt+1}), translated...")
+                    logger.warning(f"LLMconverted (attempt {attempt+1}), details...")
                     content = self._fix_truncated_json(content)
                 
-                # translatedJSON
+                # convertedJSON
                 try:
                     result = json.loads(content)
                     
-                    # translated
+                    # details
                     if "bio" not in result or not result["bio"]:
                         result["bio"] = entity_summary[:200] if entity_summary else f"{entity_type}: {entity_name}"
                     if "persona" not in result or not result["persona"]:
-                        result["persona"] = entity_summary or f"{entity_name}translated{entity_type}。"
+                        result["persona"] = entity_summary or f"{entity_name}details{entity_type}。"
                     
                     return result
                     
                 except json.JSONDecodeError as je:
-                    logger.warning(f"JSONtranslated (attempt {attempt+1}): {str(je)[:80]}")
+                    logger.warning(f"JSONconverted (attempt {attempt+1}): {str(je)[:80]}")
                     
-                    # translatedJSON
+                    # convertedJSON
                     result = self._try_fix_json(content, entity_name, entity_type, entity_summary)
                     if result.get("_fixed"):
                         del result["_fixed"]
@@ -569,75 +569,75 @@ class OasisProfileGenerator:
                     last_error = je
                     
             except Exception as e:
-                logger.warning(f"LLMtranslated (attempt {attempt+1}): {str(e)[:80]}")
+                logger.warning(f"LLMconverted (attempt {attempt+1}): {str(e)[:80]}")
                 last_error = e
                 import time
-                time.sleep(1 * (attempt + 1))  # translated
+                time.sleep(1 * (attempt + 1))  # details
         
-        logger.warning(f"LLMtranslated（{max_attempts}translated）: {last_error}, translated")
+        logger.warning(f"LLMconverted（{max_attempts}details）: {last_error}, details")
         return self._generate_profile_rule_based(
             entity_name, entity_type, entity_summary, entity_attributes
         )
     
     def _fix_truncated_json(self, content: str) -> str:
-        """translatedJSON（translatedmax_tokenstranslated）"""
+        """convertedJSON（convertedmax_tokensconverted）"""
         import re
         
-        # translatedJSONtranslated，translated
+        # convertedJSONconverted，details
         content = content.strip()
         
-        # translated
+        # details
         open_braces = content.count('{') - content.count('}')
         open_brackets = content.count('[') - content.count(']')
         
-        # translated
-        # translated：translated，translated
+        # details
+        # details：details，details
         if content and content[-1] not in '",}]':
-            # translated
+            # details
             content += '"'
         
-        # translated
+        # details
         content += ']' * open_brackets
         content += '}' * open_braces
         
         return content
     
     def _try_fix_json(self, content: str, entity_name: str, entity_type: str, entity_summary: str = "") -> Dict[str, Any]:
-        """translatedJSON"""
+        """convertedJSON"""
         import re
         
-        # 1. translated
+        # 1. details
         content = self._fix_truncated_json(content)
         
-        # 2. translatedJSONtranslated
+        # 2. convertedJSONconverted
         json_match = re.search(r'\{[\s\S]*\}', content)
         if json_match:
             json_str = json_match.group()
             
-            # 3. translated
-            # translated
+            # 3. details
+            # details
             def fix_string_newlines(match):
                 s = match.group(0)
-                # translated
+                # details
                 s = s.replace('\n', ' ').replace('\r', ' ')
-                # translated
+                # details
                 s = re.sub(r'\s+', ' ', s)
                 return s
             
-            # translatedJSONtranslated
+            # convertedJSONconverted
             json_str = re.sub(r'"[^"\\]*(?:\\.[^"\\]*)*"', fix_string_newlines, json_str)
             
-            # 4. translated
+            # 4. details
             try:
                 result = json.loads(json_str)
                 result["_fixed"] = True
                 return result
             except json.JSONDecodeError as e:
-                # 5. translated，translated
+                # 5. details，details
                 try:
-                    # translated
+                    # details
                     json_str = re.sub(r'[\x00-\x1f\x7f-\x9f]', ' ', json_str)
-                    # translated
+                    # details
                     json_str = re.sub(r'\s+', ' ', json_str)
                     result = json.loads(json_str)
                     result["_fixed"] = True
@@ -645,32 +645,32 @@ class OasisProfileGenerator:
                 except:
                     pass
         
-        # 6. translated
+        # 6. details
         bio_match = re.search(r'"bio"\s*:\s*"([^"]*)"', content)
-        persona_match = re.search(r'"persona"\s*:\s*"([^"]*)', content)  # translated
+        persona_match = re.search(r'"persona"\s*:\s*"([^"]*)', content)  # details
         
         bio = bio_match.group(1) if bio_match else (entity_summary[:200] if entity_summary else f"{entity_type}: {entity_name}")
-        persona = persona_match.group(1) if persona_match else (entity_summary or f"{entity_name}translated{entity_type}。")
+        persona = persona_match.group(1) if persona_match else (entity_summary or f"{entity_name}details{entity_type}。")
         
-        # translated，translated
+        # details，details
         if bio_match or persona_match:
-            logger.info(f"translatedJSONtranslated")
+            logger.info(f"convertedJSONconverted")
             return {
                 "bio": bio,
                 "persona": persona,
                 "_fixed": True
             }
         
-        # 7. translated，translated
-        logger.warning(f"JSONtranslated，translated")
+        # 7. details，details
+        logger.warning(f"JSONconverted，details")
         return {
             "bio": entity_summary[:200] if entity_summary else f"{entity_type}: {entity_name}",
-            "persona": entity_summary or f"{entity_name}translated{entity_type}。"
+            "persona": entity_summary or f"{entity_name}details{entity_type}。"
         }
     
     def _get_system_prompt(self, is_individual: bool) -> str:
-        """translated"""
-        base_prompt = "translated。translated、translated,translated。translatedJSONtranslated，translated。translated。"
+        """details"""
+        base_prompt = "details。details、details,details。convertedJSONconverted，details。details。"
         return base_prompt
     
     def _build_individual_persona_prompt(
@@ -681,45 +681,45 @@ class OasisProfileGenerator:
         entity_attributes: Dict[str, Any],
         context: str
     ) -> str:
-        """translated"""
+        """details"""
         
-        attrs_str = json.dumps(entity_attributes, ensure_ascii=False) if entity_attributes else "translated"
-        context_str = context[:3000] if context else "translated"
+        attrs_str = json.dumps(entity_attributes, ensure_ascii=False) if entity_attributes else "details"
+        context_str = context[:3000] if context else "details"
         
-        return f"""translated,translated。
+        return f"""details,details。
 
-translated: {entity_name}
-translated: {entity_type}
-translated: {entity_summary}
-translated: {attrs_str}
+details: {entity_name}
+details: {entity_type}
+details: {entity_summary}
+details: {attrs_str}
 
-translated:
+details:
 {context_str}
 
-translatedJSON，translated:
+convertedJSON，details:
 
-1. bio: translated，200translated
-2. persona: translated（2000translated），translated:
-   - translated（translated、translated、translated、translated）
-   - translated（translated、translated、translated）
-   - translated（MBTItranslated、translated、translated）
-   - translated（translated、translated、translated、translated）
-   - translated（translated、translated/translated）
-   - translated（translated、translated、translated）
-   - translated（translated，translated，translated）
-3. age: translated（translated）
-4. gender: translated，translated: "male" translated "female"
-5. mbti: MBTItranslated（translatedINTJ、ENFPtranslated）
-6. country: translated（translated，translated"translated"）
-7. profession: translated
-8. interested_topics: translated
+1. bio: details，200converted
+2. persona: details（2000converted），details:
+   - details（details、details、details、details）
+   - details（details、details、details）
+   - details（MBTIconverted、details、details）
+   - details（details、details、details、details）
+   - details（details、details/details）
+   - details（details、details、details）
+   - details（details，details，details）
+3. age: details（details）
+4. gender: details，details: "male" details "female"
+5. mbti: MBTIconverted（convertedINTJ、ENFPconverted）
+6. country: details（details，details"details"）
+7. profession: details
+8. interested_topics: details
 
-translated:
-- translated，translated
-- personatranslated
-- translated（translatedgendertranslatedmale/female）
-- translated
-- agetranslated，gendertranslated"male"translated"female"
+details:
+- details，details
+- personaconverted
+- details（convertedgenderconvertedmale/female）
+- details
+- ageconverted，genderconverted"male"details"female"
 """
 
     def _build_group_persona_prompt(
@@ -730,45 +730,45 @@ translated:
         entity_attributes: Dict[str, Any],
         context: str
     ) -> str:
-        """translated/translated"""
+        """details/details"""
         
-        attrs_str = json.dumps(entity_attributes, ensure_ascii=False) if entity_attributes else "translated"
-        context_str = context[:3000] if context else "translated"
+        attrs_str = json.dumps(entity_attributes, ensure_ascii=False) if entity_attributes else "details"
+        context_str = context[:3000] if context else "details"
         
-        return f"""translated/translated,translated。
+        return f"""details/details,details。
 
-translated: {entity_name}
-translated: {entity_type}
-translated: {entity_summary}
-translated: {attrs_str}
+details: {entity_name}
+details: {entity_type}
+details: {entity_summary}
+details: {attrs_str}
 
-translated:
+details:
 {context_str}
 
-translatedJSON，translated:
+convertedJSON，details:
 
-1. bio: translated，200translated，translated
-2. persona: translated（2000translated），translated:
-   - translated（translated、translated、translated、translated）
-   - translated（translated、translated、translated）
-   - translated（translated、translated、translated）
-   - translated（translated、translated、translated）
-   - translated（translated、translated）
-   - translated（translated、translated）
-   - translated（translated，translated，translated）
-3. age: translated30（translated）
-4. gender: translated"other"（translatedothertranslated）
-5. mbti: MBTItranslated，translated，translatedISTJtranslated
-6. country: translated（translated，translated"translated"）
-7. profession: translated
-8. interested_topics: translated
+1. bio: details，200converted，details
+2. persona: details（2000converted），details:
+   - details（details、details、details、details）
+   - details（details、details、details）
+   - details（details、details、details）
+   - details（details、details、details）
+   - details（details、details）
+   - details（details、details）
+   - details（details，details，details）
+3. age: converted30（details）
+4. gender: details"other"（convertedotherconverted）
+5. mbti: MBTIconverted，details，convertedISTJconverted
+6. country: details（details，details"details"）
+7. profession: details
+8. interested_topics: details
 
-translated:
-- translated，translatednulltranslated
-- personatranslated，translated
-- translated（translatedgendertranslated"other"）
-- agetranslated30，gendertranslated"other"
-- translated"""
+details:
+- details，convertednullconverted
+- personaconverted，details
+- details（convertedgenderconverted"other"）
+- ageconverted30，genderconverted"other"
+- details"""
     
     def _generate_profile_rule_based(
         self,
@@ -777,9 +777,9 @@ translated:
         entity_summary: str,
         entity_attributes: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """translated"""
+        """details"""
         
-        # translated
+        # details
         entity_type_lower = entity_type.lower()
         
         if entity_type_lower in ["student", "alumni"]:
@@ -810,10 +810,10 @@ translated:
             return {
                 "bio": f"Official account for {entity_name}. News and updates.",
                 "persona": f"{entity_name} is a media entity that reports news and facilitates public discourse. The account shares timely updates and engages with the audience on current events.",
-                "age": 30,  # translated
-                "gender": "other",  # translatedother
-                "mbti": "ISTJ",  # translated：translated
-                "country": "translated",
+                "age": 30,  # details
+                "gender": "other",  # convertedother
+                "mbti": "ISTJ",  # details：details
+                "country": "details",
                 "profession": "Media",
                 "interested_topics": ["General News", "Current Events", "Public Affairs"],
             }
@@ -822,16 +822,16 @@ translated:
             return {
                 "bio": f"Official account of {entity_name}.",
                 "persona": f"{entity_name} is an institutional entity that communicates official positions, announcements, and engages with stakeholders on relevant matters.",
-                "age": 30,  # translated
-                "gender": "other",  # translatedother
-                "mbti": "ISTJ",  # translated：translated
-                "country": "translated",
+                "age": 30,  # details
+                "gender": "other",  # convertedother
+                "mbti": "ISTJ",  # details：details
+                "country": "details",
                 "profession": entity_type,
                 "interested_topics": ["Public Policy", "Community", "Official Announcements"],
             }
         
         else:
-            # translated
+            # details
             return {
                 "bio": entity_summary[:150] if entity_summary else f"{entity_type}: {entity_name}",
                 "persona": entity_summary or f"{entity_name} is a {entity_type.lower()} participating in social discussions.",
@@ -844,7 +844,7 @@ translated:
             }
     
     def set_graph_id(self, graph_id: str):
-        """translatedIDtranslatedZeptranslated"""
+        """convertedIDconvertedZepconverted"""
         self.graph_id = graph_id
     
     def generate_profiles_from_entities(
@@ -858,52 +858,52 @@ translated:
         output_platform: str = "reddit"
     ) -> List[OasisAgentProfile]:
         """
-        translatedAgent Profile（translated）
+        convertedAgent Profile（details）
         
         Args:
-            entities: translated
-            use_llm: translatedLLMtranslated
-            progress_callback: translated (current, total, message)
-            graph_id: translatedID，translatedZeptranslated
-            parallel_count: translated，translated5
-            realtime_output_path: translated（translated，translated）
-            output_platform: translated ("reddit" translated "twitter")
+            entities: details
+            use_llm: convertedLLMconverted
+            progress_callback: details (current, total, message)
+            graph_id: convertedID，convertedZepconverted
+            parallel_count: details，converted5
+            realtime_output_path: details（details，details）
+            output_platform: details ("reddit" details "twitter")
             
         Returns:
-            Agent Profiletranslated
+            Agent Profileconverted
         """
         import concurrent.futures
         from threading import Lock
         
-        # translatedgraph_idtranslatedZeptranslated
+        # convertedgraph_idconvertedZepconverted
         if graph_id:
             self.graph_id = graph_id
         
         total = len(entities)
-        profiles = [None] * total  # translated
-        completed_count = [0]  # translated
+        profiles = [None] * total  # details
+        completed_count = [0]  # details
         lock = Lock()
         
-        # translated
+        # details
         def save_profiles_realtime():
-            """translated profiles translated"""
+            """details profiles details"""
             if not realtime_output_path:
                 return
             
             with lock:
-                # translated profiles
+                # details profiles
                 existing_profiles = [p for p in profiles if p is not None]
                 if not existing_profiles:
                     return
                 
                 try:
                     if output_platform == "reddit":
-                        # Reddit JSON translated
+                        # Reddit JSON details
                         profiles_data = [p.to_reddit_format() for p in existing_profiles]
                         with open(realtime_output_path, 'w', encoding='utf-8') as f:
                             json.dump(profiles_data, f, ensure_ascii=False, indent=2)
                     else:
-                        # Twitter CSV translated
+                        # Twitter CSV details
                         import csv
                         profiles_data = [p.to_twitter_format() for p in existing_profiles]
                         if profiles_data:
@@ -913,10 +913,10 @@ translated:
                                 writer.writeheader()
                                 writer.writerows(profiles_data)
                 except Exception as e:
-                    logger.warning(f"translated profiles translated: {e}")
+                    logger.warning(f"details profiles details: {e}")
         
         def generate_single_profile(idx: int, entity: EntityNode) -> tuple:
-            """translatedprofiletranslated"""
+            """convertedprofileconverted"""
             entity_type = entity.get_entity_type() or "Entity"
             
             try:
@@ -926,14 +926,14 @@ translated:
                     use_llm=use_llm
                 )
                 
-                # translated
+                # details
                 self._print_generated_profile(entity.name, entity_type, profile)
                 
                 return idx, profile, None
                 
             except Exception as e:
-                logger.error(f"translated {entity.name} translated: {str(e)}")
-                # translatedprofile
+                logger.error(f"details {entity.name} details: {str(e)}")
+                # convertedprofile
                 fallback_profile = OasisAgentProfile(
                     user_id=idx,
                     user_name=self._generate_username(entity.name),
@@ -945,20 +945,20 @@ translated:
                 )
                 return idx, fallback_profile, str(e)
         
-        logger.info(f"translated {total} translatedAgenttranslated（translated: {parallel_count}）...")
+        logger.info(f"details {total} convertedAgentconverted（details: {parallel_count}）...")
         print(f"\n{'='*60}")
-        print(f"translatedAgenttranslated - translated {total} translated，translated: {parallel_count}")
+        print(f"convertedAgentconverted - details {total} details，details: {parallel_count}")
         print(f"{'='*60}\n")
         
-        # translated
+        # details
         with concurrent.futures.ThreadPoolExecutor(max_workers=parallel_count) as executor:
-            # translated
+            # details
             future_to_entity = {
                 executor.submit(generate_single_profile, idx, entity): (idx, entity)
                 for idx, entity in enumerate(entities)
             }
             
-            # translated
+            # details
             for future in concurrent.futures.as_completed(future_to_entity):
                 idx, entity = future_to_entity[future]
                 entity_type = entity.get_entity_type() or "Entity"
@@ -971,23 +971,23 @@ translated:
                         completed_count[0] += 1
                         current = completed_count[0]
                     
-                    # translated
+                    # details
                     save_profiles_realtime()
                     
                     if progress_callback:
                         progress_callback(
                             current, 
                             total, 
-                            f"translated {current}/{total}: {entity.name}（{entity_type}）"
+                            f"details {current}/{total}: {entity.name}（{entity_type}）"
                         )
                     
                     if error:
-                        logger.warning(f"[{current}/{total}] {entity.name} translated: {error}")
+                        logger.warning(f"[{current}/{total}] {entity.name} details: {error}")
                     else:
-                        logger.info(f"[{current}/{total}] translated: {entity.name} ({entity_type})")
+                        logger.info(f"[{current}/{total}] details: {entity.name} ({entity_type})")
                         
                 except Exception as e:
-                    logger.error(f"translated {entity.name} translated: {str(e)}")
+                    logger.error(f"details {entity.name} details: {str(e)}")
                     with lock:
                         completed_count[0] += 1
                     profiles[idx] = OasisAgentProfile(
@@ -999,44 +999,44 @@ translated:
                         source_entity_uuid=entity.uuid,
                         source_entity_type=entity_type,
                     )
-                    # translated（translated）
+                    # details（details）
                     save_profiles_realtime()
         
         print(f"\n{'='*60}")
-        print(f"translated！translated {len([p for p in profiles if p])} translatedAgent")
+        print(f"details！details {len([p for p in profiles if p])} convertedAgent")
         print(f"{'='*60}\n")
         
         return profiles
     
     def _print_generated_profile(self, entity_name: str, entity_type: str, profile: OasisAgentProfile):
-        """translated（translated，translated）"""
+        """details（details，details）"""
         separator = "-" * 70
         
-        # translated（translated）
-        topics_str = ', '.join(profile.interested_topics) if profile.interested_topics else 'translated'
+        # details（details）
+        topics_str = ', '.join(profile.interested_topics) if profile.interested_topics else 'details'
         
         output_lines = [
             f"\n{separator}",
-            f"[translated] {entity_name} ({entity_type})",
+            f"[details] {entity_name} ({entity_type})",
             f"{separator}",
-            f"translated: {profile.user_name}",
+            f"details: {profile.user_name}",
             f"",
-            f"【translated】",
+            f"【details】",
             f"{profile.bio}",
             f"",
-            f"【translated】",
+            f"【details】",
             f"{profile.persona}",
             f"",
-            f"【translated】",
-            f"translated: {profile.age} | translated: {profile.gender} | MBTI: {profile.mbti}",
-            f"translated: {profile.profession} | translated: {profile.country}",
-            f"translated: {topics_str}",
+            f"【details】",
+            f"details: {profile.age} | details: {profile.gender} | MBTI: {profile.mbti}",
+            f"details: {profile.profession} | details: {profile.country}",
+            f"details: {topics_str}",
             separator
         ]
         
         output = "\n".join(output_lines)
         
-        # translated（translated，loggertranslated）
+        # details（details，loggerconverted）
         print(output)
     
     def save_profiles(
@@ -1046,16 +1046,16 @@ translated:
         platform: str = "reddit"
     ):
         """
-        translatedProfiletranslated（translated）
+        convertedProfileconverted（details）
         
-        OASIStranslated：
-        - Twitter: CSVtranslated
-        - Reddit: JSONtranslated
+        OASISconverted：
+        - Twitter: CSVconverted
+        - Reddit: JSONconverted
         
         Args:
-            profiles: Profiletranslated
-            file_path: translated
-            platform: translated ("reddit" translated "twitter")
+            profiles: Profileconverted
+            file_path: details
+            platform: details ("reddit" details "twitter")
         """
         if platform == "twitter":
             self._save_twitter_csv(profiles, file_path)
@@ -1064,73 +1064,73 @@ translated:
     
     def _save_twitter_csv(self, profiles: List[OasisAgentProfile], file_path: str):
         """
-        translatedTwitter ProfiletranslatedCSVtranslated（translatedOASIStranslated）
+        convertedTwitter ProfileconvertedCSVconverted（convertedOASISconverted）
         
-        OASIS TwittertranslatedCSVtranslated：
-        - user_id: translatedID（translatedCSVtranslated0translated）
-        - name: translated
-        - username: translated
-        - user_char: translated（translatedLLMtranslated，translatedAgenttranslated）
-        - description: translated（translated）
+        OASIS TwitterconvertedCSVconverted：
+        - user_id: convertedID（convertedCSVconverted0converted）
+        - name: details
+        - username: details
+        - user_char: details（convertedLLMconverted，convertedAgentconverted）
+        - description: details（details）
         
-        user_char vs description translated：
-        - user_char: translated，LLMtranslated，translatedAgenttranslated
-        - description: translated，translated
+        user_char vs description details：
+        - user_char: details，LLMconverted，convertedAgentconverted
+        - description: details，details
         """
         import csv
         
-        # translated.csv
+        # details.csv
         if not file_path.endswith('.csv'):
             file_path = file_path.replace('.json', '.csv')
         
         with open(file_path, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             
-            # translatedOASIStranslated
+            # convertedOASISconverted
             headers = ['user_id', 'name', 'username', 'user_char', 'description']
             writer.writerow(headers)
             
-            # translated
+            # details
             for idx, profile in enumerate(profiles):
-                # user_char: translated（bio + persona），translatedLLMtranslated
+                # user_char: details（bio + persona），convertedLLMconverted
                 user_char = profile.bio
                 if profile.persona and profile.persona != profile.bio:
                     user_char = f"{profile.bio} {profile.persona}"
-                # translated（CSVtranslated）
+                # details（CSVconverted）
                 user_char = user_char.replace('\n', ' ').replace('\r', ' ')
                 
-                # description: translated，translated
+                # description: details，details
                 description = profile.bio.replace('\n', ' ').replace('\r', ' ')
                 
                 row = [
-                    idx,                    # user_id: translated0translatedID
-                    profile.name,           # name: translated
-                    profile.user_name,      # username: translated
-                    user_char,              # user_char: translated（translatedLLMtranslated）
-                    description             # description: translated（translated）
+                    idx,                    # user_id: converted0convertedID
+                    profile.name,           # name: details
+                    profile.user_name,      # username: details
+                    user_char,              # user_char: details（convertedLLMconverted）
+                    description             # description: details（details）
                 ]
                 writer.writerow(row)
         
-        logger.info(f"translated {len(profiles)} translatedTwitter Profiletranslated {file_path} (OASIS CSVtranslated)")
+        logger.info(f"details {len(profiles)} convertedTwitter Profileconverted {file_path} (OASIS CSVconverted)")
     
     def _normalize_gender(self, gender: Optional[str]) -> str:
         """
-        translatedgendertranslatedOASIStranslated
+        convertedgenderconvertedOASISconverted
         
-        OASIStranslated: male, female, other
+        OASISconverted: male, female, other
         """
         if not gender:
             return "other"
         
         gender_lower = gender.lower().strip()
         
-        # translated
+        # details
         gender_map = {
-            "translated": "male",
-            "translated": "female",
-            "translated": "other",
-            "translated": "other",
-            # translated
+            "details": "male",
+            "details": "female",
+            "details": "other",
+            "details": "other",
+            # details
             "male": "male",
             "female": "female",
             "other": "other",
@@ -1140,41 +1140,41 @@ translated:
     
     def _save_reddit_json(self, profiles: List[OasisAgentProfile], file_path: str):
         """
-        translatedReddit ProfiletranslatedJSONtranslated
+        convertedReddit ProfileconvertedJSONconverted
         
-        translated to_reddit_format() translated，translated OASIS translated。
-        translated user_id translated，translated OASIS agent_graph.get_agent() translated！
+        details to_reddit_format() details，details OASIS details。
+        details user_id details，details OASIS agent_graph.get_agent() details！
         
-        translated：
-        - user_id: translatedID（translated，translated initial_posts translated poster_agent_id）
-        - username: translated
-        - name: translated
-        - bio: translated
-        - persona: translated
-        - age: translated（translated）
-        - gender: "male", "female", translated "other"
-        - mbti: MBTItranslated
-        - country: translated
+        details：
+        - user_id: convertedID（details，details initial_posts details poster_agent_id）
+        - username: details
+        - name: details
+        - bio: details
+        - persona: details
+        - age: details（details）
+        - gender: "male", "female", details "other"
+        - mbti: MBTIconverted
+        - country: details
         """
         data = []
         for idx, profile in enumerate(profiles):
-            # translated to_reddit_format() translated
+            # details to_reddit_format() details
             item = {
-                "user_id": profile.user_id if profile.user_id is not None else idx,  # translated：translated user_id
+                "user_id": profile.user_id if profile.user_id is not None else idx,  # details：details user_id
                 "username": profile.user_name,
                 "name": profile.name,
                 "bio": profile.bio[:150] if profile.bio else f"{profile.name}",
                 "persona": profile.persona or f"{profile.name} is a participant in social discussions.",
                 "karma": profile.karma if profile.karma else 1000,
                 "created_at": profile.created_at,
-                # OASIStranslated - translated
+                # OASISconverted - details
                 "age": profile.age if profile.age else 30,
                 "gender": self._normalize_gender(profile.gender),
                 "mbti": profile.mbti if profile.mbti else "ISTJ",
-                "country": profile.country if profile.country else "translated",
+                "country": profile.country if profile.country else "details",
             }
             
-            # translated
+            # details
             if profile.profession:
                 item["profession"] = profile.profession
             if profile.interested_topics:
@@ -1185,16 +1185,16 @@ translated:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         
-        logger.info(f"translated {len(profiles)} translatedReddit Profiletranslated {file_path} (JSONtranslated，translateduser_idtranslated)")
+        logger.info(f"details {len(profiles)} convertedReddit Profileconverted {file_path} (JSONconverted，converteduser_idconverted)")
     
-    # translated，translated
+    # details，details
     def save_profiles_to_json(
         self,
         profiles: List[OasisAgentProfile],
         file_path: str,
         platform: str = "reddit"
     ):
-        """[translated] translated save_profiles() translated"""
-        logger.warning("save_profiles_to_jsontranslated，translatedsave_profilestranslated")
+        """[details] details save_profiles() details"""
+        logger.warning("save_profiles_to_jsonconverted，convertedsave_profilesconverted")
         self.save_profiles(profiles, file_path, platform)
 

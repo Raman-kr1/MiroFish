@@ -81,7 +81,7 @@ class ZepEntityReader:
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or Config.ZEP_API_KEY
         if not self.api_key:
-            raise ValueError("ZEP_API_KEY translated")
+            raise ValueError("ZEP_API_KEY details")
         
         self.client = Zep(api_key=self.api_key)
     
@@ -114,13 +114,13 @@ class ZepEntityReader:
                 last_exception = e
                 if attempt < max_retries - 1:
                     logger.warning(
-                        f"Zep {operation_name} translated {attempt + 1} translated: {str(e)[:100]}, "
-                        f"{delay:.1f}translated..."
+                        f"Zep {operation_name} details {attempt + 1} details: {str(e)[:100]}, "
+                        f"{delay:.1f}details..."
                     )
                     time.sleep(delay)
                     delay *= 2  # Exponential backoff
                 else:
-                    logger.error(f"Zep {operation_name} translated {max_retries} translated: {str(e)}")
+                    logger.error(f"Zep {operation_name} details {max_retries} details: {str(e)}")
         
         raise last_exception
     
@@ -134,7 +134,7 @@ class ZepEntityReader:
         Returns:
             List of nodes
         """
-        logger.info(f"translated {graph_id} translated...")
+        logger.info(f"details {graph_id} details...")
 
         nodes = fetch_all_nodes(self.client, graph_id)
 
@@ -148,7 +148,7 @@ class ZepEntityReader:
                 "attributes": node.attributes or {},
             })
 
-        logger.info(f"translated {len(nodes_data)} translated")
+        logger.info(f"details {len(nodes_data)} details")
         return nodes_data
 
     def get_all_edges(self, graph_id: str) -> List[Dict[str, Any]]:
@@ -161,7 +161,7 @@ class ZepEntityReader:
         Returns:
             List of edges
         """
-        logger.info(f"translated {graph_id} translated...")
+        logger.info(f"details {graph_id} details...")
 
         edges = fetch_all_edges(self.client, graph_id)
 
@@ -176,7 +176,7 @@ class ZepEntityReader:
                 "attributes": edge.attributes or {},
             })
 
-        logger.info(f"translated {len(edges_data)} translated")
+        logger.info(f"details {len(edges_data)} details")
         return edges_data
     
     def get_node_edges(self, node_uuid: str) -> List[Dict[str, Any]]:
@@ -193,7 +193,7 @@ class ZepEntityReader:
             # Call Zep API with retry
             edges = self._call_with_retry(
                 func=lambda: self.client.graph.node.get_entity_edges(node_uuid=node_uuid),
-                operation_name=f"translated(node={node_uuid[:8]}...)"
+                operation_name=f"details(node={node_uuid[:8]}...)"
             )
             
             edges_data = []
@@ -209,7 +209,7 @@ class ZepEntityReader:
             
             return edges_data
         except Exception as e:
-            logger.warning(f"translated {node_uuid} translated: {str(e)}")
+            logger.warning(f"details {node_uuid} details: {str(e)}")
             return []
     
     def filter_defined_entities(
@@ -233,7 +233,7 @@ class ZepEntityReader:
         Returns:
             FilteredEntities: Collection of filtered entities
         """
-        logger.info(f"translated {graph_id} translated...")
+        logger.info(f"details {graph_id} details...")
         
         # Get all nodes
         all_nodes = self.get_all_nodes(graph_id)
@@ -320,8 +320,8 @@ class ZepEntityReader:
             
             filtered_entities.append(entity)
         
-        logger.info(f"translated: translated {total_count}, translated {len(filtered_entities)}, "
-                   f"translated: {entity_types_found}")
+        logger.info(f"details: details {total_count}, details {len(filtered_entities)}, "
+                   f"details: {entity_types_found}")
         
         return FilteredEntities(
             entities=filtered_entities,
@@ -349,7 +349,7 @@ class ZepEntityReader:
             # Get node with retry mechanism
             node = self._call_with_retry(
                 func=lambda: self.client.graph.node.get(uuid_=entity_uuid),
-                operation_name=f"translated(uuid={entity_uuid[:8]}...)"
+                operation_name=f"details(uuid={entity_uuid[:8]}...)"
             )
             
             if not node:
@@ -407,7 +407,7 @@ class ZepEntityReader:
             )
             
         except Exception as e:
-            logger.error(f"translated {entity_uuid} translated: {str(e)}")
+            logger.error(f"details {entity_uuid} details: {str(e)}")
             return None
     
     def get_entities_by_type(

@@ -126,8 +126,8 @@ try:
         generate_reddit_agent_graph
     )
 except ImportError as e:
-    print(f"translated: translated {e}")
-    print("translated: pip install oasis-ai camel-ai")
+    print(f"details: details {e}")
+    print("details: pip install oasis-ai camel-ai")
     sys.exit(1)
 
 
@@ -236,12 +236,12 @@ class IPCHandler:
             result = self._get_interview_result(agent_id)
             
             self.send_response(command_id, "completed", result=result)
-            print(f"  Interviewtranslated: agent_id={agent_id}")
+            print(f"  Interviewconverted: agent_id={agent_id}")
             return True
             
         except Exception as e:
             error_msg = str(e)
-            print(f"  Interviewtranslated: agent_id={agent_id}, error={error_msg}")
+            print(f"  Interviewconverted: agent_id={agent_id}, error={error_msg}")
             self.send_response(command_id, "failed", error=error_msg)
             return False
     
@@ -269,10 +269,10 @@ class IPCHandler:
                     )
                     agent_prompts[agent_id] = prompt
                 except Exception as e:
-                    print(f"  translated: translatedAgent {agent_id}: {e}")
+                    print(f"  details: convertedAgent {agent_id}: {e}")
             
             if not actions:
-                self.send_response(command_id, "failed", error="translatedAgent")
+                self.send_response(command_id, "failed", error="convertedAgent")
                 return False
             
             # Execute batch Interview
@@ -288,12 +288,12 @@ class IPCHandler:
                 "interviews_count": len(results),
                 "results": results
             })
-            print(f"  translatedInterviewtranslated: {len(results)} translatedAgent")
+            print(f"  convertedInterviewconverted: {len(results)} convertedAgent")
             return True
             
         except Exception as e:
             error_msg = str(e)
-            print(f"  translatedInterviewtranslated: {error_msg}")
+            print(f"  convertedInterviewconverted: {error_msg}")
             self.send_response(command_id, "failed", error=error_msg)
             return False
     
@@ -336,7 +336,7 @@ class IPCHandler:
             conn.close()
             
         except Exception as e:
-            print(f"  translatedInterviewtranslated: {e}")
+            print(f"  convertedInterviewconverted: {e}")
         
         return result
     
@@ -355,7 +355,7 @@ class IPCHandler:
         command_type = command.get("command_type")
         args = command.get("args", {})
         
-        print(f"\ntranslatedIPCtranslated: {command_type}, id={command_id}")
+        print(f"\nconvertedIPCconverted: {command_type}, id={command_id}")
         
         if command_type == CommandType.INTERVIEW:
             await self.handle_interview(
@@ -373,12 +373,12 @@ class IPCHandler:
             return True
             
         elif command_type == CommandType.CLOSE_ENV:
-            print("translated")
-            self.send_response(command_id, "completed", result={"message": "translated"})
+            print("details")
+            self.send_response(command_id, "completed", result={"message": "details"})
             return False
         
         else:
-            self.send_response(command_id, "failed", error=f"translated: {command_type}")
+            self.send_response(command_id, "failed", error=f"details: {command_type}")
             return True
 
 
@@ -454,12 +454,12 @@ class RedditSimulationRunner:
             os.environ["OPENAI_API_KEY"] = llm_api_key
         
         if not os.environ.get("OPENAI_API_KEY"):
-            raise ValueError("translated API Key translated，translated .env translated LLM_API_KEY")
+            raise ValueError("details API Key details，details .env details LLM_API_KEY")
         
         if llm_base_url:
             os.environ["OPENAI_API_BASE_URL"] = llm_base_url
         
-        print(f"LLMtranslated: model={llm_model}, base_url={llm_base_url[:40] if llm_base_url else 'translated'}...")
+        print(f"LLMconverted: model={llm_model}, base_url={llm_base_url[:40] if llm_base_url else 'details'}...")
         
         return ModelFactory.create(
             model_platform=ModelPlatformType.OPENAI,
@@ -527,10 +527,10 @@ class RedditSimulationRunner:
             max_rounds: Maximum number of simulation rounds (optional; truncates overly long simulations)
         """
         print("=" * 60)
-        print("OASIS Reddittranslated")
-        print(f"translated: {self.config_path}")
-        print(f"translatedID: {self.config.get('simulation_id', 'unknown')}")
-        print(f"translated: {'translated' if self.wait_for_commands else 'translated'}")
+        print("OASIS Redditconverted")
+        print(f"details: {self.config_path}")
+        print(f"convertedID: {self.config.get('simulation_id', 'unknown')}")
+        print(f"details: {'details' if self.wait_for_commands else 'details'}")
         print("=" * 60)
         
         time_config = self.config.get("time_config", {})
@@ -543,23 +543,23 @@ class RedditSimulationRunner:
             original_rounds = total_rounds
             total_rounds = min(total_rounds, max_rounds)
             if total_rounds < original_rounds:
-                print(f"\ntranslated: {original_rounds} -> {total_rounds} (max_rounds={max_rounds})")
+                print(f"\nconverted: {original_rounds} -> {total_rounds} (max_rounds={max_rounds})")
         
-        print(f"\ntranslated:")
-        print(f"  - translated: {total_hours}translated")
-        print(f"  - translated: {minutes_per_round}translated")
-        print(f"  - translated: {total_rounds}")
+        print(f"\nconverted:")
+        print(f"  - details: {total_hours}details")
+        print(f"  - details: {minutes_per_round}details")
+        print(f"  - details: {total_rounds}")
         if max_rounds:
-            print(f"  - translated: {max_rounds}")
-        print(f"  - Agenttranslated: {len(self.config.get('agent_configs', []))}")
+            print(f"  - details: {max_rounds}")
+        print(f"  - Agentconverted: {len(self.config.get('agent_configs', []))}")
         
-        print("\ntranslatedLLMtranslated...")
+        print("\nconvertedLLMconverted...")
         model = self._create_model()
         
-        print("translatedAgent Profile...")
+        print("convertedAgent Profile...")
         profile_path = self._get_profile_path()
         if not os.path.exists(profile_path):
-            print(f"translated: Profiletranslated: {profile_path}")
+            print(f"details: Profileconverted: {profile_path}")
             return
         
         self.agent_graph = await generate_reddit_agent_graph(
@@ -571,18 +571,18 @@ class RedditSimulationRunner:
         db_path = self._get_db_path()
         if os.path.exists(db_path):
             os.remove(db_path)
-            print(f"translated: {db_path}")
+            print(f"details: {db_path}")
         
-        print("translatedOASIStranslated...")
+        print("convertedOASISconverted...")
         self.env = oasis.make(
             agent_graph=self.agent_graph,
             platform=oasis.DefaultPlatformType.REDDIT,
             database_path=db_path,
-            semaphore=30,  # translated LLM translated，translated API translated
+            semaphore=30,  # details LLM details，details API details
         )
         
         await self.env.reset()
-        print("translated\n")
+        print("details\n")
         
         # Initialize the IPC handler
         self.ipc_handler = IPCHandler(self.simulation_dir, self.env, self.agent_graph)
@@ -593,7 +593,7 @@ class RedditSimulationRunner:
         initial_posts = event_config.get("initial_posts", [])
         
         if initial_posts:
-            print(f"translated ({len(initial_posts)}translated)...")
+            print(f"details ({len(initial_posts)}details)...")
             initial_actions = {}
             for post in initial_posts:
                 agent_id = post.get("poster_agent_id", 0)
@@ -613,14 +613,14 @@ class RedditSimulationRunner:
                             action_args={"content": content}
                         )
                 except Exception as e:
-                    print(f"  translated: translatedAgent {agent_id}translated: {e}")
+                    print(f"  details: convertedAgent {agent_id}details: {e}")
             
             if initial_actions:
                 await self.env.step(initial_actions)
-                print(f"  translated {len(initial_actions)} translated")
+                print(f"  details {len(initial_actions)} details")
         
         # Main simulation loop
-        print("\ntranslated...")
+        print("\nconverted...")
         start_time = datetime.now()
         
         for round_num in range(total_rounds):
@@ -651,15 +651,15 @@ class RedditSimulationRunner:
                       f"- elapsed: {elapsed:.1f}s")
         
         total_elapsed = (datetime.now() - start_time).total_seconds()
-        print(f"\ntranslated!")
-        print(f"  - translated: {total_elapsed:.1f}translated")
-        print(f"  - translated: {db_path}")
+        print(f"\nconverted!")
+        print(f"  - details: {total_elapsed:.1f}details")
+        print(f"  - details: {db_path}")
         
         # Decide whether to enter the wait-for-commands mode
         if self.wait_for_commands:
             print("\n" + "=" * 60)
-            print("translated - translated")
-            print("translated: interview, batch_interview, close_env")
+            print("details - details")
+            print("details: interview, batch_interview, close_env")
             print("=" * 60)
             
             self.ipc_handler.update_status("alive")
@@ -676,41 +676,41 @@ class RedditSimulationRunner:
                     except asyncio.TimeoutError:
                         pass
             except KeyboardInterrupt:
-                print("\ntranslated")
+                print("\nconverted")
             except asyncio.CancelledError:
-                print("\ntranslated")
+                print("\nconverted")
             except Exception as e:
-                print(f"\ntranslated: {e}")
+                print(f"\nconverted: {e}")
             
-            print("\ntranslated...")
+            print("\nconverted...")
         
         # Close the environment
         self.ipc_handler.update_status("stopped")
         await self.env.close()
         
-        print("translated")
+        print("details")
         print("=" * 60)
 
 
 async def main():
-    parser = argparse.ArgumentParser(description='OASIS Reddittranslated')
+    parser = argparse.ArgumentParser(description='OASIS Redditconverted')
     parser.add_argument(
         '--config', 
         type=str, 
         required=True,
-        help='translated (simulation_config.json)'
+        help='details (simulation_config.json)'
     )
     parser.add_argument(
         '--max-rounds',
         type=int,
         default=None,
-        help='translated（translated，translated）'
+        help='details（details，details）'
     )
     parser.add_argument(
         '--no-wait',
         action='store_true',
         default=False,
-        help='translated，translated'
+        help='details，details'
     )
     
     args = parser.parse_args()
@@ -720,7 +720,7 @@ async def main():
     _shutdown_event = asyncio.Event()
     
     if not os.path.exists(args.config):
-        print(f"translated: translated: {args.config}")
+        print(f"details: details: {args.config}")
         sys.exit(1)
     
     # Initialize logging configuration (fixed file names, clean up old logs)
@@ -742,14 +742,14 @@ def setup_signal_handlers():
     def signal_handler(signum, frame):
         global _cleanup_done
         sig_name = "SIGTERM" if signum == signal.SIGTERM else "SIGINT"
-        print(f"\ntranslated {sig_name} translated，translated...")
+        print(f"\nconverted {sig_name} details，details...")
         if not _cleanup_done:
             _cleanup_done = True
             if _shutdown_event:
                 _shutdown_event.set()
         else:
             # Force exit only if the signal is received a second time
-            print("translated...")
+            print("details...")
             sys.exit(1)
     
     signal.signal(signal.SIGTERM, signal_handler)
@@ -761,9 +761,9 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\ntranslated")
+        print("\nconverted")
     except SystemExit:
         pass
     finally:
-        print("translated")
+        print("details")
 

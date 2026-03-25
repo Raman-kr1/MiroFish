@@ -1,7 +1,7 @@
 [project]
 name = "mirofish-backend"
 version = "0.1.0"
-description = "MiroFish - translated，translated"
+description = "MiroFish - details，details"
 requires-python = ">=3.11"
 license = { text = "AGPL-3.0" }
 authors = [
@@ -9,27 +9,27 @@ authors = [
 ]
 
 dependencies = [
-    # translated
+    # details
     "flask>=3.0.0",
     "flask-cors>=6.0.0",
     
-    # LLM translated
+    # LLM details
     "openai>=1.0.0",
     
     # Zep Cloud
     "zep-cloud==3.13.0",
     
-    # OASIS translated
+    # OASIS details
     "camel-oasis==0.2.5",
     "camel-ai==0.2.78",
     
-    # translated
+    # details
     "PyMuPDF>=1.24.0",
-    # translated（translatedUTF-8translated）
+    # details（convertedUTF-8converted）
     "charset-normalizer>=3.0.0",
     "chardet>=5.0.0",
     
-    # translated
+    # details
     "python-dotenv>=1.0.0",
     "pydantic>=2.0.0",
 ]

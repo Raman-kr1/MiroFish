@@ -288,7 +288,7 @@ class ActionLogger:
             f.write(json.dumps(entry, ensure_ascii=False) + '\n')
 
 
-# 全局日志实例（兼容旧接口）
+# translated（translated）
 _global_logger: Optional[ActionLogger] = None
 
 

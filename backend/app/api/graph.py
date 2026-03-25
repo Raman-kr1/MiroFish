@@ -213,12 +213,20 @@ def generate_ontology():
         
         # Generate ontology
         logger.info("Calling LLM to generate ontology definition...")
-        generator = OntologyGenerator()
-        ontology = generator.generate(
-            document_texts=document_texts,
-            simulation_requirement=simulation_requirement,
-            additional_context=additional_context if additional_context else None
-        )
+        try:
+            generator = OntologyGenerator()
+            ontology = generator.generate(
+                document_texts=document_texts,
+                simulation_requirement=simulation_requirement,
+                additional_context=additional_context if additional_context else None
+            )
+        except Exception as e:
+            logger.error(f"Error generating ontology: {e}")
+            logger.error(traceback.format_exc())
+            return jsonify({
+                "success": False,
+                "error": f"Failed to generate ontology: {str(e)}"
+            }), 500
         
         # Save ontology to project
         entity_count = len(ontology.get("entity_types", []))

@@ -1,0 +1,69 @@
+# MiroFish Project - Raman's Notes
+
+## Setup & Run Instructions
+
+### Prerequisites
+- Python 3.9+
+- Node.js & npm
+
+### Backend Setup
+1.  Navigate to the project root.
+2.  Create/Activate virtual environment:
+    ```bash
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
+3.  Install dependencies:
+    ```bash
+    pip install -r backend/requirements.txt
+    ```
+4.  Configure Environment Variables:
+    - Ensure `.env` file exists in the root directory.
+    - **Crucial**: Set `LLM_MODEL_NAME=llama-3.3-70b-versatile` (or another supported model) as the previously configured Mixtral model is decommissioned.
+
+### Running the Application
+
+1.  **Start Backend**:
+    ```bash
+    # From project root
+    source .venv/bin/activate
+    python backend/run.py
+    ```
+    - Runs on: `http://localhost:5001`
+    - Logs are located in `backend/logs/`
+
+2.  **Start Frontend**:
+    ```bash
+    # Open a new terminal
+    cd frontend
+    npm install  # If first time
+    npm run dev
+    ```
+    - Runs on: `http://localhost:3000`
+
+## Recent Changes & Fixes (March 25, 2026)
+
+### 1. Fixed Ontology Generation 500 Error
+- **Issue**: The backend was returning a 500 Internal Server Error during ontology generation without clear logs.
+- **Root Cause**: The configured LLM model `mixtral-8x7b-32768` on Groq was decommissioned.
+- **Fix**:
+    - Updated `.env` to use `LLM_MODEL_NAME=llama-3.3-70b-versatile`.
+    - Modified `backend/app/api/graph.py` to wrap the ontology generation call in a `try-except` block. This ensures that if the LLM fails, the full stack trace is logged to the console/logs, making debugging easier.
+
+### 2. Resolved Network Error
+- **Issue**: Frontend reported "Network Error" when uploading files.
+- **Root Cause**: The backend server process was not running/listening on port 5001.
+- **Fix**: Restarted the backend server using `python backend/run.py`.
+
+### 3. Application Update (Commit d49fa29)
+The application has undergone a significant update focused on **Internationalization (i18n)** and cross-platform compatibility.
+- **UI Translation**: Text in `ReportView`, `SimulationRunView`, `SimulationView`, and other major components has been translated to English.
+- **Documentation**: A Chinese documentation file `README_CN.md` was added.
+- **Configuration**:
+    - `backend/.python-version` added to specify Python version.
+    - Extensive updates to backend services and scripts to support the new structure.
+
+## Troubleshooting Tips
+- **500 Error**: Check `backend/logs` or the terminal output for stack traces. The new error handling in `graph.py` will catch LLM failures.
+- **Network Error**: Ensure backend is running (`lsof -i :5001`).
+- **Frontend Proxy**: The frontend interacts with the backend via a proxy config in `vite.config.js` (pointing to port 5001).
